@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/features/auth/model";
 import useInput from "@/shared/hooks/useInput";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const email = useInput("");
@@ -28,6 +29,10 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const googleLogin = () => {
+    window.location.href = `http://localhost:8080/oauth2/authorization/google`;
   };
 
   return (
@@ -69,6 +74,13 @@ export default function LoginPage() {
           {loading ? "로그인 중..." : "로그인"}
         </button>
       </form>
+      <Button
+        onClick={() => {
+          googleLogin();
+        }}
+      >
+        googleLogin
+      </Button>
     </div>
   );
 }
