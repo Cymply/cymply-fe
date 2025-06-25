@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../styles/globals.css";
 import { Providers } from "./providers";
+import { AppLayout } from "@/widgets/layout";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -38,7 +39,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pretendard.variable} ${gangwonEduAll.variable}`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <AppLayout>{children}</AppLayout>
+        </Providers>
       </body>
     </html>
   );
