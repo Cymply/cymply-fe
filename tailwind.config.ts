@@ -40,6 +40,10 @@ export default {
           dark: "#FFB700", // 진한색(primary-dark)
           light: "#FFF7E4", // 밝은색(primary-light)
         },
+        kakao: {
+          yellow: "#FBE300",
+          black: "#3b1e1e",
+        },
         states: {},
       },
     },

@@ -14,6 +14,8 @@
 
 @layer base {
   :root {
+    --fluid-size: clamp(1rem, 2vw, 2rem);
+
     --background: theme("colors.background");
     --foreground: theme("colors.foreground");
     --black-900: theme("colors.black.900");
@@ -34,6 +36,8 @@
     --primary: theme("colors.primary.DEFAULT");
     --primary-dark: theme("colors.primary.dark");
     --primary-light: theme("colors.primary.light");
+    --kakao-yellow: theme("colors.kakao.yellow");
+    --kakao-black: theme("colors.kakao.black");
   }
 }
 
@@ -56,6 +60,7 @@ body {
 
 html {
   font-size: 16px;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
