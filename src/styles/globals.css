@@ -4,6 +4,22 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: "Pretendard";
+  src: url("../../public/fonts/PretendardVariable.woff2") format("woff2");
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GangwonEduAllBold";
+  src: url("../../public/fonts/GangwonEduAllBold.ttf") format("truetype");
+  font-weight: 45 920;
+  font-style: bold;
+  font-display: swap;
+}
+
 :root {
   --content-width: 750px;
   --header-height: 6rem;
