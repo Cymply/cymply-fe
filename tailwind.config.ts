@@ -1,0 +1,56 @@
+import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
+
+export default {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        pretendard: ["var(--font-pretendard)"],
+        gangwonEduAll: ["var(--font-gangwonEduAll)"],
+      },
+      colors: {
+        background: "#ffffff",
+        foreground: "#111111",
+        black: {
+          "900": "#000000", // black-900
+          "800": "#111111",
+          "700": "#191F28",
+          "600": "#333333",
+          "500": "#404040",
+          "400": "#555555",
+          "300": "#666666",
+          "200": "#999999",
+        },
+        gray: {
+          "900": "#aaaaaa", // gray-900
+          "800": "#cccccc",
+          "700": "#dddddd",
+          "600": "#f5f5f5",
+          "500": "#f6f6f6",
+          "400": "#F8F8F8",
+          "100": "#FFFFFF",
+        },
+        primary: {
+          DEFAULT: "#FFB700", // 기본(primary)
+          dark: "#FFB700", // 진한색(primary-dark)
+          light: "#FFF7E4", // 밝은색(primary-light)
+        },
+        states: {},
+      },
+    },
+  },
+  plugins: [
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        ".gradient-grad": {
+          background: "linear-gradient(180deg, #FFF 74.57%, #FFB700 123.03%)",
+        },
+      });
+    }),
+  ],
+} satisfies Config;

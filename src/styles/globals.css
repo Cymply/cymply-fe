@@ -12,12 +12,29 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "GangwonEduAllBold";
-  src: url("../../public/fonts/GangwonEduAllBold.ttf") format("truetype");
-  font-weight: 45 920;
-  font-style: bold;
-  font-display: swap;
+@layer base {
+  :root {
+    --background: theme("colors.background");
+    --foreground: theme("colors.foreground");
+    --black-900: theme("colors.black.900");
+    --black-800: theme("colors.black.800");
+    --black-700: theme("colors.black.700");
+    --black-600: theme("colors.black.600");
+    --black-500: theme("colors.black.500");
+    --black-400: theme("colors.black.400");
+    --black-300: theme("colors.black.300");
+    --black-200: theme("colors.black.200");
+    --gray-900: theme("colors.gray.900");
+    --gray-800: theme("colors.gray.800");
+    --gray-700: theme("colors.gray.700");
+    --gray-600: theme("colors.gray.600");
+    --gray-500: theme("colors.gray.500");
+    --gray-400: theme("colors.gray.400");
+    --gray-100: theme("colors.gray.100");
+    --primary: theme("colors.primary.DEFAULT");
+    --primary-dark: theme("colors.primary.dark");
+    --primary-light: theme("colors.primary.light");
+  }
 }
 
 :root {
@@ -66,7 +83,14 @@ img {
 }
 
 button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
   cursor: pointer;
+  outline: none;
 }
 
 ::-webkit-scrollbar {
