@@ -39,6 +39,10 @@ export default {
           DEFAULT: "#FFB700", // 기본(primary)
           dark: "#FFB700", // 진한색(primary-dark)
           light: "#FFF7E4", // 밝은색(primary-light)
+          accent: "#EEB33D", // 강조색(primary-accent)
+        },
+        borderColor: {
+          focus: "#EEB33D",
         },
         kakao: {
           yellow: "#FBE300",
