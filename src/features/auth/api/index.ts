@@ -1,16 +1,21 @@
-import { User } from '@/entities/user/model/types';
-import { api } from '@/shared/api';
+import {User} from "@/entities/user/model/user-dummy-data";
+import * as process from "process";
+import {apiClient} from "@/shared/lib/apiClient";
 
 export const authApi = {
-  login: (data: any) =>
-    api.post<any>('/auth/login', data),
-  
-  refresh: () =>
-    api.post<any>('/auth/refresh'),
+  login: (provider: any) =>
+    apiClient.get<any>(`/oauth2/authorization/${provider}`),
+  signup : (userData : any) => {
+    return apiClient.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/signup/oauth2`, userData);
+  },
+  getAccessToken: () =>
+    apiClient.post<any>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/token/refresh`),
+  getAccessTokenAfterSignup: () =>
+    apiClient.post<any>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/user/signup/oauth2/success`),
   
   logout: () =>
-    api.post('/auth/logout'),
+    apiClient.post('/auth/logout'),
   
   getMe: () =>
-    api.get<User>('/auth/me'),
-};
+    apiClient.get<User>('/auth/me'),
+}
