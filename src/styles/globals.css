@@ -14,8 +14,6 @@
 
 @layer base {
   :root {
-    --fluid-size: clamp(1rem, 2vw, 2rem);
-
     --background: theme("colors.background");
     --foreground: theme("colors.foreground");
     --black-900: theme("colors.black.900");
@@ -43,7 +41,7 @@
 
 :root {
   --content-width: 750px;
-  --header-height: 6rem;
+  --header-height: 11rem;
 }
 
 * {
@@ -61,9 +59,12 @@ body {
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
+  font-size: clamp(8px, 2.1333vw, 16px);
 }
 
 body {
+  max-width: 750px;
+  margin: 0 auto;
   font-family: "Pretendard", sans-serif;
   font-size: 1rem; /* 1rem = 16px */
   line-height: 1.6;

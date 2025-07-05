@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "w-full aspect-[5/1] inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[0.625rem] text-md transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "w-full inline-flex items-center justify-center gap-5 whitespace-nowrap rounded-[0.625rem] text-md transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
@@ -16,8 +16,8 @@ const buttonVariants = cva(
         inactive: "bg-gray-400 text-gray-900 shadow-xs hover:bg-gray-400/90",
         border:
           "border border-solid border-black-300 bg-white text-black-600 rounded-full shadow-xs hover:bg-white/90",
-        kakao: "bg-kakao-yellow text-kakao-black shadow-xs hover:bg-kakao-yellow/90",
-        google: "bg-white text-black-800 shadow-xs hover:bg-white/90",
+        kakao: "bg-kakao-yellow font-semibold text-kakao-black shadow-xs hover:bg-kakao-yellow/90",
+        google: "bg-white font-semibold text-black-800 shadow-xs hover:bg-white/90",
         underline: "border-none bg-none text-black-200 underline",
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
@@ -31,7 +31,6 @@ const buttonVariants = cva(
         default: "max-w-[42.375rem] h-[7.5rem] p-[2.625rem] has-[>svg]:p-[2.375rem] text-[2rem]",
         sm: "max-w-[20.625rem] h-[7.5rem] p-[2.625rem] has-[>svg]:p-[2.375rem] text-[2rem]",
         md: "max-w-[27.75rem] h-[5.4375rem] p-8 has-[>svg]:px-[7.5rem] text-[2rem]",
-        icon: "size-[3.125rem]",
       },
     },
     defaultVariants: {
