@@ -2,12 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-// import {useRouter} from "next/navigation";
 import process from "process";
 
 export default function Home() {
-  // const router = useRouter();
-
   return (
     <div className="flex flex-col h-full justify-between">
       <div className="flex flex-col gap-20 font-gangwonEduAll mt-44">
