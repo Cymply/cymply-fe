@@ -1,6 +1,12 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
+import {useRouter} from "next/navigation";
+import process from "process";
 
 export default function Home() {
+  const router = useRouter();
+  
   return (
     <div className="flex flex-col gap-16">
       <div>
@@ -12,7 +18,7 @@ export default function Home() {
         <Button>default</Button>
         <Button variant="primary">primary</Button>
         <Button variant="underline">underline</Button>
-        <Button variant="kakao">카카오로 로그인</Button>
+        <Button variant="kakao" onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/oauth2/authorization/kakao`}>카카오로 로그인</Button>
         <Button variant="google">Google로 로그인</Button>
         <Button variant="active" size="sm">
           active small
