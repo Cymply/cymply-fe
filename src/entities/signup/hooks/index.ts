@@ -1,3 +1,3 @@
 export * from "./useNickname"
-export * from "./useSelectBirthday"
+export * from "./useSelectAgeGroup"
 export * from "./useSelectSex";
