@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
+import colors from "tailwindcss/colors";
 
 export default {
   content: [
@@ -7,6 +8,9 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/widgets/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/entities/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/shared/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -15,6 +19,7 @@ export default {
         gangwonEduAll: ["var(--font-gangwonEduAll)"],
       },
       colors: {
+        ...colors,
         background: "#ffffff",
         foreground: "#111111",
         black: {

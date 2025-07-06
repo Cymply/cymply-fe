@@ -6,14 +6,13 @@ interface SignupHeaderProps {
 
 export default function SignupHeader({ title, desc }: SignupHeaderProps) {
   return (
-    <>
-      <span className="text-black text-5xl font-semibold font-['Pretendard'] leading-[60px]">
-        {title}
-        <br />
+    <div className="justify-start">
+      <span className="text-amber-400 text-6xl font-normal font-['GangwonEduAll_OTF'] leading-[76px]">
+        더 섬세한 공감
       </span>
-      <span className="text-black text-4xl font-normal font-['Pretendard'] leading-[60px]">
-        {desc}
+      <span className="text-neutral-900 text-6xl font-normal font-['GangwonEduAll_OTF'] leading-[76px]">
+        을 위해<br/>당신을 살짝 알려주세요.
       </span>
-    </>
+    </div>
   )
 }

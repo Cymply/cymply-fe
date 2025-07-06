@@ -1,3 +1,3 @@
-export * from "./SelectBirthday";
+export * from "./SelectAgeGroup";
 export * from "./SelectSex";
 export * from "./SetNickname";
