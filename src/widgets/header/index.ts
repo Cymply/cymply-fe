@@ -1,2 +1,3 @@
 export { Header } from "./ui/Header";
-export { Logo } from "./ui/Logo";
+export { LogoBtn } from "./ui/LogoBtn";
+export { MyPageBtn } from "./ui/MyPageBtn";
