@@ -15,8 +15,9 @@ export default function SignupProfilePage() {
     <SignupView
       header={
         <SignupHeader
-          title={"윤슬에 오신 것을 환영해요"}
-          desc={"정보 제공 쿠션멘트"}
+          highlightTitle={"더 섬세한 공감"}
+          title={"을 위해"}
+          desc={"당신을 살짝 알려주세요"}
         />
       }
       footer={

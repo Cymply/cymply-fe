@@ -24,7 +24,7 @@ export default function SetNickname() {
         <div className="w-full h-28 rounded-[10px] border border-zinc-400 relative">
           <Input
             type="text"
-            placeholder="닉네임을 입력하세요"
+            placeholder="편지를 작성하고 받을 별명을 정해주세요"
             value={nickname}
             onChange={(e) => handleNicknameChange(e.target.value)}
             className={cn(
