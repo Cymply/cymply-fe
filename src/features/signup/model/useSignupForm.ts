@@ -2,13 +2,14 @@
 'use client'
 
 import { useAtom } from 'jotai'
-import { useRouter, useSearchParams } from 'next/navigation'
+import {usePathname, useRouter, useSearchParams} from 'next/navigation'
 import { genderAtom, ageGroupAtom, formValidAtom } from "@/store/signupStore"
 import { useState } from 'react'
 
 export default function useSignupForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const [gender] = useAtom(genderAtom)
   const [ageGroup] = useAtom(ageGroupAtom)
   const [canProceed] = useAtom(formValidAtom)
@@ -17,8 +18,8 @@ export default function useSignupForm() {
     isValid: false
   })
   
-  // 현재 페이지가 닉네임 페이지인지 확인
-  const isSignupNickname = searchParams.get('step') === 'nickname'
+  // 현재 페이지가 닉네임 페이지인지 확인 (URL 경로로 판단)
+  const isSignupNickname = pathname.endsWith('/nickname')
   
   const handleNext = () => {
     if (canProceed) {

@@ -15,8 +15,8 @@ export default function SelectSex() {
   return (
     <div className="space-y-4">
       {/* 성별 제목 */}
-      <Label className="text-black text-3xl font-gangwonEduAll leading-9">
-        성별
+      <Label className="text-neutral-600 text-5xl font-normal font-gangwonEduAll leading-[48px]">
+        성별을 알려주세요
       </Label>
       
       {/* Radio Group으로 성별 선택 - 가로 배치 */}
