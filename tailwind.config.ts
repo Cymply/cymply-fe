@@ -54,7 +54,9 @@ export default {
           yellow: "#FBE300",
           black: "#3b1e1e",
         },
-        states: {},
+        states: {
+          red: "#DD0000",
+        },
       },
     },
   },
