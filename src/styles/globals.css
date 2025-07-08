@@ -36,6 +36,7 @@
     --primary-light: theme("colors.primary.light");
     --kakao-yellow: theme("colors.kakao.yellow");
     --kakao-black: theme("colors.kakao.black");
+    --states-red: theme("colors.states.red");
   }
 }
 

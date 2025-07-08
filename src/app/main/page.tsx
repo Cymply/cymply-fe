@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 
 export default function MainPage() {
   return (
-    <div className="flex flex-col gap-24 h-full">
-      <div className="flex flex-col gap-28 mt-32">
+    <div className="flex flex-col gap-24 h-full mt-32">
+      <div className="flex flex-col gap-28">
         <h3 className="font-gangwonEduAll font-bold text-black-800 text-6xl leading-tight">
           ✉️ 아직 도착한 <br />
           편지가 없어요
