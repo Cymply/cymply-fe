@@ -1,10 +1,11 @@
 "use client";
+
 import React, { useState } from "react";
 import clsx from "clsx";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 
-type InputFieldProps = {
+type LetterFormInputProps = {
   label?: string;
   error?: string;
   placeholder?: string;
@@ -12,7 +13,7 @@ type InputFieldProps = {
   showCount?: boolean;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-export const LetterFormInput = React.forwardRef<HTMLInputElement, InputFieldProps>(
+export const LetterFormInput = React.forwardRef<HTMLInputElement, LetterFormInputProps>(
   ({ label, error, placeholder, maxLength, showCount = false, className, ...props }, ref) => {
     const [value, setValue] = useState(props.value?.toString() || "");
 
@@ -40,7 +41,7 @@ export const LetterFormInput = React.forwardRef<HTMLInputElement, InputFieldProp
             onChange={handleChange}
             value={value}
             className={clsx(
-              "w-full border-b border-gray-800 pt-[2.625rem] pb-[2.625rem] shadow-none bg-transparent focus:outline-none",
+              "w-full border-b border-gray-800 pt-[2.625rem] pb-[2.625rem] shadow-none bg-transparent focus:outline-none font-gangwonEduAll font-bold",
               isOverLimit ? "border-states-red" : "border-gray-800 ",
               className
             )}
