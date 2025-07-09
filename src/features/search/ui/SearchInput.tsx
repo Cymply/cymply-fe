@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, KeyboardEvent } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import clsx from "clsx";
 
 interface SearchInputProps {
   onSearch: (query: string) => void;
@@ -39,13 +40,13 @@ export const SearchInput = ({ onSearch, initialValue = "", placeholder }: Search
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="p-9 rounded-[0.625rem] border-none bg-gray-600 focus:outline-none"
+        className={clsx("p-9 rounded-[0.625rem] border-none bg-gray-600 focus:outline-none")}
         placeholder={placeholder}
       />
       <div className="absolute w-10 h-10 right-9 top-1/2 -translate-y-1/2">
         {value ? (
-          <button onClick={handleClear} className="text-3xl" aria-label="초기화">
-            X
+          <button onClick={handleClear} aria-label="초기화">
+            <Image src="/icons/ico-close.svg" alt="icon-close" fill />
           </button>
         ) : (
           <button onClick={handleSearch} aria-label="검색">

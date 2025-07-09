@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { SearchInput } from "@/features/search/ui/SearchInput";
+import { SearchInput } from "@/features/search";
 
 export default function SearchPage() {
   const router = useRouter();
