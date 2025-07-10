@@ -22,7 +22,7 @@ export default function SignupFooter() {
           onClick={handleSubmit}
           // disabled={!canProceed}
           className={cn(
-            "w-[678px] h-28 bg-amber-400 rounded-[10px] text-white text-3xl font-semibold font-['Pretendard'] leading-9 hover:bg-amber-500 transition-all duration-200"
+            "w-[42.375rem] h-28 bg-amber-400 rounded-[0.625rem] text-white text-3xl font-semibold font-['Pretendard'] leading-9 hover:bg-amber-500 transition-all duration-200"
           )}
         >
           {validation.isChecking ? '확인 중...' : "회원가입 하기"}
@@ -33,7 +33,7 @@ export default function SignupFooter() {
             onClick={handleNext}
             // disabled={!canProceed}
             className={cn(
-              "w-[678px] h-28 rounded-[10px] text-3xl font-semibold font-['Pretendard'] leading-9 transition-all duration-200",
+              "w-[42.375rem] h-28 rounded-[0.625rem] text-3xl font-semibold font-['Pretendard'] leading-9 transition-all duration-200",
               canProceed
                 ? 'bg-amber-400 hover:bg-amber-500 text-white'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed hover:bg-gray-200'

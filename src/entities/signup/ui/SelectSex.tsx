@@ -15,7 +15,7 @@ export default function SelectSex() {
   return (
     <div className="space-y-4">
       {/* 성별 제목 */}
-      <Label className="text-neutral-600 text-5xl font-normal font-gangwonEduAll leading-[48px]">
+      <Label className="text-neutral-600 text-5xl font-normal font-gangwonEduAll leading-[3rem]">
         성별을 알려주세요
       </Label>
       
@@ -35,7 +35,7 @@ export default function SelectSex() {
           <Label
             htmlFor="male"
             className={cn(
-              "flex items-center justify-center w-80 h-28 rounded-[10px] cursor-pointer transition-all duration-200 ease-in-out",
+              "flex items-center justify-center w-80 h-28 rounded-[0.625rem] cursor-pointer transition-all duration-200 ease-in-out",
               "text-3xl font-semibold leading-9",
               selectedGender === 'M'
                 ? 'bg-blue-100 text-blue-600 border border-blue-600 font-bold'
@@ -56,7 +56,7 @@ export default function SelectSex() {
           <Label
             htmlFor="female"
             className={cn(
-              "flex items-center justify-center w-80 h-28 rounded-[10px] cursor-pointer transition-all duration-200 ease-in-out",
+              "flex items-center justify-center w-80 h-28 rounded-[0.625rem] cursor-pointer transition-all duration-200 ease-in-out",
               "text-3xl font-semibold font-gangwonEduAll leading-9",
               selectedGender === 'F'
                 ? 'bg-pink-100 !important text-pink-600 border border-pink-600 font-bold'

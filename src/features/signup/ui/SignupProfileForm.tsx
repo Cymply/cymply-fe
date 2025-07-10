@@ -6,7 +6,7 @@ import SelectBirthday from "@/entities/signup/ui/SelectAgeGroup";
 
 export default function SignupProfileForm() {
   return (
-    <div className="space-y-16">
+    <div className="space-y-16 flex-col flex gap-10">
       <SelectSex />
       <SelectBirthday />
     </div>

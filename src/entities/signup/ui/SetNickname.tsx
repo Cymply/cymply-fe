@@ -1,4 +1,4 @@
-// src/entities/signup/ui/SetNickname.tsx (수정된 버전)
+// src/entities/signup/ui/SetNickname.tsx
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -21,14 +21,14 @@ export default function SetNickname() {
     <div className="space-y-6">
       {/* 닉네임 입력 필드 */}
       <div className="relative">
-        <div className="w-full h-28 rounded-[10px] border border-zinc-400 relative">
+        <div className="w-full h-28 rounded-[0.625rem] border border-zinc-400 relative">
           <Input
             type="text"
             placeholder="편지를 작성하고 받을 별명을 정해주세요"
             value={nickname}
             onChange={(e) => handleNicknameChange(e.target.value)}
             className={cn(
-              "w-full h-full !text-3xl font-normal font-['Pretendard'] leading-9 border-0 rounded-[10px] bg-transparent px-6",
+              "w-full h-full !text-3xl font-normal font-['Pretendard'] leading-9 border-0 rounded-[0.625rem] bg-transparent px-6",
               "placeholder:text-zinc-400 placeholder:text-3xl focus-visible:ring-0 focus-visible:ring-offset-0",
               inputStatus === 'valid' && 'text-black',
               inputStatus === 'duplicate' && 'text-black',
