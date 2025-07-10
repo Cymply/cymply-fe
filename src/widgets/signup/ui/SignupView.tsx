@@ -19,36 +19,21 @@ export default function SignupView(props: SignupViewProps) {
   }
   
   return (
-    <div className="w-[750px] h-[1624px] relative bg-white overflow-hidden">
-      {/* 상단 헤더 이미지와 네비게이션 */}
-      <div className="w-[750px] h-44 left-0 top-0 absolute">
-        {/* 뒤로가기 버튼 */}
-        <div className="w-12 h-12 left-[25px] top-[110px] absolute">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleBack}
-            className="p-0 hover:bg-transparent w-full h-full flex items-center justify-center"
-          >
-            <ChevronLeft className="size-8 text-black stroke-[3] fill-none"/>
-          </Button>
-        </div>
-      </div>
-      
+    <div className="w-full h-full relative overflow-hidden flex-col gap-1">
       {/* 메인 컨텐츠 영역 */}
-      <div className="relative z-10">
+      <div className="relative flex flex-col gap-10">
         {/* 헤더 텍스트 */}
-        <div className="left-[36px] top-[240px] absolute">
+        <div className="">
           {props.header}
         </div>
         
         {/* 메인 컨텐츠 */}
-        <div className="absolute left-[36px] top-[454px] w-[678px]">
+        <div className="relative flex-col flex h-full">
           {props.children}
         </div>
         
         {/* 푸터 */}
-        <div className="absolute left-[36px] top-[1325px] w-[678px]">
+        <div className="relative">
           {props.footer}
         </div>
       </div>

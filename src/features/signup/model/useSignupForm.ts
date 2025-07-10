@@ -24,7 +24,7 @@ export default function useSignupForm() {
   const handleNext = () => {
     if (canProceed) {
       // 다음 단계로 이동 (닉네임 입력 페이지 등)
-      router.push('/signup/nickname')
+      router.push('/signup/step2')
     }
   }
   

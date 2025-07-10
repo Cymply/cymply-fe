@@ -23,7 +23,7 @@ export default function SelectAgeGroup() {
   return (
     <div className="flex flex-col gap-6">
       {/* 나이 제목 */}
-      <Label className="text-neutral-600 text-5xl font-normal font-gangwonEduAll leading-[48px]">
+      <Label className="text-neutral-600 text-5xl font-normal font-gangwonEduAll leading-[3rem]">
         나이를 알려주세요
       </Label>
       
@@ -31,7 +31,7 @@ export default function SelectAgeGroup() {
       <RadioGroup
         value={selectedAgeGroup || undefined}
         onValueChange={(value) => handleAgeGroupSelect(value as typeof AGE_GROUPS[number]['value'])}
-        className="grid grid-cols-2 gap-6 w-full max-w-[678px]"
+        className="grid grid-cols-2 gap-6 w-full max-w-[42.375rem]"
       >
         {AGE_GROUPS.map((ageGroup) => (
           <div key={ageGroup.value} className="flex">
@@ -43,10 +43,10 @@ export default function SelectAgeGroup() {
             <Label
               htmlFor={ageGroup.value}
               className={cn(
-                "flex items-center justify-center w-80 h-28 rounded-[10px] cursor-pointer transition-all duration-200 ease-in-out",
+                "flex items-center justify-center w-80 h-28 rounded-[0.625rem] cursor-pointer transition-all duration-200 ease-in-out",
                 "text-3xl font-medium font-['Pretendard'] leading-9 text-center",
                 selectedAgeGroup === ageGroup.value
-                  ? '!bg-yellow-50 border-[3px] !border-amber-400 text-amber-400 font-bold'
+                  ? '!bg-yellow-50 border-[0.1875rem] !border-amber-400 text-amber-400 font-bold'
                   : 'bg-stone-50 text-neutral-400 hover:bg-stone-100'
               )}
             >
