@@ -1,6 +1,10 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
+import useLetter from "@/features/letter/model/useLetter";
 
 export default function MainPage() {
+  const {createUserLink} = useLetter();
   return (
     <div className="flex flex-col gap-24 h-full mt-32">
       <div className="flex flex-col gap-28">
@@ -15,7 +19,7 @@ export default function MainPage() {
         <div className="text-4xl">Cymply URL</div>
       </div>
       <div>
-        <Button>링크 복사하기</Button>
+        <Button onClick={createUserLink}>링크 복사하기</Button>
       </div>
     </div>
   );

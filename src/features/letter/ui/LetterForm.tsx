@@ -3,6 +3,9 @@
 import { useForm } from "react-hook-form";
 import { LetterFormInput } from "./LetterFormInput";
 import { LetterFormTextarea } from "./LetterFormTextarea";
+import {useSearchParams} from "next/navigation";
+import {apiClient} from "@/shared/lib/apiClient";
+import useLetter from "@/features/letter/model/useLetter";
 
 type LetterFormValues = {
   title: string;
@@ -13,13 +16,10 @@ export const LetterForm = ({ id }: { id: string }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     watch,
-  } = useForm<LetterFormValues>();
-
-  const onSubmit = (data: LetterFormValues) => {
-    console.log(data);
-  };
+    onSubmit,
+    errors,
+  } = useLetter();
 
   return (
     <form
