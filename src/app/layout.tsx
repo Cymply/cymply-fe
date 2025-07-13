@@ -37,7 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${pretendard.variable} ${gangwonEduAll.variable}`}>
+      <body suppressHydrationWarning className={`${pretendard.variable} ${gangwonEduAll.variable}`}>
         <Providers>{children}</Providers>
       </body>
     </html>

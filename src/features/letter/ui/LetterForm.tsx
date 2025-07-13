@@ -1,25 +1,11 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { LetterFormInput } from "./LetterFormInput";
 import { LetterFormTextarea } from "./LetterFormTextarea";
-import {useSearchParams} from "next/navigation";
-import {apiClient} from "@/shared/lib/apiClient";
 import useLetter from "@/features/letter/model/useLetter";
 
-type LetterFormValues = {
-  title: string;
-  contents: string;
-};
-
 export const LetterForm = ({ id }: { id: string }) => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    onSubmit,
-    errors,
-  } = useLetter();
+  const { register, handleSubmit, watch, onSubmit, errors } = useLetter();
 
   return (
     <form

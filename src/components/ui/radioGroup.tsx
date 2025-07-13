@@ -25,7 +25,7 @@ const radioItemVariants = cva(
       variant: {
         default: [
           "border border-gray-300 text-gray-700 hover:bg-gray-50",
-          "data-[state=checked]:bg-primary-light data-[state=checked]:text-primary-accent data-[state=checked]:!border-[1px] data-[state=checked]:!border-solid data-[state=checked]:!border-primary-accent data-[state=checked]:font-bold",
+          "data-[state=checked]:bg-primary-light data-[state=checked]:text-primary data-[state=checked]:!border-[1px] data-[state=checked]:!border-solid data-[state=checked]:!border-primary data-[state=checked]:font-bold",
         ],
       },
     },

@@ -42,13 +42,13 @@ export default {
           "100": "#FFFFFF",
         },
         primary: {
-          DEFAULT: "#FFB700", // 기본(primary)
-          dark: "#FFB700", // 진한색(primary-dark)
+          DEFAULT: "#EEB33D", // 기본(primary)
+          dark: "#EEB33D", // 진한색(primary-dark)
           light: "#FFF7E4", // 밝은색(primary-light)
-          accent: "#EEB33D", // 강조색(primary-accent)
         },
         borderColor: {
           focus: "#EEB33D",
+          dashed: "#A99983",
         },
         kakao: {
           yellow: "#FBE300",

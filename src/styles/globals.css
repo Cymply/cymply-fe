@@ -37,6 +37,8 @@
     --kakao-yellow: theme("colors.kakao.yellow");
     --kakao-black: theme("colors.kakao.black");
     --states-red: theme("colors.states.red");
+    --borderColor-focus: theme("colors.borderColor.focus");
+    --borderColor-dashed: theme("colors.borderColor.dashed");
   }
 }
 
