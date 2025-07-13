@@ -107,7 +107,7 @@ const useSearch = <
   );
 
   return {
-    data: query.data,
+    data: query.data || [],
     isLoading: query.isLoading,
     isError: query.isError,
     isSuccess: query.isSuccess,
