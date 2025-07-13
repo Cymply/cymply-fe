@@ -40,13 +40,13 @@ export const validateNickname = (nickname: string): NicknameValidationResult => 
  * @param nickname 중복 체크할 닉네임
  * @returns Promise<boolean> 중복 여부
  */
-export const checkNicknameDuplicate = async (nickname: string): Promise<boolean> => {
+export const checkNicknameDuplicate = async (nickname: string): Promise<any> => {
   try {
     const response = await apiClient.get(`/api/v1/users/check/nickname/${nickname}`)
     console.log("response nickname", response.data)
     // 응답 데이터 구조에 따라 조정 필요
     // 예: { isDuplicate: boolean } 또는 { available: boolean }
-    return response.data.isDuplicate || false
+    return response.data
     
   } catch (error) {
     console.error('닉네임 중복 체크 API 오류:', error)
