@@ -1,19 +1,21 @@
 // src/features/signup/ui/SignupHeader.tsx
 interface SignupHeaderProps {
   highlightTitle: string;
-  title : string;
+  title: string;
   desc: string;
 }
 
 export default function SignupHeader({ highlightTitle, title, desc }: SignupHeaderProps) {
   return (
     <div className="justify-start">
-      <span className="text-amber-400 text-6xl font-normal font-['GangwonEduAll_OTF'] leading-[4.75rem]">
+      <span className="text-primary text-6xl font-bold font-gangwonEduAll leading-[4.75rem]">
         {highlightTitle}
       </span>
-      <span className="text-neutral-900 text-6xl font-normal font-['GangwonEduAll_OTF'] leading-[4.75rem]">
-        {title}<br/>{desc}
+      <span className="text-black-800 text-6xl font-bold font-gangwonEduAll leading-[4.75rem]">
+        {title}
+        <br />
+        {desc}
       </span>
     </div>
-  )
+  );
 }
