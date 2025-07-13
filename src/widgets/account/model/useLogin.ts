@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import axios from "axios";
-import {AuthService} from "@/shared/lib/auth";
 import {apiClient} from "@/shared/lib/apiClient";
 import * as process from "process";
 

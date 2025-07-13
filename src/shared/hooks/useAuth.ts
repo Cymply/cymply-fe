@@ -1,50 +1,49 @@
-// hooks/useAuth.ts
+// shared/hooks/useAuth.ts
 import { useState, useEffect } from 'react';
 import { TokenManager } from '../lib/tokenManager';
-import { AuthService } from '../lib/auth';
+import { checkAuthStatus } from '../lib/apiClient';
 
 export const useAuth = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   
   useEffect(() => {
-    // 클라이언트 사이드에서만 실행
-    const checkAuth = () => {
-      const loggedIn = TokenManager.isLoggedIn();
-      setIsLoggedIn(loggedIn);
-      setIsLoading(false);
+    const checkAuth = async () => {
+      try {
+        const hasTokens = TokenManager.hasTokens();
+        if (!hasTokens) {
+          setIsAuthenticated(false);
+          return;
+        }
+        
+        const isValid = await checkAuthStatus();
+        setIsAuthenticated(isValid);
+      } catch (error) {
+        console.error('Auth check error:', error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
     };
     
     checkAuth();
   }, []);
   
-  const login = async (code: string) => {
-    try {
-      setIsLoading(true);
-      await AuthService.login(code);
-      setIsLoggedIn(true);
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
+  const login = (tokens: { accessToken: string; refreshToken: string }) => {
+    TokenManager.setTokens(tokens);
+    setIsAuthenticated(true);
   };
   
-  const logout = async () => {
-    try {
-      setIsLoading(true);
-      await AuthService.logout();
-      setIsLoggedIn(false);
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      setIsLoading(false);
+  const logout = () => {
+    TokenManager.clearTokens();
+    setIsAuthenticated(false);
+    if (typeof window !== 'undefined') {
+      window.location.href = '/login';
     }
   };
   
   return {
-    isLoggedIn,
+    isAuthenticated,
     isLoading,
     login,
     logout

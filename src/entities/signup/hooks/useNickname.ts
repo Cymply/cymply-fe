@@ -64,12 +64,12 @@ export default function useNickname() {
     
     const timer = setTimeout(() => {
       checkNicknameDuplicate(value)
-        .then((isDuplicate) => {
+        .then((data) => {
           updateValidation({
-            isValid: !isDuplicate,
-            isDuplicate,
+            isValid: data.success,
+            isDuplicate : !data.success,
             isChecking: false,
-            errorMessage: isDuplicate ? '중복된 별명입니다.' : ''
+            errorMessage: data.content || data?.errorMessage
           })
         })
         .catch(() => {
