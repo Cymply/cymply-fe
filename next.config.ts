@@ -4,6 +4,14 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
   output: "standalone",
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "i.scdn.co",
+      },
+    ],
+  },
   webpack: (config, { dev, isServer }) => {
     config.plugins.push(codeInspectorPlugin({ bundler: "webpack" }));
     if (dev && !isServer) {
