@@ -48,6 +48,7 @@ export default {
         },
         borderColor: {
           focus: "#EEB33D",
+          dashed: "#A99983",
         },
         kakao: {
           yellow: "#FBE300",

@@ -9,6 +9,7 @@ import { letterAtom, lettersAtom, userLetterLinkAtom } from "@/entities/letter/s
 export default function useLetter() {
   const searchParams = useSearchParams();
   const router = useRouter();
+
   const [userLetterLink, setUserLetterLink] = useAtom<string>(userLetterLinkAtom);
   const [letter, setLetter] = useAtom(letterAtom);
   const [letters, setLetters] = useAtom(lettersAtom);
@@ -56,7 +57,7 @@ export default function useLetter() {
         const res = await letterApi.getLetter(letterId);
         // console.log("편지 조회 단건", res)
         if (res.status != 200) throw res.statusText;
-        setLetter(res.data.data);
+        setLetter(res.data.data.letters);
       } catch (error) {
         console.error(error);
       }
@@ -81,7 +82,7 @@ export default function useLetter() {
     getLetters();
     getLetter("1");
     createUserLink();
-  }, []);
+  }, [getLetters, getLetter, createUserLink]);
 
   return {
     register,
