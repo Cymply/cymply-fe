@@ -6,9 +6,5 @@ export const signupApi= {
     return await apiClient.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/signup/oauth2`, userData);
   },
   
-  getTempToken: async () => {
-    return await apiClient.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/token/refresh/temp`)
-  },
-  
-  getTokenAfterSignup : async() => await apiClient.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/signup/oauth2`)
+  getTokenAfterSignup : async() => await apiClient.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/signup/oauth2/success`)
 }

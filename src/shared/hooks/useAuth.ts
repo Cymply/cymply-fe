@@ -29,7 +29,7 @@ export const useAuth = () => {
     checkAuth();
   }, []);
   
-  const login = (tokens: { accessToken: string; refreshToken: string }) => {
+  const login = (tokens: { accessToken: string; refreshToken?: string }) => {
     TokenManager.setTokens(tokens);
     setIsAuthenticated(true);
   };

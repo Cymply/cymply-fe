@@ -42,7 +42,7 @@ export default function useSignupForm() {
         gender : gender,
         birth : '1996-03-24',
         name : nickname,
-        nickName : nickname,
+        nickname : nickname,
       }
       
       // API 호출 후 성공 시 처리
