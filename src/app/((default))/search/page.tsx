@@ -13,33 +13,97 @@ import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 
+const musicDummyData = [
+  {
+    title: "뛰어(JUMP)",
+    artist: "BLACKPINK",
+    thumbnail:
+      "https://i.scdn.co/image/ab67616d0000b27374c923a5320cb6be10f6abd8",
+  },
+  {
+    title: "마지막처럼",
+    artist: "BLACKPINK",
+    thumbnail:
+      "https://i.scdn.co/image/ab67616d0000b273ac93d8b1bd84fa6b5291ba21",
+  },
+  {
+    title: "불장난",
+    artist: "BLACKPINK",
+    thumbnail:
+      "https://i.scdn.co/image/ab67616d0000b27318a4a215052e9f396864bd73",
+  },
+  {
+    title: "Lovesick Girls",
+    artist: "BLACKPINK",
+    thumbnail:
+      "https://i.scdn.co/image/ab67616d0000b2731895052324f123becdd0d53d",
+  },
+  {
+    title: "How You Like That",
+    artist: "BLACKPINK",
+    thumbnail:
+      "https://i.scdn.co/image/ab67616d0000b2731895052324f123becdd0d53d",
+  },
+  {
+    title: "Forever Young",
+    artist: "BLACKPINK",
+    thumbnail:
+      "https://i.scdn.co/image/ab67616d0000b27314d1e0d0aba77339c007ed92",
+  },
+  {
+    title: "Don't Know What To Do",
+    artist: "BLACKPINK",
+    thumbnail:
+      "https://i.scdn.co/image/ab67616d0000b2732d602ab2d4acff0c2cf57683",
+  },
+  {
+    title: "How You Like That",
+    artist: "BLACKPINK",
+    thumbnail:
+      "https://i.scdn.co/image/ab67616d0000b27357f5bb0f7a90c35a4bcbb727",
+  },
+  {
+    title: "뚜두뚜두 (DDU-DU DDU-DU)",
+    artist: "BLACKPINK",
+    thumbnail:
+      "https://i.scdn.co/image/ab67616d0000b27314d1e0d0aba77339c007ed92",
+  },
+  {
+    title: "Kill This Love",
+    artist: "BLACKPINK",
+    thumbnail:
+      "https://i.scdn.co/image/ab67616d0000b2732d602ab2d4acff0c2cf57683",
+  },
+];
+
 export default function SearchPage() {
   const router = useRouter();
   const { selectedMusic, handleMusicSelect, handleSelectedMusicReset } =
     useSelectMusicItem();
 
-  const { data, search, loadMore, hasNextPage, isFetching, searchParams } =
-    useInfiniteSearch<TMusicItem>({
-      queryKey: "searchMusic",
-      queryFn: async (params) => {
-        const response = await musicApi.getMusic(params);
-        return response.data;
-      },
-      initialLimit: 10,
-    });
+  // const { data, search, loadMore, hasNextPage, isFetching, searchParams } =
+  //   useInfiniteSearch<TMusicItem>({
+  //     queryKey: "searchMusic",
+  //     queryFn: async (params) => {
+  //       const response = await musicApi.getMusic(params);
+
+  //       return response.data;
+  //     },
+  //     initialLimit: 10,
+  //   });
 
   // 스크롤 컨테이너 ref
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // 스크롤 기반 무한스크롤 설정
-  useScrollInfiniteLoad({
-    hasNextPage,
-    isFetching,
-    onLoadMore: loadMore,
-    scrollContainerRef:
-      scrollContainerRef as React.RefObject<HTMLElement | null>,
-    threshold: 50,
-  });
+  // useScrollInfiniteLoad({
+  //   hasNextPage,
+  //   isFetching,
+  //   onLoadMore: loadMore,
+  //   scrollContainerRef:
+  //     scrollContainerRef as React.RefObject<HTMLElement | null>,
+  //   threshold: 50,
+  // });
 
   // 음악 고유 식별자 생성 함수
   const getMusicId = (music: TMusicItem) =>
@@ -64,9 +128,11 @@ export default function SearchPage() {
         <SearchInput
           onSearch={(query) => {
             handleSelectedMusicReset();
-            search(query);
+            console.log(query);
+            // search(query);
           }}
-          initialValue={searchParams.keyword || ""}
+          // initialValue={searchParams.keyword || ""}
+          initialValue={""}
           placeholder="가수명과 곡명을 함께 입력해 주세요"
         />
       </div>
@@ -76,7 +142,8 @@ export default function SearchPage() {
         ref={scrollContainerRef}
         className=" overflow-y-auto pr-2 border border-gray-100 rounded-lg p-4"
       >
-        {!isEmpty(searchParams.keyword) && data.length > 0 ? (
+        {/* {!isEmpty(searchParams.keyword) && data.length > 0 ? ( */}
+        {true && musicDummyData.length > 0 ? (
           <RadioGroup
             value={
               selectedMusic.title && selectedMusic.artist
@@ -85,7 +152,7 @@ export default function SearchPage() {
             }
             onValueChange={(value) => {
               // 선택된 value로 전체 음악 객체 찾기
-              const selectedMusicItem = data.find(
+              const selectedMusicItem = musicDummyData.find(
                 (music: TMusicItem) => getMusicId(music) === value
               );
 
@@ -99,7 +166,7 @@ export default function SearchPage() {
             }}
             className="flex flex-col gap-4"
           >
-            {data.map((result: TMusicItem, index: number) => (
+            {musicDummyData.map((result: TMusicItem, index: number) => (
               <RadioGroupItem
                 value={getMusicId(result)}
                 key={`${result.title}-${result.artist}-${result.thumbnail}-${index}`}
@@ -120,7 +187,7 @@ export default function SearchPage() {
             ))}
 
             {/* 로딩 표시 */}
-            {isFetching && (
+            {false && (
               <div className="h-4 flex items-center justify-center">
                 <div className="text-gray-500 text-sm">로딩 중...</div>
               </div>

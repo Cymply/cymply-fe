@@ -46,7 +46,7 @@ export const useInfiniteSearch = <T,>({
   // 데이터가 변경될 때마다 누적 데이터 업데이트
   useEffect(() => {
     if (data) {
-      const newContent = data.data.content;
+      const newContent = data.data?.content || [];
 
       if (currentPage === 1) {
         // 새로운 검색일 때는 기존 데이터 초기화
@@ -56,7 +56,7 @@ export const useInfiniteSearch = <T,>({
         setAllData((prev) => [...prev, ...newContent]);
       }
 
-      setTotalCount(data.data.totalCount);
+      setTotalCount(data.data?.totalCount || 0);
 
       // hasNextPage 업데이트 로직
       if (newContent.length === 0) {
