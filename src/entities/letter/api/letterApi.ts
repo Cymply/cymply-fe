@@ -12,5 +12,5 @@ export const letterApi = {
   sendLetter: async(letter : SendLetterRequest)=> await apiClient.post(`/api/v1/letters`, letter),
   
   // 편지 작성 링크 생성
-  createUserLetterLink: async () => await apiClient.post(`/api/v1/letters/code`, {})
+  createUserLetterLink: async () => await apiClient.post(`/api/v1/letters/code`)
 }

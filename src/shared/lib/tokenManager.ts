@@ -1,7 +1,7 @@
 // shared/lib/tokenManager.ts
 export interface TokenPair {
   accessToken: string;
-  refreshToken: string;
+  refreshToken?: string;
 }
 
 export class TokenManager {
@@ -11,8 +11,12 @@ export class TokenManager {
   // 토큰 저장
   static setTokens(tokens: TokenPair): void {
     if (typeof window !== 'undefined') {
-      sessionStorage.setItem(this.ACCESS_TOKEN_KEY, tokens.accessToken);
-      sessionStorage.setItem(this.REFRESH_TOKEN_KEY, tokens.refreshToken);
+      if (tokens.accessToken){
+        sessionStorage.setItem(this.ACCESS_TOKEN_KEY, tokens.accessToken);
+      }
+      if (tokens.refreshToken) {
+        sessionStorage.setItem(this.REFRESH_TOKEN_KEY, tokens.refreshToken);
+      }
     }
   }
   

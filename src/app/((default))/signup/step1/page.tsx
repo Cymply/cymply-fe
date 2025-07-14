@@ -6,15 +6,9 @@ import SignupHeader from "@/features/signup/ui/SignupHeader";
 import SignupFooter from "@/features/signup/ui/SignupFooter";
 import SignupProfileForm from "@/features/signup/ui/SignupProfileForm";
 import {useRouter, useSearchParams} from "next/navigation";
-import {useEffect} from "react";
-import useSignupForm from "@/features/signup/model/useSignupForm";
-import useSignupRedirect from "@/app/((default))/signup/model/useSignupRedirect";
 
 export default function SignupProfilePage() {
   const searchParams = useSearchParams();
-  
-  useSignupRedirect();
-  
   
   return (
     <SignupView

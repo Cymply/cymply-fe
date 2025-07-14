@@ -22,8 +22,8 @@ export function useSignupRedirectWithErrorHandling() {
       setState({ isProcessing: true, error: null });
       
       // URL 파라미터에서 토큰 추출
-      const accessToken = searchParams.get('accessToken');
-      const refreshToken = searchParams.get('refreshToken');
+      const accessToken = searchParams.get('access_token');
+      const refreshToken = searchParams.get('refresh_token');
       
       // 토큰 유효성 검사
       if (!accessToken || !refreshToken) {
@@ -61,7 +61,7 @@ export function useSignupRedirectWithErrorHandling() {
   
   useEffect(() => {
     afterSocialLogin();
-  }, [afterSocialLogin]);
+  }, []);
   
   return state;
 }
