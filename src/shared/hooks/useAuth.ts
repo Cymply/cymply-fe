@@ -7,27 +7,23 @@ export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const hasTokens = TokenManager.hasTokens();
-        if (!hasTokens) {
-          setIsAuthenticated(false);
-          return;
-        }
-        
-        const isValid = await checkAuthStatus();
-        setIsAuthenticated(isValid);
-      } catch (error) {
-        console.error('Auth check error:', error);
+  const checkAuth = async () => {
+    try {
+      const hasTokens = TokenManager.hasTokens();
+      if (!hasTokens) {
         setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
+        return;
       }
-    };
-    
-    checkAuth();
-  }, []);
+      
+      const isValid = await checkAuthStatus();
+      setIsAuthenticated(isValid);
+    } catch (error) {
+      console.error('Auth check error:', error);
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   
   const login = (tokens: { accessToken: string; refreshToken?: string }) => {
     TokenManager.setTokens(tokens);
@@ -46,6 +42,7 @@ export const useAuth = () => {
     isAuthenticated,
     isLoading,
     login,
-    logout
+    logout,
+    checkAuth
   };
 };
