@@ -32,7 +32,7 @@ export default function useLetter() {
       if (res.status != 200) {
         throw res.statusText;
       }
-      router.push("/letter/sent");
+      // router.push("/letter/sent");
     } catch (error) {
       console.error(error);
     }
@@ -77,12 +77,12 @@ export default function useLetter() {
     }
   }, [letters]);
 
-  // 조회 테스트
-  useEffect(() => {
-    getLetters();
-    getLetter("1");
-    createUserLink();
-  }, [getLetters, getLetter, createUserLink]);
+  // // 조회 테스트
+  // useEffect(() => {
+  //   getLetters();
+  //   getLetter("1");
+  //   createUserLink();
+  // }, [getLetters, getLetter, createUserLink]);
 
   return {
     register,
