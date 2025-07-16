@@ -1,3 +1,4 @@
+// shared/lib/apiClient.ts
 import axios, { AxiosResponse, InternalAxiosRequestConfig, AxiosError } from 'axios';
 import { TokenManager, TokenPair } from './tokenManager';
 
@@ -45,14 +46,18 @@ const refreshTokens = async (): Promise<string> => {
     
     const { accessToken, refreshToken: newRefreshToken } = response.data;
     
+    // 새 토큰들 저장 (accessToken은 쿠키, refreshToken은 sessionStorage)
     TokenManager.setTokens({
       accessToken,
       refreshToken: newRefreshToken
     });
     
+    console.log('🔄 토큰 재발급 완료');
     return accessToken;
   } catch (error) {
+    console.error('❌ 토큰 재발급 실패:', error);
     TokenManager.clearTokens();
+    
     // 로그인 페이지로 리다이렉트
     if (typeof window !== 'undefined') {
       window.location.href = '/login';
@@ -124,13 +129,14 @@ apiClient.interceptors.response.use(
 // 인증 상태 확인 함수
 export const checkAuthStatus = async (): Promise<boolean> => {
   try {
-    if (!TokenManager.hasTokens()) {
+    if (!TokenManager.hasAccessToken()) {
       return false;
     }
     
     const response = await apiClient.get('/api/v1/users/me');
     return response.status === 200;
   } catch (error) {
+    console.error('인증 상태 확인 실패:', error);
     return false;
   }
 };

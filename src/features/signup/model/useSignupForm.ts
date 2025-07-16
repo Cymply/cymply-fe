@@ -7,6 +7,7 @@ import {genderAtom, ageGroupAtom, formValidAtom, nicknameAtom} from "@/store/sig
 import { useState } from 'react'
 import {signupApi} from "@/entities/signup/api/signupApi";
 import {useAuth} from "@/shared/hooks/useAuth";
+import {TokenManager} from "@/shared/lib/tokenManager";
 
 export default function useSignupForm() {
   const router = useRouter()
@@ -20,15 +21,91 @@ export default function useSignupForm() {
     isChecking: false,
     isValid: false
   });
-  const { login } = useAuth(); // useAuth의 login 함수 사용
+  const { login } = useAuth();
   
+  // 쿠키 헬퍼 함수들
+  const getCookie = (name: string): string | null => {
+    if (typeof window === 'undefined') return null;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      const cookieValue = parts.pop()?.split(';').shift() || null;
+      return cookieValue ? decodeURIComponent(cookieValue) : null;
+    }
+    return null;
+  };
   
-  // 현재 페이지가 닉네임 페이지인지 확인 (URL 경로로 판단)
+  const setCookie = (name: string, value: string, maxAge: number = 3600): void => {
+    if (typeof window !== 'undefined') {
+      const secure = process.env.NODE_ENV === 'production' ? '; secure' : '';
+      document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; samesite=lax${secure}`;
+    }
+  };
+  
+  const clearRedirectCookies = () => {
+    document.cookie = 'recipientCode=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+    document.cookie = 'recipientRedirectUrl=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+    document.cookie = 'generalRedirectUrl=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+  };
+  
+  const normalizePath = (path: string): string => {
+    try {
+      const normalized = path.replace(/\/+/g, '/').trim();
+      return normalized.length > 1 && normalized.endsWith('/')
+        ? normalized.slice(0, -1)
+        : normalized;
+    } catch (error) {
+      console.error('Path normalization error:', error);
+      return path;
+    }
+  };
+  
+  // 토큰 저장 완료까지 최대 3초 대기 (쿠키에서 accessToken 확인)
+  const waitForTokenSave = async (token: string, maxWaitTime = 3000) => {
+    console.log('⏳ 토큰 저장 확인 시작...');
+    const startTime = Date.now();
+    
+    while (Date.now() - startTime < maxWaitTime) {
+      // TokenManager와 직접 쿠키 확인 둘 다 체크
+      const tokenManagerToken = TokenManager.getAccessToken();
+      const directCookieToken = getCookie('accessToken');
+      
+      console.log('🔍 TokenManager 토큰:', tokenManagerToken ? '있음' : '없음');
+      console.log('🔍 직접 쿠키 확인:', directCookieToken ? '있음' : '없음');
+      
+      if (tokenManagerToken === token || directCookieToken === token) {
+        console.log('✅ 토큰 저장 확인됨');
+        return true;
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, 100)); // 100ms마다 확인
+    }
+    
+    console.log('❌ 토큰 저장 타임아웃');
+    return false;
+  };
+  
+  // 리다이렉트 URL 결정 함수
+  const getRedirectUrl = () => {
+    const recipientRedirectUrl = getCookie('recipientRedirectUrl');
+    const generalRedirectUrl = getCookie('generalRedirectUrl');
+    
+    if (recipientRedirectUrl) {
+      console.log('🔍 Found recipient redirect URL:', recipientRedirectUrl);
+      return normalizePath(recipientRedirectUrl);
+    } else if (generalRedirectUrl) {
+      console.log('🔍 Found general redirect URL:', generalRedirectUrl);
+      return normalizePath(generalRedirectUrl);
+    } else {
+      console.log('🔍 No redirect URL found, using default');
+      return '/main'; // 기본값
+    }
+  };
+  
   const isSignupNickname = pathname.endsWith('/step2')
   
   const handleNext = () => {
     if (canProceed) {
-      // 다음 단계로 이동 (닉네임 입력 페이지 등)
       router.push('/signup/step2')
     }
   }
@@ -37,7 +114,6 @@ export default function useSignupForm() {
     try {
       setValidation(prev => ({ ...prev, isChecking: true }))
       
-      // 회원가입 API 호출
       const signupData = {
         gender : gender,
         birth : '1996-03-24',
@@ -45,30 +121,62 @@ export default function useSignupForm() {
         nickname : nickname,
       }
       
-      // API 호출 후 성공 시 처리
+      console.log('🚀 회원가입 API 호출 시작');
       const res = await signupApi.signup(signupData);
       
       if (res.status !== 200) {
         throw res.statusText;
       }
       
-      // 새로운 토큰 재발급
+      console.log('🚀 토큰 재발급 API 호출 시작');
       const resToken = await signupApi.getTokenAfterSignup()
-
+      
       if (resToken.status !== 200) {
         throw resToken.statusText;
       }
-      const { accessToken, refreshToken } = resToken.data.data;
       
-      login({accessToken, refreshToken})
+      const { accessToken, refreshToken } = resToken.data.data;
+      console.log('🔍 받은 토큰:', {
+        accessToken: accessToken ? '있음' : '없음',
+        refreshToken: refreshToken ? '있음' : '없음'
+      });
+      
+      console.log('🔍 토큰 저장 시작');
+      login({accessToken, refreshToken});
+      
+      // 추가로 직접 저장도 시도 (보험용)
+      console.log('🔧 직접 토큰 저장 시도');
+      setCookie('accessToken', accessToken, 3600); // accessToken은 쿠키에
+      if (refreshToken) {
+        sessionStorage.setItem('refreshToken', refreshToken); // refreshToken은 sessionStorage에
+      }
+      
+      // 토큰 저장 완료까지 대기
+      const tokenSaved = await waitForTokenSave(accessToken);
+      
+      if (!tokenSaved) {
+        console.error('❌ 토큰 저장 완전 실패');
+        // 토큰 저장에 실패해도 진행 (토큰이 있으니까)
+        console.log('⚠️ 토큰 저장 실패했지만 진행');
+      }
       
       setValidation({ isChecking: false, isValid: true })
       
-      // 회원가입 완료 후 리다이렉트
-      router.push('/main')
+      // 리다이렉트 URL 결정
+      const redirectUrl = getRedirectUrl();
+      console.log('✅ 회원가입 완료, 리다이렉트 URL:', redirectUrl);
+      
+      // 쿠키 정리
+      clearRedirectCookies();
+      
+      // 페이지 이동 전에 잠시 대기 (토큰이 완전히 저장되도록)
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      console.log('🚀 페이지 이동:', redirectUrl);
+      window.location.href = redirectUrl;
       
     } catch (error) {
-      console.error('회원가입 실패:', error)
+      console.error('❌ 회원가입 실패:', error)
       setValidation({ isChecking: false, isValid: false })
     }
   }
