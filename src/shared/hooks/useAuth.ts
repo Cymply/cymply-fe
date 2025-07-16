@@ -26,8 +26,13 @@ export const useAuth = () => {
   };
   
   const login = (tokens: { accessToken: string; refreshToken?: string }) => {
+    console.log('🔍 useAuth login 시작');
+    
+    // accessToken은 쿠키에, refreshToken은 sessionStorage에 저장
     TokenManager.setTokens(tokens);
     setIsAuthenticated(true);
+    
+    console.log('✅ useAuth login 완료 (쿠키 + sessionStorage)');
   };
   
   const logout = () => {
@@ -37,6 +42,11 @@ export const useAuth = () => {
       window.location.href = '/login';
     }
   };
+  
+  // 컴포넌트 마운트 시 인증 상태 확인
+  useEffect(() => {
+    checkAuth();
+  }, []);
   
   return {
     isAuthenticated,

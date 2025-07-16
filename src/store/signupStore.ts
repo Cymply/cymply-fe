@@ -39,3 +39,5 @@ export const formValidAtom = atom(
     return gender !== null && ageGroup !== null
   }
 )
+
+export const recipientCodeAtom = atom<string | null>(null)
