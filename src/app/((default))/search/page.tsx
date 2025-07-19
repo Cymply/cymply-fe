@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 export default function SearchPage() {
   const router = useRouter();
@@ -45,6 +45,9 @@ export default function SearchPage() {
   const getMusicId = (music: TMusicItem) =>
     `${music.title || ""}-${music.artist || ""}-${music.thumbnail || ""}`;
 
+  useEffect(() => {
+    handleSelectedMusicReset();
+  }, []);
   return (
     <div className="w-full h-full flex flex-col">
       {/* 헤더 영역 */}
