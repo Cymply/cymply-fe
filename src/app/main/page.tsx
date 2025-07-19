@@ -14,7 +14,7 @@ export default function MainPage() {
 
   useEffect(() => {
     getLetters().finally(() => setLoading(false));
-  }, [getLetters]);
+  }, []);
 
   if (loading) return <p>편지 불러오는 중...</p>;
 
