@@ -1,10 +1,7 @@
-import { Button } from "../components/ui/button";
+"use client";
+
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <p>Hello World</p>
-      <Button>test</Button>
-    </div>
-  );
+  redirect("/main");
 }
