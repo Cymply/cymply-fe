@@ -12,12 +12,14 @@ interface MusicItemProps {
 }
 
 import Image from "next/image";
+import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
 
 export const MusicItem = ({
   music,
   option = "none",
   className = "",
 }: MusicItemProps) => {
+  const { selectedMusic } = useSelectMusicItem();
   return (
     <div className={cn(className)}>
       {/* <div className="flex items-center gap-4 justify-center"> */}
@@ -33,7 +35,7 @@ export const MusicItem = ({
           />
         )}
       </div>
-      <div className="flex w-full gap-2 items-center">
+      <div className="flex w-full gap-2 items-center justify-between">
         <div className="text-[2rem] flex-1 text-left">
           <p className="text-4xl">{music.title || "앨범명"}</p>
           <p className="text-xl">{music.artist || "가수명"}</p>
