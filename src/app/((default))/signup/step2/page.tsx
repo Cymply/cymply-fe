@@ -1,4 +1,4 @@
-// src/app/signup/nickname/page.tsx
+// src/app/signup/step2/page.tsx
 
 import SignupView from "@/widgets/signup/ui/SignupView";
 import SignupHeader from "@/features/signup/ui/SignupHeader";

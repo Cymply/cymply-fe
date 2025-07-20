@@ -1,3 +1,5 @@
+// src/features/letter/ui/LetterList.tsx
+
 import { Letters } from "@/entities/letter";
 
 export const LetterList = ({ letters }: Letters) => {

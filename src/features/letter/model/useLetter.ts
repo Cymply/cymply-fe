@@ -1,18 +1,27 @@
+// src/features/letter/model/useLetter.ts
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { letterApi } from "@/entities/letter/api/letterApi";
 import { LetterFormValues } from "@/features/letter/model/types";
 import { useCallback, useEffect } from "react";
-import { useAtom } from "jotai";
-import { letterAtom, lettersAtom, userLetterLinkAtom } from "@/entities/letter/store/letterStore";
+import {useAtom, useAtomValue} from "jotai";
+import {
+  letterAtom,
+  lettersAtom,
+  recipientCodeAtom,
+  recipientUrlAtom,
+  userLetterLinkAtom
+} from "@/entities/letter/store/letterStore";
+import {useAuth} from "@/shared/hooks/useAuth";
 
 export default function useLetter() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
-  const [userLetterLink, setUserLetterLink] = useAtom<string>(userLetterLinkAtom);
+  const [recipientUrl, setRecipientUrl] = useAtom(recipientUrlAtom);
   const [letter, setLetter] = useAtom(letterAtom);
   const [letters, setLetters] = useAtom(lettersAtom);
+  const {isAuthenticated} = useAuth()
 
   const {
     register,
@@ -41,14 +50,18 @@ export default function useLetter() {
   // 나의 편지를 받을 주소 생성하는 곳
   const createUserLink = useCallback(async () => {
     try {
-      const res = await letterApi.createUserLetterLink();
-      console.log("내 편지 받을 링크 조회", res);
-      if (res.status != 200) throw res.statusText;
-      setUserLetterLink(res.data.data?.content?.link);
+      if (isAuthenticated) {
+        const res = await letterApi.createUserLetterLink();
+        console.log("내 편지 받을 링크 조회", res);
+        if (res.status != 200) throw res.statusText;
+        setRecipientUrl(res.data.data?.content?.link);
+      } else {
+        router.push("/login")
+      }
     } catch (error) {
       console.error(error);
     }
-  }, [userLetterLink]);
+  }, [recipientUrl, isAuthenticated]);
 
   // 편지 하나 조회
   const getLetter = useCallback(
@@ -93,5 +106,6 @@ export default function useLetter() {
     createUserLink,
     getLetter,
     getLetters,
+    recipientUrl,
   };
 }

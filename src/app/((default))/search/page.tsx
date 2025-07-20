@@ -10,11 +10,14 @@ import { musicApi } from "@/entities/music/api/musicApi";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
-import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import {useRouter, useSearchParams} from "next/navigation";
+import {useEffect, useRef, useState} from "react";
 
 export default function SearchPage() {
   const router = useRouter();
+  const urlSearchParams = useSearchParams();
+  const [userCode, setUserCode] = useState<string | null>(null);
+  
   const { selectedMusic, handleMusicSelect, handleSelectedMusicReset } =
     useSelectMusicItem();
 
@@ -44,6 +47,15 @@ export default function SearchPage() {
   // 음악 고유 식별자 생성 함수
   const getMusicId = (music: TMusicItem) =>
     `${music.title || ""}-${music.artist || ""}-${music.thumbnail || ""}`;
+  
+  // user-code 파라미터 확인
+  useEffect(() => {
+    const code = urlSearchParams.get('user-code');
+    if (code) {
+      console.log('🔍 편지 받는 사람 코드:', code);
+      setUserCode(code);
+    }
+  }, [urlSearchParams]);
 
   return (
     <div className="w-full h-full flex flex-col">

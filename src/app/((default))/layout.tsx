@@ -1,3 +1,5 @@
+// src/((default))/layout.tsx
+
 import { BackBtn } from "@/widgets/header/ui/BackBtn";
 import React from "react";
 
