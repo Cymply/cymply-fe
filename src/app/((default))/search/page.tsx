@@ -10,6 +10,7 @@ import { musicApi } from "@/entities/music/api/musicApi";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
+
 import {useRouter, useSearchParams} from "next/navigation";
 import {useEffect, useRef, useState} from "react";
 
@@ -57,6 +58,9 @@ export default function SearchPage() {
     }
   }, [urlSearchParams]);
 
+  useEffect(() => {
+    handleSelectedMusicReset();
+  }, []);
   return (
     <div className="w-full h-full flex flex-col">
       {/* 헤더 영역 */}
