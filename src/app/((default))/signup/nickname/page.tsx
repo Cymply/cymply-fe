@@ -1,5 +1,4 @@
 // src/app/signup/nickname/page.tsx
-
 import SignupView from "@/widgets/signup/ui/SignupView";
 import SignupHeader from "@/features/signup/ui/SignupHeader";
 import SignupFooter from "@/features/signup/ui/SignupFooter";
