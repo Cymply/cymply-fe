@@ -41,7 +41,7 @@ export function useSignupRedirectWithErrorHandling() {
       // 약간의 딜레이 후 리다이렉트 (사용자 경험 개선)
       setTimeout(() => {
         router.push('/signup/step1');
-      }, 500);
+      }, 1000);
       
     } catch (error) {
       console.error("afterSocialLogin error", error);
