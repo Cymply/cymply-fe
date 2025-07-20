@@ -1,14 +1,16 @@
+// src/middleware.ts (수정된 버전)
 import { NextRequest, NextResponse } from 'next/server'
 
 export function middleware(request: NextRequest) {
   const publicPaths = ['/login', '/main', '/signup', '/signin']
-  const recipientCodePath = "/letters"
+  const letterCodePath = "/letter/code"  // /letter/code/[code] 패턴용
+  const recipientCodePath = "/letters"   // 기존 /letters?code= 패턴용
+  
   // URL 디코딩 후 경로 정규화
   const rawPathname = decodeURIComponent(request.nextUrl.pathname)
-  // 연속된 슬래시를 하나로 변경하고, 앞뒤 공백 제거
   const pathname = rawPathname.replace(/\/+/g, '/').trim()
   
-  console.log('🔍 Middleware 실행:', pathname) // 디버깅용
+  console.log('🔍 Middleware 실행:', pathname)
   
   // public path면 통과
   if (publicPaths.some(path => pathname.startsWith(path))) {
@@ -19,17 +21,39 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('accessToken')?.value ||
     request.headers.get('authorization')?.replace('Bearer ', '')
   
-  // middleware.ts의 쿠키 저장 부분 수정
   if (!token) {
     console.log('❌ 토큰 없음, 리다이렉트 필요:', pathname)
     
     const response = NextResponse.redirect(new URL('/login', request.url))
     
-    if (pathname.startsWith(recipientCodePath)) {
+    // /letter/code/[code] 패턴 처리
+    if (pathname.startsWith(letterCodePath)) {
+      const codeMatch = pathname.match(/\/letter\/code\/(.+)/)
+      if (codeMatch) {
+        const code = codeMatch[1]
+        const redirectUrl = `/search`  // URL에서 code 제거
+        
+        response.cookies.set('recipientCode', code, {
+          maxAge: 30 * 60,
+          httpOnly: false,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax'
+        })
+        response.cookies.set('recipientRedirectUrl', redirectUrl, {
+          maxAge: 30 * 60,
+          httpOnly: false,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax'
+        })
+        
+        console.log('📝 Saved letter code redirect URL:', redirectUrl, 'with code:', code)
+      }
+    }
+    // 기존 /letters?code= 패턴 처리
+    else if (pathname.startsWith(recipientCodePath)) {
       const recipientCode = request.nextUrl.searchParams.get('code')
       if (recipientCode) {
-        // 정규화된 URL을 쿠키에 저장 (인코딩하지 않음)
-        const redirectUrl = `/letters?code=${recipientCode}`
+        const redirectUrl = `/search`  // URL에서 code 제거
         
         response.cookies.set('recipientCode', recipientCode, {
           maxAge: 30 * 60,
@@ -44,10 +68,10 @@ export function middleware(request: NextRequest) {
           sameSite: 'lax'
         })
         
-        console.log('📝 Saved recipient redirect URL:', redirectUrl)
+        console.log('📝 Saved recipient redirect URL:', redirectUrl, 'with code:', recipientCode)
       }
     } else {
-      // 정규화된 경로를 쿠키에 저장
+      // 일반 경로 저장
       response.cookies.set('generalRedirectUrl', pathname, {
         maxAge: 30 * 60,
         httpOnly: false,
