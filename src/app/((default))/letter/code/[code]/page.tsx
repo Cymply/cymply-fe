@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { useAtom } from 'jotai';
-import { recipientCodeAtom } from "@/entities/letter";
+import {recipientCodeAtom, recipientUrlAtom} from "@/entities/letter";
 import { TokenManager } from '@/shared/lib/tokenManager';
 
 export default function LetterCodePage() {
@@ -13,8 +13,9 @@ export default function LetterCodePage() {
   const params = useParams();
   const { isAuthenticated, isLoading } = useAuth();
   const [, setRecipientCode] = useAtom(recipientCodeAtom);
-  
   const code = params.code as string;
+  const [, setRecipientUrl] = useAtom(recipientUrlAtom);
+  
   
   useEffect(() => {
     // 코드가 유효하지 않은 경우 메인으로 리다이렉트
