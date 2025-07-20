@@ -6,8 +6,25 @@
 
 @font-face {
   font-family: "Pretendard";
-  src: url("../../public/fonts/PretendardVariable.woff2") format("woff2");
+  src: url("/fonts/PretendardVariable.woff2") format("woff2");
   font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* GangwonEdu 폰트 추가 */
+@font-face {
+  font-family: "GangwonEduAll";
+  src: url("/fonts/GangwonEduAllBold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GangwonEduAll";
+  src: url("/fonts/GangwonEduAllLight.ttf") format("truetype");
+  font-weight: 300;
   font-style: normal;
   font-display: swap;
 }

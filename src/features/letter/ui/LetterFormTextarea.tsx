@@ -1,3 +1,5 @@
+// src/features/letter/ui/LetterFormTextarea.tsx
+
 import React from "react";
 import clsx from "clsx";
 import { Textarea } from "@/components/ui/textarea";

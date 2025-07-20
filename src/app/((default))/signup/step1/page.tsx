@@ -1,4 +1,4 @@
-//src/app/signup/profile/page.tsx
+//src/app/signup/step1/page.tsx
 "use client"
 
 import SignupView from "@/widgets/signup/ui/SignupView";
