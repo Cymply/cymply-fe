@@ -1,11 +1,16 @@
 import React from "react";
 import { Header } from "@/widgets/header";
+import { Alert } from "@/widgets/alert";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="relative flex flex-col w-full h-full bg-[url('/images/img-main-bg.png')] bg-cover bg-center bg-no-repeat">
+    <main className="relative w-full h-screen overflow-hidden">
       <Header />
-      <div className="flex flex-col w-full h-full pl-9 pr-9">{children}</div>
+      <div className="absolute inset-0 bg-[url('/images/img-main-bg.png')] bg-cover bg-center bg-no-repeat z-0"></div>
+      <Alert />
+      <div className="relative z-10 pt-[var(--header-height)] overflow-y-scroll h-full px-9 pb-[4.5rem]">
+        {children}
+      </div>
     </main>
   );
 }
