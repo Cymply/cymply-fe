@@ -129,7 +129,7 @@ apiClient.interceptors.response.use(
 // 인증 상태 확인 함수
 export const checkAuthStatus = async (): Promise<boolean> => {
   try {
-    if (!TokenManager.hasAccessToken()) {
+    if (typeof window !== 'undefined' && !TokenManager.hasAccessToken()) {
       return false;
     }
     

@@ -7,11 +7,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radioGroup";
 import useSelectAgeGroup from "@/entities/signup/hooks/useSelectAgeGroup";
 
 const AGE_GROUPS = [
-  { value: "under_9", label: "9세 이하" },
-  { value: "10_19", label: "10 ~ 19세" },
-  { value: "20_24", label: "20 ~ 24세" },
-  { value: "25_30", label: "25 ~ 30세" },
-  { value: "over_31", label: "31세 이상" },
+  { value: "AGE_UNDER_10", label: "9세 이하" },
+  { value: "AGE_10_19", label: "10 ~ 19세" },
+  { value: "AGE_20_24", label: "20 ~ 24세" },
+  { value: "AGE_25_30", label: "25 ~ 30세" },
+  { value: "AGE_OVER_30", label: "31세 이상" },
 ] as const;
 
 export default function SelectAgeGroup() {
