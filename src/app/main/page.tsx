@@ -59,7 +59,7 @@ export default function MainPage() {
         ],
       });
     }
-  }, [isAuthenticated, setAlert, router]);
+  }, [loading, authLoading, isAuthenticated, setAlert, router]);
 
   // 인증 로딩 중이거나 편지 로딩 중일 때
   if (authLoading || loading) {

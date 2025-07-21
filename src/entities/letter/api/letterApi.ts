@@ -3,7 +3,7 @@ import { SendLetterRequest } from "@/entities/letter/model/types";
 
 export const letterApi = {
   // 편지 단건 조회
-  getLetter: async (id: string) => await apiClient.get(`/api/v1/letters/${id}`),
+  getLetter: async (id: number) => await apiClient.get(`/api/v1/letters/${id}`),
 
   // 받은 편지 목록
   getLetters: async () => await apiClient.get(`/api/v1/letters/received/grouped`),

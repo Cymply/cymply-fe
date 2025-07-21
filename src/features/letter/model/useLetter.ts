@@ -77,7 +77,7 @@ export default function useLetter() {
 
   // 편지 하나 조회
   const getLetter = useCallback(
-    async (letterId: string) => {
+    async (letterId: number) => {
       try {
         if (!isAuthenticated) {
           console.log("❌ 인증되지 않음 - getLetter");

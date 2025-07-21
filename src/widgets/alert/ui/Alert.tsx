@@ -10,7 +10,7 @@ export const Alert = () => {
   if (!open) return null;
 
   return (
-    <Portal>
+    <Portal containerId="portal-root">
       <div className="fixed inset-0 flex items-center justify-center z-50 bg-black-900/70">
         <div className="bg-white pt-[3.75rem] pl-11 pr-11 pb-[4.5rem] rounded-lg w-[42.375rem] text-left shadow-xl">
           <div className="mb-[3.75rem]">
