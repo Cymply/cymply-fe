@@ -41,7 +41,7 @@ export default function MainPage() {
 
   useEffect(() => {
     // 인증되지 않은 경우
-    if (!isAuthenticated) {
+    if (!loading && !authLoading && !isAuthenticated) {
       setAlert({
         open: true,
         title: (
