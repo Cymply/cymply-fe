@@ -41,7 +41,7 @@ export default function MainPage() {
 
   useEffect(() => {
     // 인증되지 않은 경우
-    if (!isAuthenticated) {
+    if (!loading && !authLoading && !isAuthenticated) {
       setAlert({
         open: true,
         title: (
@@ -59,7 +59,7 @@ export default function MainPage() {
         ],
       });
     }
-  }, [isAuthenticated, setAlert, router]);
+  }, [loading, authLoading, isAuthenticated, setAlert, router]);
 
   // 인증 로딩 중이거나 편지 로딩 중일 때
   if (authLoading || loading) {

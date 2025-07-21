@@ -8,6 +8,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <Header />
       <div className="absolute inset-0 bg-[url('/images/img-main-bg.png')] bg-cover bg-center bg-no-repeat z-0"></div>
       <Alert />
+      <div id="portal-root" />
+      <div id="modal-root" />
       <div className="relative z-10 pt-[var(--header-height)] overflow-y-scroll h-full px-9 pb-[4.5rem]">
         {children}
       </div>
