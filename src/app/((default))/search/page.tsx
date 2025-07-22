@@ -11,16 +11,15 @@ import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
 
-import {useRouter, useSearchParams} from "next/navigation";
-import {useEffect, useRef, useState} from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 export default function SearchPage() {
   const router = useRouter();
   const urlSearchParams = useSearchParams();
   const [userCode, setUserCode] = useState<string | null>(null);
-  
-  const { selectedMusic, handleMusicSelect, handleSelectedMusicReset } =
-    useSelectMusicItem();
+
+  const { selectedMusic, handleMusicSelect, handleSelectedMusicReset } = useSelectMusicItem();
 
   const { data, search, loadMore, hasNextPage, isFetching, searchParams } =
     useInfiniteSearch<TMusicItem>({
@@ -40,20 +39,19 @@ export default function SearchPage() {
     hasNextPage,
     isFetching,
     onLoadMore: loadMore,
-    scrollContainerRef:
-      scrollContainerRef as React.RefObject<HTMLElement | null>,
+    scrollContainerRef: scrollContainerRef as React.RefObject<HTMLElement | null>,
     threshold: 50,
   });
 
   // 음악 고유 식별자 생성 함수
   const getMusicId = (music: TMusicItem) =>
     `${music.title || ""}-${music.artist || ""}-${music.thumbnail || ""}`;
-  
+
   // user-code 파라미터 확인
   useEffect(() => {
-    const code = urlSearchParams.get('user-code');
+    const code = urlSearchParams.get("user-code");
     if (code) {
-      console.log('🔍 편지 받는 사람 코드:', code);
+      console.log("🔍 편지 받는 사람 코드:", code);
       setUserCode(code);
     }
   }, [urlSearchParams]);
@@ -88,16 +86,11 @@ export default function SearchPage() {
       </div>
 
       {/* 검색 결과 영역 - 최대 높이 제한 */}
-      <div
-        ref={scrollContainerRef}
-        className=" overflow-y-auto pr-2 border border-gray-100 rounded-lg p-4"
-      >
+      <div ref={scrollContainerRef} className="overflow-y-auto">
         {!isEmpty(searchParams.keyword) && data.length > 0 ? (
           <RadioGroup
             value={
-              selectedMusic.title && selectedMusic.artist
-                ? getMusicId(selectedMusic)
-                : undefined
+              selectedMusic.title && selectedMusic.artist ? getMusicId(selectedMusic) : undefined
             }
             onValueChange={(value) => {
               // 선택된 value로 전체 음악 객체 찾기
@@ -119,18 +112,18 @@ export default function SearchPage() {
               <RadioGroupItem
                 value={getMusicId(result)}
                 key={`${result.title}-${result.artist}-${result.thumbnail}-${index}`}
-                className="flex items-center gap-4 justify-center"
+                className={cn(
+                  "pt-6 pb-6 pl-9 pr-9 flex items-center gap-4 justify-center transition delay-100 duration-300 ease-in-out",
+                  selectedMusic.title === result.title &&
+                    selectedMusic.artist === result.artist &&
+                    selectedMusic.thumbnail === result.thumbnail &&
+                    "!bg-primary-light"
+                )}
               >
                 <MusicItem
                   key={`${result.title}-${result.artist}-${result.thumbnail}-${index}`}
                   music={result}
-                  className={cn(
-                    "w-full gap-4 flex",
-                    selectedMusic.title === result.title &&
-                      selectedMusic.artist === result.artist &&
-                      selectedMusic.thumbnail === result.thumbnail &&
-                      "!bg-yellow-50 border-[0.1875rem] !border-amber-400 "
-                  )}
+                  className="w-full gap-9 flex"
                 />
               </RadioGroupItem>
             ))}
@@ -153,7 +146,7 @@ export default function SearchPage() {
       </div>
 
       {/* 하단 버튼 영역 - 고정 간격 */}
-      <div className="flex flex-col gap-6 mt-6 mb-6 flex-shrink-0">
+      <div className="fixed bottom-[3.75rem] w-full">
         <Button
           onClick={() => {
             router.push("/letter/write");
@@ -161,15 +154,7 @@ export default function SearchPage() {
           variant="primary"
           disabled={!selectedMusic.title || !selectedMusic.artist}
         >
-          편지 보내기
-        </Button>
-        <Button
-          onClick={() => {
-            router.push("/main");
-          }}
-          variant="secondary"
-        >
-          홈으로 돌아가기
+          노래 선택
         </Button>
       </div>
     </div>

@@ -72,5 +72,5 @@ export default function MainPage() {
 
   console.log("📮 편지 목록:", letters);
 
-  return letters?.length ? <LetterList letters={letters} /> : <LetterEmpty />;
+  return letters.length > 1 ? <LetterList letters={letters} /> : <LetterEmpty />;
 }

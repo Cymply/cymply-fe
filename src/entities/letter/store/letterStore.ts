@@ -1,11 +1,11 @@
-import { atom, useAtom } from "jotai";
-import { Letter } from "@/entities/letter/model/types";
+import { atom } from "jotai";
+import { LetterDetail, Letters } from "@/entities/letter/model/types";
 
 export const userLetterLinkAtom = atom<string>("");
 
-export const letterAtom = atom<Letter | null>(null);
+export const letterAtom = atom<LetterDetail | null>(null);
 
-export const lettersAtom = atom<Letter[]>([]);
+export const lettersAtom = atom<Letters[]>([]);
 
 export const recipientCodeAtom = atom<string | null>(null);
 
