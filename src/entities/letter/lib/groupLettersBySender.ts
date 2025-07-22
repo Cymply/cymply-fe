@@ -5,8 +5,10 @@ export function groupLettersBySender(letters: Letter[]): Letter[][] {
   const groups: Record<number, Letter[]> = {};
 
   letters.forEach((letter) => {
-    if (!letter.senderId) return;
-    if (!groups[letter.senderId]) groups[letter.senderId] = [];
+    if (letter.senderId === undefined || letter.senderId) return;
+    if (!groups[letter.senderId]) {
+      groups[letter.senderId] = [];
+    }
     groups[letter.senderId].push(letter);
   });
 

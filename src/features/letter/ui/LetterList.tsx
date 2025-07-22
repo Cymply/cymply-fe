@@ -1,19 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { Letter, Letters } from "@/entities/letter";
+import { Letter, LetterDetail, Letters } from "@/entities/letter";
 import { LetterCard } from "@/shared/ui";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { groupLettersBySender } from "@/entities/letter";
 import { Modal } from "@/widgets/modal/ui/Modal";
 import useLetter from "../model/useLetter";
 
-export const LetterList = ({ letters }: Letters) => {
+interface LetterListProps {
+  letters: Letters[];
+}
+
+export const LetterList = ({ letters }: LetterListProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [detailLetter, setDetailLetter] = useState<Letter | null>(null);
-  const groupedLetters = groupLettersBySender(letters);
+  const [detailLetter, setDetailLetter] = useState<LetterDetail | null>(null);
 
   const { getLetter } = useLetter();
 
@@ -27,11 +29,10 @@ export const LetterList = ({ letters }: Letters) => {
       setLoading(true);
       setIsModalOpen(true);
 
-      await getLetter(letter.id);
-      setDetailLetter(letter);
+      const fetchedDetail = await getLetter(letter.id);
+      setDetailLetter(fetchedDetail ?? null);
     } catch (error) {
       console.error("편지 상세 조회 실패:", error);
-      setDetailLetter(letter);
     } finally {
       setLoading(false);
     }
@@ -45,7 +46,7 @@ export const LetterList = ({ letters }: Letters) => {
   return (
     <div>
       <div className="flex flex-col">
-        {groupedLetters.map((group, idx) => (
+        {letters.map((group, idx) => (
           <div
             key={idx}
             className="font-gangwonEduAll border-b border-dashed border-borderColor-dashed"
@@ -53,8 +54,7 @@ export const LetterList = ({ letters }: Letters) => {
             {/* 타이틀 */}
             <div className="mt-[4.5rem] mb-[4.5rem]">
               <h3 className="text-[3.25rem] font-semibold text-black-400">
-                ✉️{" "}
-                <span className="text-black-800">{group[0]?.senderNickname ?? "알 수 없음"}</span>{" "}
+                ✉️ <span className="text-black-800">{group.senderNickname ?? "알 수 없음"}</span>{" "}
                 님에게 온 편지
               </h3>
             </div>
@@ -67,7 +67,7 @@ export const LetterList = ({ letters }: Letters) => {
                 centeredSlides={false}
                 style={{ width: "100%" }}
               >
-                {group.map((letter) => (
+                {group.letters.map((letter) => (
                   <SwiperSlide key={letter.id} style={{ width: "76%" }}>
                     <LetterCard letter={letter} handleModalOpen={() => handleModalOpen(letter)} />
                   </SwiperSlide>

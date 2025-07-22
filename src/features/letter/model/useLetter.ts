@@ -9,7 +9,7 @@ import { useAtom } from "jotai";
 import { letterAtom, lettersAtom, recipientUrlAtom } from "@/entities/letter/store/letterStore";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { TokenManager } from "@/shared/lib/tokenManager";
-import { mockLetters } from "@/entities/letter/mock/mockLetters";
+import { mockLetterDetailsById, mockLetters } from "@/entities/letter/mock/mockLetters";
 
 export default function useLetter() {
   const searchParams = useSearchParams();
@@ -79,6 +79,13 @@ export default function useLetter() {
   const getLetter = useCallback(
     async (letterId: number) => {
       try {
+        const isDev = process.env.NODE_ENV === "development";
+
+        if (isDev) {
+          console.log("⚙️ 개발 모드 - 목업 데이터 사용");
+          return mockLetterDetailsById[letterId] || null; // ✅ 해당 ID의 LetterDetail 반환, 없으면 null
+        }
+
         if (!isAuthenticated) {
           console.log("❌ 인증되지 않음 - getLetter");
           return;
@@ -87,7 +94,7 @@ export default function useLetter() {
         const res = await letterApi.getLetter(letterId);
         console.log("편지 조회 단건", res);
         if (res.status != 200) throw res.statusText;
-        setLetter(res.data.data.letters);
+        setLetter(res.data.data.content);
       } catch (error) {
         console.error("편지 단건 조회 실패:", error);
       }
@@ -126,7 +133,7 @@ export default function useLetter() {
         throw new Error(`API Error: ${res.status} ${res.statusText}`);
       }
 
-      setLetters(res.data.data);
+      setLetters(res.data.data.content);
       console.log("✅ 편지 목록 조회 완료");
     } catch (error) {
       console.error("편지 목록 조회 실패:", error);
