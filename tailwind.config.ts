@@ -18,6 +18,9 @@ export default {
         pretendard: ["var(--font-pretendard)"],
         gangwonEduAll: ["var(--font-gangwonEduAll)"],
       },
+      boxShadow: {
+        button: "0px -30px 30px rgba(255, 255, 255, 0.5)",
+      },
       colors: {
         ...colors,
         background: "#ffffff",
