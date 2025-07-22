@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Letter, LetterDetail, Letters } from "@/entities/letter";
-import { LetterCard } from "@/shared/ui";
+import { LetterCard, LetterCardDetail } from "@/shared/ui";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Modal } from "@/widgets/modal/ui/Modal";
@@ -77,12 +77,13 @@ export const LetterList = ({ letters }: LetterListProps) => {
           </div>
         ))}
       </div>
-      <Modal
-        isModalOpen={isModalOpen}
-        isLoading={loading}
-        detailItem={detailLetter}
-        handleModalClose={handleModalClose}
-      />
+      <Modal isModalOpen={isModalOpen} isLoading={loading} handleModalClose={handleModalClose}>
+        {detailLetter ? (
+          <LetterCardDetail detailItem={detailLetter} />
+        ) : (
+          !loading && isModalOpen && <p>편지 내용을 불러올 수 없습니다.</p>
+        )}
+      </Modal>
     </div>
   );
 };
