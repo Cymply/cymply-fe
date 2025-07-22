@@ -59,6 +59,7 @@ export default function SearchPage() {
   useEffect(() => {
     handleSelectedMusicReset();
   }, []);
+
   return (
     <div className="w-full h-full flex flex-col">
       {/* 헤더 영역 */}
@@ -86,7 +87,7 @@ export default function SearchPage() {
       </div>
 
       {/* 검색 결과 영역 - 최대 높이 제한 */}
-      <div ref={scrollContainerRef} className="overflow-y-auto">
+      <div ref={scrollContainerRef} className="overflow-y-auto flex-1">
         {!isEmpty(searchParams.keyword) && data.length > 0 ? (
           <RadioGroup
             value={
@@ -146,7 +147,7 @@ export default function SearchPage() {
       </div>
 
       {/* 하단 버튼 영역 - 고정 간격 */}
-      <div className="fixed bottom-[3.75rem] w-full">
+      <div className="block mb-[11.25rem] w-full shadow-button">
         <Button
           onClick={() => {
             router.push("/letter/write");
