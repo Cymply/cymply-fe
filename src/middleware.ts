@@ -34,13 +34,13 @@ export function middleware(request: NextRequest) {
         const redirectUrl = `/search`  // URL에서 code 제거
         
         response.cookies.set('recipientCode', code, {
-          maxAge: 30 * 60,
+          // maxAge: 30 * 60,
           httpOnly: false,
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'lax'
         })
         response.cookies.set('recipientRedirectUrl', redirectUrl, {
-          maxAge: 30 * 60,
+          // maxAge: 30 * 60,
           httpOnly: false,
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'lax'

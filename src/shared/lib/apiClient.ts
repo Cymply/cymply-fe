@@ -41,10 +41,7 @@ const refreshTokens = async (): Promise<string> => {
 
   try {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/token/refresh`,
-      {
-        refreshToken,
-      }
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/token/refresh`, refreshToken
     );
 
     const { accessToken, refreshToken: newRefreshToken } = response.data;
@@ -138,7 +135,8 @@ export const checkAuthStatus = async (): Promise<boolean> => {
       return false;
     }
 
-    const response = await apiClient.get("/api/v1/users/me");
+    const response = await refreshTokens();
+    print
     return response.status === 200;
   } catch (error) {
     console.error("인증 상태 확인 실패:", error);
@@ -149,7 +147,8 @@ export const checkAuthStatus = async (): Promise<boolean> => {
 // 로그아웃 함수
 export const logout = async (): Promise<void> => {
   try {
-    await apiClient.post("/api/v1/auth/logout");
+    await apiClient.post("/api/v1/logout");
+    TokenManager.clearTokens();
   } catch (error) {
     console.error("Logout error:", error);
   } finally {

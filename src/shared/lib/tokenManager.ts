@@ -9,7 +9,7 @@ export class TokenManager {
   private static readonly REFRESH_TOKEN_KEY = 'refreshToken';
   
   // 쿠키 헬퍼 함수들
-  private static setCookie(name: string, value: string, maxAge: number = 3600): void {
+  private static setCookie(name: string, value: string, maxAge: number = 360): void {
     if (typeof window !== 'undefined') {
       const secure = process.env.NODE_ENV === 'production' ? '; secure' : '';
       const sameSite = '; samesite=lax';
@@ -47,7 +47,7 @@ export class TokenManager {
       
       // accessToken은 쿠키에 저장 (1시간)
       if (tokens.accessToken) {
-        this.setCookie(this.ACCESS_TOKEN_KEY, tokens.accessToken, 3600);
+        this.setCookie(this.ACCESS_TOKEN_KEY, tokens.accessToken, 360);
       }
       
       // refreshToken은 sessionStorage에 저장

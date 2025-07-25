@@ -79,7 +79,7 @@ export default function useSigninRedirect() {
       if (!tokenSaved) {
         console.log('🔧 토큰 저장 실패, 직접 저장 시도');
         // 토큰 직접 저장 시도
-        document.cookie = `accessToken=${accessToken}; path=/; max-age=3600`;
+        document.cookie = `accessToken=${accessToken}; path=/; max-age=360`;
         
         // 직접 저장 후 다시 확인
         const retryTokenSaved = await waitForTokenSave(accessToken, 1000);

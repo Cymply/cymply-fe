@@ -39,7 +39,7 @@ export const useAuth = () => {
   };
   
   const login = async (tokens: { accessToken: string; refreshToken?: string }) => {
-    console.log('🔍 useAuth login 시작');
+    console.log('🔍 useAuth login 시작 : tokens', tokens);
     
     // accessToken은 쿠키에, refreshToken은 sessionStorage에 저장
     TokenManager.setTokens(tokens);
