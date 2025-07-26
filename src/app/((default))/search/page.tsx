@@ -11,16 +11,17 @@ import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
 import {useRouter, useSearchParams} from "next/navigation";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState, Suspense} from "react";
 
-export default function SearchPage() {
+// useSearchParams를 사용하는 컴포넌트를 별도로 분리
+function SearchPageContent() {
   const router = useRouter();
   const urlSearchParams = useSearchParams();
   const [userCode, setUserCode] = useState<string | null>(null);
   
   const { selectedMusic, handleMusicSelect, handleSelectedMusicReset } =
     useSelectMusicItem();
-
+  
   const { data, search, loadMore, hasNextPage, isFetching, searchParams } =
     useInfiniteSearch<TMusicItem>({
       queryKey: "searchMusic",
@@ -30,10 +31,10 @@ export default function SearchPage() {
       },
       initialLimit: 10,
     });
-
+  
   // 스크롤 컨테이너 ref
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
+  
   // 스크롤 기반 무한스크롤 설정
   useScrollInfiniteLoad({
     hasNextPage,
@@ -43,7 +44,7 @@ export default function SearchPage() {
       scrollContainerRef as React.RefObject<HTMLElement | null>,
     threshold: 50,
   });
-
+  
   // 음악 고유 식별자 생성 함수
   const getMusicId = (music: TMusicItem) =>
     `${music.title || ""}-${music.artist || ""}-${music.thumbnail || ""}`;
@@ -56,7 +57,7 @@ export default function SearchPage() {
       setUserCode(code);
     }
   }, [urlSearchParams]);
-
+  
   return (
     <div className="w-full h-full flex flex-col">
       {/* 헤더 영역 */}
@@ -70,7 +71,7 @@ export default function SearchPage() {
           &quot;가수 이름 + 곡명&quot; 형태로 입력해 주세요.
         </p>
       </div>
-
+      
       {/* 검색창 */}
       <div className="mt-6 mb-6 flex-shrink-0">
         <SearchInput
@@ -82,7 +83,7 @@ export default function SearchPage() {
           placeholder="가수명과 곡명을 함께 입력해 주세요"
         />
       </div>
-
+      
       {/* 검색 결과 영역 - 최대 높이 제한 */}
       <div
         ref={scrollContainerRef}
@@ -100,7 +101,7 @@ export default function SearchPage() {
               const selectedMusicItem = data.find(
                 (music: TMusicItem) => getMusicId(music) === value
               );
-
+              
               if (selectedMusicItem) {
                 handleMusicSelect({
                   title: selectedMusicItem.title,
@@ -123,14 +124,14 @@ export default function SearchPage() {
                   className={cn(
                     "w-full gap-4 flex",
                     selectedMusic.title === result.title &&
-                      selectedMusic.artist === result.artist &&
-                      selectedMusic.thumbnail === result.thumbnail &&
-                      "!bg-yellow-50 border-[0.1875rem] !border-amber-400 "
+                    selectedMusic.artist === result.artist &&
+                    selectedMusic.thumbnail === result.thumbnail &&
+                    "!bg-yellow-50 border-[0.1875rem] !border-amber-400 "
                   )}
                 />
               </RadioGroupItem>
             ))}
-
+            
             {/* 로딩 표시 */}
             {isFetching && (
               <div className="h-4 flex items-center justify-center">
@@ -147,7 +148,7 @@ export default function SearchPage() {
           </div>
         )}
       </div>
-
+      
       {/* 하단 버튼 영역 - 고정 간격 */}
       <div className="flex flex-col gap-6 mt-6 mb-6 flex-shrink-0">
         <Button
@@ -169,5 +170,18 @@ export default function SearchPage() {
         </Button>
       </div>
     </div>
+  );
+}
+
+// 메인 컴포넌트에서 Suspense로 감싸기
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="text-lg">검색 페이지를 불러오는 중...</div>
+      </div>
+    }>
+      <SearchPageContent />
+    </Suspense>
   );
 }

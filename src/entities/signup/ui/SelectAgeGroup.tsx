@@ -1,7 +1,7 @@
 // src/entities/signup/ui/SelectAgeGroup.tsx
 "use client";
 
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui/Label";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radioGroup";
 import useSelectAgeGroup from "@/entities/signup/hooks/useSelectAgeGroup";

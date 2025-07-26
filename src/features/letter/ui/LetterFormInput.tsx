@@ -4,7 +4,7 @@
 
 import React, { useState } from "react";
 import clsx from "clsx";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/Input";
 import Image from "next/image";
 
 type LetterFormInputProps = {

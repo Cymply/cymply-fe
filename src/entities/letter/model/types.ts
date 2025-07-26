@@ -15,6 +15,8 @@ export interface Letters {
 }
 
 export interface SendLetterRequest {
-  receipt: string;
-  content: string;
+  recipientCode?: string | null;
+  content?: string;
+  title?: string;
+  artist?: string
 }

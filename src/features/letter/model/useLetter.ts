@@ -14,15 +14,19 @@ import {
   userLetterLinkAtom
 } from "@/entities/letter/store/letterStore";
 import {useAuth} from "@/shared/hooks/useAuth";
+import {musicAtom} from "@/store/musicStore";
+import {SendLetterRequest} from "@/entities/letter";
 
 export default function useLetter() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [recipientUrl, setRecipientUrl] = useAtom(recipientUrlAtom);
+  const recipientCode = useAtomValue(recipientCodeAtom);
   const [letter, setLetter] = useAtom(letterAtom);
   const [letters, setLetters] = useAtom(lettersAtom);
   const {isAuthenticated} = useAuth()
-
+  const [selectedMusic, setSelectedMusic] = useAtom(musicAtom);
+  
   const {
     register,
     handleSubmit,
@@ -32,16 +36,20 @@ export default function useLetter() {
 
   // 편지 보내기
   const onSubmit = async (data: LetterFormValues) => {
-    const userCode = searchParams.get("user-code") || "12345678";
     try {
-      const res = await letterApi.sendLetter({
-        receipt: userCode,
+      const sendRequest : SendLetterRequest = {
+        recipientCode: recipientCode,
         content: data.contents,
-      });
+        title: data.title,
+        artist: selectedMusic.artist
+      }
+      console.log("편지 전송 확인, ", sendRequest)
+      
+      const res = await letterApi.sendLetter(sendRequest);
       if (res.status != 200) {
         throw res.statusText;
       }
-      // router.push("/letter/sent");
+      router.push("/letter/sent");
     } catch (error) {
       console.error(error);
     }

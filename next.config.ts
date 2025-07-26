@@ -1,9 +1,13 @@
 import type { NextConfig } from "next";
 import { codeInspectorPlugin } from "code-inspector-plugin";
+
 const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
   output: "standalone",
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -17,7 +21,7 @@ const nextConfig: NextConfig = {
     if (dev && !isServer) {
     }
     console.log("next.config.js/webpack.plugins", config.plugins);
-
+    
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],

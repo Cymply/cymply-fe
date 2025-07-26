@@ -1,7 +1,7 @@
 // src/entities/signup/ui/SelectSex.tsx
 "use client";
 
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui/Label";
 import { cn } from "@/lib/utils";
 import useSelectSex from "@/entities/signup/hooks/useSelectSex";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radioGroup";
