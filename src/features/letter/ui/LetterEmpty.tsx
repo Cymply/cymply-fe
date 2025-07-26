@@ -1,15 +1,25 @@
-// src/features/letter/ui/LetterEmpty.tsx
-
 "use client";
 
-import { Button } from "@/components/ui/button";
 import useLetter from "@/features/letter/model/useLetter";
-import { UrlLinkBox } from "@/shared/ui/UrlLinkBox";
+import { useAuth } from "@/shared/hooks/useAuth";
+import { CopyLinkButton, UrlLinkBox } from "@/shared/ui";
+import { useEffect } from "react";
 
 export const LetterEmpty = () => {
   const { createUserLink, recipientUrl } = useLetter();
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const init = async () => {
+      await createUserLink();
+    };
+    init();
+  }, [isAuthenticated]);
+
   return (
-    <div className="flex flex-col gap-24 h-full mt-[7.5rem]">
+    <div className="flex flex-col gap-24 mt-[7.5rem]">
       <div className="flex flex-col font-gangwonEduAll font-bold">
         <h3 className="text-black-800 text-[4rem] leading-tight mb-[4.5rem]">
           ✉️ 아직 도착한 <br />
@@ -22,9 +32,7 @@ export const LetterEmpty = () => {
         <p className="text-black-300 text-[2rem]">윤슬은 링크를 통해서만 편지를 받을 수 있어요.</p>
       </div>
       <UrlLinkBox recipientUrl={recipientUrl} />
-      <Button onClick={createUserLink} className="mt-3">
-        링크 복사하기
-      </Button>
+      <CopyLinkButton url={recipientUrl} />
     </div>
   );
 };

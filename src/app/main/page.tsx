@@ -8,16 +8,15 @@ import { lettersAtom } from "@/entities/letter/store/letterStore";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { alertAtom } from "@/widgets/alert";
 import { useRouter } from "next/navigation";
+import { LoadingSpinner } from "@/shared/ui";
 
 export default function MainPage() {
   const [loading, setLoading] = useState(true);
-
+  const router = useRouter();
   const letters = useAtomValue(lettersAtom);
+  const setAlert = useSetAtom(alertAtom);
   const { getLetters } = useLetter();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
-
-  const router = useRouter();
-  const setAlert = useSetAtom(alertAtom);
 
   useEffect(() => {
     const fetchLetters = async () => {
@@ -63,7 +62,7 @@ export default function MainPage() {
 
   // 인증 로딩 중이거나 편지 로딩 중일 때
   if (authLoading || loading) {
-    return <p>편지 불러오는 중...</p>;
+    return <LoadingSpinner />;
   }
 
   if (!isAuthenticated) {
