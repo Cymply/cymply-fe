@@ -105,13 +105,13 @@ export default function useLetter() {
   // 내 편지 목록 전체 조회
   const getLetters = useCallback(async () => {
     try {
-      const isDev = process.env.NODE_ENV === "development";
+      // const isDev = process.env.NODE_ENV === "development";
 
-      if (isDev) {
-        console.log("⚙️ 개발 모드 - 목업 데이터 사용");
-        setLetters(mockLetters);
-        return;
-      }
+      // if (isDev) {
+      //   console.log("⚙️ 개발 모드 - 목업 데이터 사용");
+      //   setLetters(mockLetters);
+      //   return;
+      // }
 
       if (!isAuthenticated) {
         console.log("❌ 인증되지 않음 - getLetters");
