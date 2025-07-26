@@ -4,7 +4,7 @@
 
 import { Button } from "@/components/ui/button";
 import useLetter from "@/features/letter/model/useLetter";
-import { UrlLinkBox } from "@/shared/ui/UrlLinkBox";
+import { UrlLinkBox } from "@/shared/ui";
 
 export const LetterEmpty = () => {
   const { createUserLink, recipientUrl } = useLetter();

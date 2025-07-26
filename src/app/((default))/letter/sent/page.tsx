@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import useLetter from "@/features/letter/model/useLetter";
-import { UrlLinkBox } from "@/shared/ui/UrlLinkBox";
+import { UrlLinkBox } from "@/shared/ui";
 import { useRouter } from "next/navigation";
 
 export default function LetterSentPage() {
