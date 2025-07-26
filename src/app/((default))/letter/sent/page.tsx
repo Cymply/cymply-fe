@@ -2,12 +2,24 @@
 
 import { Button } from "@/components/ui/button";
 import useLetter from "@/features/letter/model/useLetter";
-import { UrlLinkBox } from "@/shared/ui";
+import { useAuth } from "@/shared/hooks/useAuth";
+import { CopyLinkButton, UrlLinkBox } from "@/shared/ui";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function LetterSentPage() {
   const router = useRouter();
   const { createUserLink, recipientUrl } = useLetter();
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const init = async () => {
+      await createUserLink();
+    };
+    init();
+  }, [isAuthenticated]);
 
   const handleGoMain = () => {
     router.push("/main");
@@ -26,9 +38,7 @@ export default function LetterSentPage() {
         <UrlLinkBox recipientUrl={recipientUrl} />
       </div>
       <div className="flex flex-col gap-6">
-        <Button onClick={createUserLink} variant="primary">
-          링크 복사하기
-        </Button>
+        <CopyLinkButton url={recipientUrl} variant={"primary"} />
         <Button onClick={handleGoMain} variant="secondary">
           홈으로 돌아가기
         </Button>
