@@ -6,8 +6,8 @@ import process from "process";
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col h-full justify-between mt-44">
-      <div className="flex flex-col gap-20 font-gangwonEduAll">
+    <div className="flex flex-col h-full justify-between mt-[9.75rem]">
+      <div className="flex flex-col gap-16 font-gangwonEduAll">
         <h3 className="text-black-800 text-7xl leading-snug">
           마음 위로 번진 빛, <br /> 빛을 담은 <br />{" "}
           <span className="font-bold">마음을 전해보세요.</span>

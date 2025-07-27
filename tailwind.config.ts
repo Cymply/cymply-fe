@@ -20,6 +20,7 @@ export default {
       },
       boxShadow: {
         button: "0px -30px 30px rgba(255, 255, 255, 0.5)",
+        card: "30px 30px 40px 0 rgba(0, 0, 0, 0.12)",
       },
       colors: {
         ...colors,
