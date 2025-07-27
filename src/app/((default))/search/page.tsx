@@ -11,17 +11,16 @@ import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
 import {useRouter, useSearchParams} from "next/navigation";
-import {useEffect, useRef, useState, Suspense} from "react";
+import {useEffect, useRef, useState} from "react";
 
-// useSearchParams를 사용하는 컴포넌트를 별도로 분리
-function SearchPageContent() {
+export default function SearchPage() {
   const router = useRouter();
   const urlSearchParams = useSearchParams();
   const [userCode, setUserCode] = useState<string | null>(null);
   
   const { selectedMusic, handleMusicSelect, handleSelectedMusicReset } =
     useSelectMusicItem();
-  
+
   const { data, search, loadMore, hasNextPage, isFetching, searchParams } =
     useInfiniteSearch<TMusicItem>({
       queryKey: "searchMusic",
@@ -31,7 +30,7 @@ function SearchPageContent() {
       },
       initialLimit: 10,
     });
-  
+
   // 스크롤 컨테이너 ref
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
@@ -40,11 +39,10 @@ function SearchPageContent() {
     hasNextPage,
     isFetching,
     onLoadMore: loadMore,
-    scrollContainerRef:
-      scrollContainerRef as React.RefObject<HTMLElement | null>,
+    scrollContainerRef: scrollContainerRef as React.RefObject<HTMLElement | null>,
     threshold: 50,
   });
-  
+
   // 음악 고유 식별자 생성 함수
   const getMusicId = (music: TMusicItem) =>
     `${music.title || ""}-${music.artist || ""}-${music.thumbnail || ""}`;
@@ -58,16 +56,20 @@ function SearchPageContent() {
     }
   }, [urlSearchParams]);
   
+  useEffect(() => {
+    handleSelectedMusicReset();
+  }, []);
+
   return (
     <div className="w-full h-full flex flex-col">
       {/* 헤더 영역 */}
       <div className="flex flex-col gap-6 font-gangwonEduAll font-bold flex-shrink-0">
         <h3 className="text-black-800 text-5xl leading-snug">
-          편지의 감정이 담긴 <br />
+          편지의 감정이 담긴 <br/>
           노래를 골라주세요
         </h3>
         <p className="text-black-200 text-[2rem] leading-normal">
-          노래를 더 정확하게 찾기 위해 <br />
+          노래를 더 정확하게 찾기 위해 <br/>
           &quot;가수 이름 + 곡명&quot; 형태로 입력해 주세요.
         </p>
       </div>
@@ -85,16 +87,11 @@ function SearchPageContent() {
       </div>
       
       {/* 검색 결과 영역 - 최대 높이 제한 */}
-      <div
-        ref={scrollContainerRef}
-        className=" overflow-y-auto pr-2 border border-gray-100 rounded-lg p-4"
-      >
+      <div ref={scrollContainerRef} className="overflow-y-auto flex-1">
         {!isEmpty(searchParams.keyword) && data.length > 0 ? (
           <RadioGroup
             value={
-              selectedMusic.title && selectedMusic.artist
-                ? getMusicId(selectedMusic)
-                : undefined
+              selectedMusic.title && selectedMusic.artist ? getMusicId(selectedMusic) : undefined
             }
             onValueChange={(value) => {
               // 선택된 value로 전체 음악 객체 찾기
@@ -116,18 +113,18 @@ function SearchPageContent() {
               <RadioGroupItem
                 value={getMusicId(result)}
                 key={`${result.title}-${result.artist}-${result.thumbnail}-${index}`}
-                className="flex items-center gap-4 justify-center"
+                className={cn(
+                  "pt-6 pb-6 pl-9 pr-9 flex items-center gap-4 justify-center transition delay-100 duration-300 ease-in-out",
+                  selectedMusic.title === result.title &&
+                  selectedMusic.artist === result.artist &&
+                  selectedMusic.thumbnail === result.thumbnail &&
+                  "!bg-primary-light"
+                )}
               >
                 <MusicItem
                   key={`${result.title}-${result.artist}-${result.thumbnail}-${index}`}
                   music={result}
-                  className={cn(
-                    "w-full gap-4 flex",
-                    selectedMusic.title === result.title &&
-                    selectedMusic.artist === result.artist &&
-                    selectedMusic.thumbnail === result.thumbnail &&
-                    "!bg-yellow-50 border-[0.1875rem] !border-amber-400 "
-                  )}
+                  className="w-full gap-9 flex"
                 />
               </RadioGroupItem>
             ))}
@@ -150,7 +147,7 @@ function SearchPageContent() {
       </div>
       
       {/* 하단 버튼 영역 - 고정 간격 */}
-      <div className="flex flex-col gap-6 mt-6 mb-6 flex-shrink-0">
+      <div className="block mb-[11.25rem] w-full shadow-button">
         <Button
           onClick={() => {
             router.push("/letter/write");
@@ -158,30 +155,9 @@ function SearchPageContent() {
           variant="primary"
           disabled={!selectedMusic.title || !selectedMusic.artist}
         >
-          편지 보내기
-        </Button>
-        <Button
-          onClick={() => {
-            router.push("/main");
-          }}
-          variant="secondary"
-        >
-          홈으로 돌아가기
+          노래 선택
         </Button>
       </div>
     </div>
-  );
-}
-
-// 메인 컴포넌트에서 Suspense로 감싸기
-export default function SearchPage() {
-  return (
-    <Suspense fallback={
-      <div className="w-full h-full flex items-center justify-center">
-        <div className="text-lg">검색 페이지를 불러오는 중...</div>
-      </div>
-    }>
-      <SearchPageContent />
-    </Suspense>
   );
 }

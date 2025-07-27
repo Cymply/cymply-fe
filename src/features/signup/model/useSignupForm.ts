@@ -116,9 +116,8 @@ export default function useSignupForm() {
       
       const signupData = {
         gender : gender,
-        birth : '1996-03-24',
-        name : nickname,
         nickname : nickname,
+        ageRange : ageGroup,
       }
       
       console.log('🚀 회원가입 API 호출 시작');
@@ -135,21 +134,18 @@ export default function useSignupForm() {
         throw resToken.statusText;
       }
       
-      const { accessToken, refreshToken } = resToken.data.data;
+      const { accessToken, refreshToken } = resToken.data.data.content;
       console.log('🔍 받은 토큰:', {
-        accessToken: accessToken ? '있음' : '없음',
-        refreshToken: refreshToken ? '있음' : '없음'
+        accessToken: accessToken ? accessToken : '없음',
+        refreshToken: refreshToken ? refreshToken : '없음'
       });
+      
+      if (!accessToken || !refreshToken) {
+        throw new Error('토큰이 응답에 없습니다');
+      }
       
       console.log('🔍 토큰 저장 시작');
       login({accessToken, refreshToken});
-      
-      // 추가로 직접 저장도 시도 (보험용)
-      console.log('🔧 직접 토큰 저장 시도');
-      setCookie('accessToken', accessToken, 3600); // accessToken은 쿠키에
-      if (refreshToken) {
-        sessionStorage.setItem('refreshToken', refreshToken); // refreshToken은 sessionStorage에
-      }
       
       // 토큰 저장 완료까지 대기
       const tokenSaved = await waitForTokenSave(accessToken);
@@ -160,6 +156,14 @@ export default function useSignupForm() {
         console.log('⚠️ 토큰 저장 실패했지만 진행');
       }
       
+      // 회원가입 후 저장된 토큰 재확인
+      const finalAccessToken = TokenManager.getAccessToken();
+      const finalRefreshToken = TokenManager.getRefreshToken();
+      console.log('=== 최종 토큰 상태 ===');
+      console.log('최종 AccessToken:', finalAccessToken ? '저장됨' : '없음');
+      console.log('최종 RefreshToken:', finalRefreshToken ? '저장됨' : '없음');
+      console.log('쿠키 확인:', document.cookie);
+      
       setValidation({ isChecking: false, isValid: true })
       
       // 리다이렉트 URL 결정
@@ -169,11 +173,8 @@ export default function useSignupForm() {
       // 쿠키 정리
       clearRedirectCookies();
       
-      // 페이지 이동 전에 잠시 대기 (토큰이 완전히 저장되도록)
-      await new Promise(resolve => setTimeout(resolve, 200));
-      
       console.log('🚀 페이지 이동:', redirectUrl);
-      window.location.href = redirectUrl;
+      router.push(redirectUrl);
       
     } catch (error) {
       console.error('❌ 회원가입 실패:', error)

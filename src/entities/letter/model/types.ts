@@ -1,3 +1,15 @@
+import { Music } from "@/entities/music";
+import { ApiResponse } from "@/shared/model/apiResponse";
+
+// 편지 전체 조회
+export type ResponseLetters = ApiResponse<Letters[]>;
+
+export interface Letters {
+  senderId: number;
+  senderNickname: string;
+  letters: Letter[];
+}
+
 export interface Letter {
   id?: number;
   senderNickname?: string;
@@ -10,10 +22,18 @@ export interface Letter {
   deletedAt?: Date | null;
 }
 
-export interface Letters {
-  letters: Letter[];
+// 편지 단건 조회
+export type ResponseLetterDetail = ApiResponse<LetterDetail>;
+
+export interface LetterDetail {
+  id: number;
+  senderNickname: string;
+  content: string;
+  sentAt: Date | null;
+  music: Music;
 }
 
+// 편지 보내기
 export interface SendLetterRequest {
   recipientCode?: string | null;
   content?: string;

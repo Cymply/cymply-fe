@@ -9,6 +9,13 @@ export const useAuth = () => {
   
   const checkAuth = async () => {
     try {
+      // 브라우저 환경에서만 실행
+      if (typeof window === 'undefined') {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+        return;
+      }
+      
       // accessToken만 있어도 인증된 것으로 간주 (middleware와 일치)
       const hasAccessToken = TokenManager.hasAccessToken();
       if (!hasAccessToken) {
@@ -31,14 +38,37 @@ export const useAuth = () => {
     }
   };
   
-  const login = (tokens: { accessToken: string; refreshToken?: string }) => {
+  const login = async (tokens: { accessToken: string; refreshToken?: string }) => {
     console.log('🔍 useAuth login 시작');
     
     // accessToken은 쿠키에, refreshToken은 sessionStorage에 저장
     TokenManager.setTokens(tokens);
+    
+    // 토큰 저장 완료 대기 (최대 2초)
+    await waitForTokenSave(tokens.accessToken, 2000);
+    
     setIsAuthenticated(true);
     
     console.log('✅ useAuth login 완료 (쿠키 + sessionStorage)');
+  };
+  
+  // 토큰 저장 완료까지 대기하는 함수
+  const waitForTokenSave = async (token: string, maxWaitTime = 2000): Promise<boolean> => {
+    console.log('⏳ 토큰 저장 확인 시작...');
+    const startTime = Date.now();
+    
+    while (Date.now() - startTime < maxWaitTime) {
+      const cookieToken = TokenManager.getAccessToken();
+      
+      if (cookieToken === token) {
+        console.log('✅ 토큰 저장 확인됨 (쿠키)');
+        return true;
+      }
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+    console.log('❌ 토큰 저장 타임아웃');
+    return false;
   };
   
   const logout = () => {
