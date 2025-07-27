@@ -34,6 +34,7 @@ const processQueue = (error: any, token: string | null = null) => {
 // 토큰 재발급 함수
 const refreshTokens = async (): Promise<string> => {
   const refreshToken = TokenManager.getRefreshToken();
+  console.log("리프레시 토큰 있냐", refreshToken)
 
   if (!refreshToken) {
     throw new Error("No refresh token available");
@@ -41,9 +42,10 @@ const refreshTokens = async (): Promise<string> => {
 
   try {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/token/refresh`, refreshToken
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/token/refresh`, refreshToken, {
+      }
     );
-
+    console.log("response refresh", response)
     const { accessToken, refreshToken: newRefreshToken } = response.data;
 
     // 새 토큰들 저장 (accessToken은 쿠키, refreshToken은 sessionStorage)
@@ -51,7 +53,7 @@ const refreshTokens = async (): Promise<string> => {
       accessToken,
       refreshToken: newRefreshToken,
     });
-
+    
     console.log("🔄 토큰 재발급 완료");
     return accessToken;
   } catch (error) {
@@ -129,17 +131,56 @@ apiClient.interceptors.response.use(
 );
 
 // 인증 상태 확인 함수
+// shared/lib/apiClient.ts - checkAuthStatus 함수 수정
 export const checkAuthStatus = async (): Promise<boolean> => {
   try {
-    if (typeof window !== "undefined" && !TokenManager.hasAccessToken()) {
-      return false;
+    if (typeof window === 'undefined') return false;
+    
+    const accessToken = TokenManager.getAccessToken();
+    const refreshToken = TokenManager.getRefreshToken();
+    
+    // accessToken이 있으면 API 호출로 유효성 검증
+    if (accessToken) {
+      console.log('✅ AccessToken 있음, API 호출로 검증');
+      try {
+        const response = await apiClient.get("/api/v1/users/me");
+        return response.status === 200;
+      } catch (error: any) {
+        // 401 에러면 토큰이 만료된 것이므로 refreshToken으로 재발급 시도
+        if (error.response?.status === 401 && refreshToken) {
+          console.log('🔄 AccessToken 만료, RefreshToken으로 재발급 시도');
+          try {
+            const newAccessToken = await refreshTokens();
+            console.log('✅ 토큰 재발급 성공');
+            return true;
+          } catch (refreshError) {
+            console.error('❌ 토큰 재발급 실패:', refreshError);
+            return false;
+          }
+        }
+        return false;
+      }
     }
-    // TODO 백엔드에서 refreshToken 개발이 완료되면 주석 해제 예정
-    // const response = await refreshTokens();
-    // return response.status === 200;
-    return true;
+    
+    // accessToken이 없지만 refreshToken이 있으면 재발급 시도
+    if (!accessToken && refreshToken) {
+      console.log('🔄 AccessToken 없음, RefreshToken으로 재발급 시도');
+      try {
+        const newAccessToken = await refreshTokens();
+        console.log('✅ 토큰 재발급 성공');
+        return true;
+      } catch (error) {
+        console.error('❌ 토큰 재발급 실패:', error);
+        return false;
+      }
+    }
+    
+    // 둘 다 없으면 인증되지 않은 상태
+    console.log('❌ AccessToken과 RefreshToken 모두 없음');
+    return false;
+    
   } catch (error) {
-    console.error("인증 상태 확인 실패:", error);
+    console.error("❌ 인증 상태 확인 실패:", error);
     return false;
   }
 };

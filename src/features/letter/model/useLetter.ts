@@ -65,13 +65,7 @@ export default function useLetter() {
   // 나의 편지를 받을 주소 생성하는 곳
   const createUserLink = async () => {
     try {
-      if (!isAuthenticated) {
-        console.log("❌ 인증되지 않음 - createUserLink");
-        router.push("/login");
-        return;
-      }
-      
-      // 토큰 확인
+      // 토큰 체크로만 인증 확인 (상태 동기화 문제 해결)
       const token = TokenManager.getAccessToken();
       if (!token) {
         console.log("❌ AccessToken 없음 - createUserLink");
@@ -79,13 +73,18 @@ export default function useLetter() {
         return;
       }
       
-      console.log("✅ 인증 완료, 편지 링크 생성 시작");
+      console.log("✅ AccessToken 확인, 편지 링크 생성 시작");
       const res = await letterApi.createUserLetterLink();
       console.log("내 편지 받을 링크 조회", res);
       if (res.status != 200) throw res.statusText;
       setRecipientUrl(res.data.data?.content?.link);
     } catch (error) {
       console.error("편지 링크 생성 실패:", error);
+      
+      // API 호출 실패 시 토큰 문제일 수 있으므로 로그인으로 리다이렉트
+      if (error.response?.status === 401) {
+        router.push("/login");
+      }
     }
   };
   

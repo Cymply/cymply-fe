@@ -61,7 +61,9 @@ export default function useSigninRedirect() {
   const afterSocialSignin = useCallback(async () => {
     try {
       const accessToken = searchParams.get('access_token');
-      console.log('🔍 토큰 확인:', accessToken ? '있음' : '없음');
+      const refreshToken = searchParams.get('refresh_token');
+      console.log('🔍 access token 확인:', accessToken ? '있음' : '없음');
+      console.log('🔍 refresh token 확인:', refreshToken ? '있음' : '없음');
       
       if (!accessToken) {
         console.error('❌ 토큰이 URL 파라미터에 없습니다.');
@@ -71,7 +73,7 @@ export default function useSigninRedirect() {
       
       // 토큰 저장
       console.log('🔍 토큰 저장 시작');
-      login({ accessToken });
+      login({ accessToken, refreshToken });
       
       // 토큰 저장 완료까지 대기
       const tokenSaved = await waitForTokenSave(accessToken);
@@ -79,7 +81,7 @@ export default function useSigninRedirect() {
       if (!tokenSaved) {
         console.log('🔧 토큰 저장 실패, 직접 저장 시도');
         // 토큰 직접 저장 시도
-        document.cookie = `accessToken=${accessToken}; path=/; max-age=360`;
+        document.cookie = `accessToken=${accessToken}; path=/; max-age=36000`;
         
         // 직접 저장 후 다시 확인
         const retryTokenSaved = await waitForTokenSave(accessToken, 1000);
