@@ -18,6 +18,7 @@ import {musicAtom} from "@/store/musicStore";
 import {SendLetterRequest} from "@/entities/letter";
 import { TokenManager } from "@/shared/lib/tokenManager";
 import { mockLetterDetailsById, mockLetters } from "@/entities/letter/mock/mockLetters";
+import {AxiosError} from "axios";
 
 export default function useLetter() {
   const searchParams = useSearchParams();
@@ -149,8 +150,9 @@ export default function useLetter() {
       console.log("✅ 편지 목록 조회 완료");
     } catch (error) {
       console.error("편지 목록 조회 실패:", error);
+      
       // 401 에러인 경우 로그인 페이지로 리다이렉트
-      if (error?.response?.status === 401) {
+      if (error instanceof AxiosError && error.response?.status === 401) {
         console.log("🔄 401 에러 - 로그인 페이지로 리다이렉트");
         TokenManager.clearTokens();
         router.push("/login");

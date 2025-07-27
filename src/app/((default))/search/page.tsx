@@ -10,17 +10,18 @@ import { musicApi } from "@/entities/music/api/musicApi";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
-import {useRouter, useSearchParams} from "next/navigation";
-import {useEffect, useRef, useState} from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState, Suspense } from "react";
+import { LoadingSpinner } from "@/shared/ui"; // 실제 경로에 맞게 수정
 
-export default function SearchPage() {
+function SearchPageContent() {
   const router = useRouter();
-  const urlSearchParams = useSearchParams();
+  const urlSearchParams = useSearchParams(); // 이 부분이 Suspense 필요
   const [userCode, setUserCode] = useState<string | null>(null);
   
   const { selectedMusic, handleMusicSelect, handleSelectedMusicReset } =
     useSelectMusicItem();
-
+  
   const { data, search, loadMore, hasNextPage, isFetching, searchParams } =
     useInfiniteSearch<TMusicItem>({
       queryKey: "searchMusic",
@@ -30,7 +31,7 @@ export default function SearchPage() {
       },
       initialLimit: 10,
     });
-
+  
   // 스크롤 컨테이너 ref
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
@@ -42,7 +43,7 @@ export default function SearchPage() {
     scrollContainerRef: scrollContainerRef as React.RefObject<HTMLElement | null>,
     threshold: 50,
   });
-
+  
   // 음악 고유 식별자 생성 함수
   const getMusicId = (music: TMusicItem) =>
     `${music.title || ""}-${music.artist || ""}-${music.thumbnail || ""}`;
@@ -58,8 +59,8 @@ export default function SearchPage() {
   
   useEffect(() => {
     handleSelectedMusicReset();
-  }, []);
-
+  }, [handleSelectedMusicReset]);
+  
   return (
     <div className="w-full h-full flex flex-col">
       {/* 헤더 영역 */}
@@ -159,5 +160,13 @@ export default function SearchPage() {
         </Button>
       </div>
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <SearchPageContent />
+    </Suspense>
   );
 }

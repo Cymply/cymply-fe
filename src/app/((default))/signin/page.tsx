@@ -3,6 +3,7 @@
 import {Suspense} from "react";
 import {useSignupRedirectWithErrorHandling} from "@/app/((default))/signup/model/useSignupRedirectWithErrorHandling";
 import useSigninRedirect from "@/app/((default))/signup/model/useSigninRedirect";
+import {LoadingSpinner} from "@/shared/ui";
 
 function SigninContent() {
   const { isProcessing } = useSigninRedirect();

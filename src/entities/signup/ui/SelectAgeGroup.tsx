@@ -14,6 +14,8 @@ const AGE_GROUPS = [
   { value: "AGE_OVER_30", label: "31세 이상" },
 ] as const;
 
+export type AgeGroup = typeof AGE_GROUPS[number]["value"];
+
 export default function SelectAgeGroup() {
   const { selectedAgeGroup, handleAgeGroupSelect } = useSelectAgeGroup();
 

@@ -5,32 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a0e67ab-fd62-43af-9d25-985317bb0d3c" name="변경" comment="기본 로그인 api 설정 관련 기본 뼈대 구축&#10;accessToken : useContext(메모리 저장)&#10;refreshToken : HttpOnly(서버(스프링부트) 쿠키에 저장)">
-      <change afterPath="$PROJECT_DIR$/public/icons/ico-close-white.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/ico-toast-success.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/icons/ico-toast-warning.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/((default))/letter/sent/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/json/loadingSpinner.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/sonner.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shared/hooks/useToast.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shared/ui/CopyLinkButton.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shared/ui/LoadingSpinner.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shared/ui/UrlLinkBox.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/logo.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/logo.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/((default))/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/((default))/letter/write/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/letter/write/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/((default))/letter/sent/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/letter/sent/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/((default))/search/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/search/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/((default))/signin/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/signin/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/login/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/login/layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/main/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/signup/hooks/useSelectAgeGroup.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/signup/hooks/useSelectAgeGroup.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/signup/ui/SelectAgeGroup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/signup/ui/SelectAgeGroup.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/features/letter/model/useLetter.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/letter/model/useLetter.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/features/letter/ui/LetterEmpty.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/letter/ui/LetterEmpty.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shared/ui/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/ui/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/widgets/header/ui/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/header/ui/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/widgets/header/ui/LogoBtn.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/header/ui/LogoBtn.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +90,7 @@
       <workItem from="1749919009322" duration="2775000" />
       <workItem from="1750760465695" duration="1264000" />
       <workItem from="1750777973783" duration="654000" />
-      <workItem from="1753518026846" duration="3707000" />
+      <workItem from="1753518026846" duration="4527000" />
     </task>
     <task id="LOCAL-00001" summary="supabase package.json 추가">
       <option name="closed" value="true" />
