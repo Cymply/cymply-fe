@@ -35,7 +35,7 @@ export default function useLetter() {
     formState: { errors },
     watch,
   } = useForm<LetterFormValues>();
-
+  
   // 편지 보내기
   const onSubmit = async (data: LetterFormValues) => {
     try {
@@ -113,17 +113,17 @@ export default function useLetter() {
     },
     [isAuthenticated, setLetter]
   );
-
+  
   // 내 편지 목록 전체 조회
   const getLetters = useCallback(async () => {
     try {
-      const isDev = process.env.NODE_ENV === "development";
-      
-      if (isDev) {
-        console.log("⚙️ 개발 모드 - 목업 데이터 사용");
-        setLetters(mockLetters);
-        return;
-      }
+      // const isDev = process.env.NODE_ENV === "development";
+      //
+      // if (isDev) {
+      //   console.log("⚙️ 개발 모드 - 목업 데이터 사용");
+      //   setLetters(mockLetters);
+      //   return;
+      // }
       
       if (!isAuthenticated) {
         console.log("❌ 인증되지 않음 - getLetters");
@@ -149,7 +149,6 @@ export default function useLetter() {
       console.log("✅ 편지 목록 조회 완료");
     } catch (error) {
       console.error("편지 목록 조회 실패:", error);
-      
       // 401 에러인 경우 로그인 페이지로 리다이렉트
       if (error?.response?.status === 401) {
         console.log("🔄 401 에러 - 로그인 페이지로 리다이렉트");
@@ -158,7 +157,7 @@ export default function useLetter() {
       }
     }
   }, [isAuthenticated, setLetters, router]);
-
+  
   return {
     register,
     handleSubmit,

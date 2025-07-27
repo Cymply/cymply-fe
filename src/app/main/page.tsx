@@ -2,23 +2,22 @@
 
 import useLetter from "@/features/letter/model/useLetter";
 import { LetterEmpty, LetterList } from "@/features/letter";
-import {Suspense, useEffect, useState} from "react";
+import {Suspense, useEffect, useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { lettersAtom } from "@/entities/letter/store/letterStore";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { alertAtom } from "@/widgets/alert";
 import { useRouter } from "next/navigation";
+import { LoadingSpinner } from "@/shared/ui";
 
 export default function MainPage() {
   const [loading, setLoading] = useState(true);
-  
+  const router = useRouter();
   const letters = useAtomValue(lettersAtom);
+  const setAlert = useSetAtom(alertAtom);
   const { getLetters } = useLetter();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
-  
-  const router = useRouter();
-  const setAlert = useSetAtom(alertAtom);
-  
+
   useEffect(() => {
     const fetchLetters = async () => {
       try {
@@ -35,10 +34,10 @@ export default function MainPage() {
         setLoading(false);
       }
     };
-    
+
     fetchLetters();
   }, [isAuthenticated, authLoading, getLetters]); // 의존성 배열에 필요한 값들 추가
-  
+
   useEffect(() => {
     // 인증되지 않은 경우
     if (!loading && !authLoading && !isAuthenticated) {
@@ -60,25 +59,26 @@ export default function MainPage() {
       });
     }
   }, [loading, authLoading, isAuthenticated, setAlert, router]);
-  
+
   // 인증 로딩 중이거나 편지 로딩 중일 때
   if (authLoading || loading) {
-    return <p>편지 불러오는 중...</p>;
+    return <LoadingSpinner />;
   }
-  
+
   if (!isAuthenticated) {
     return null;
   }
-  
+
   console.log("📮 편지 목록:", letters);
-  
+
   return letters.length > 1 ? (
-    <Suspense fallback={
-      <div className="flex items-center justify-center h-full">
-        <p>메인 페이지를 불러오는 중...</p>
-      </div>
-    }>
-      <LetterList letters={letters} />
-    </Suspense> )
-    : (<LetterEmpty />);
+      <Suspense fallback={
+        <LoadingSpinner />
+      }>
+        <LetterList letters={letters} />
+      </Suspense>
+    ) : (
+      <LetterEmpty />
+    );
+  
 }

@@ -17,8 +17,8 @@ export default function LetterWritePage() {
   };
 
   return (
-    <div className="flex flex-col justify-between h-full mt-12 mb-24">
-      <div className="flex flex-col gap-12 h-full">
+    <div className="flex flex-col justify-between h-full mt-6 mb-24">
+      <div className="flex flex-col gap-6 h-full">
         <div className="flex items-center gap-9">
           {/* <div className="w-[7.5rem] h-[7.5rem] rounded-[0.625rem] bg-gray-700">
             {selectedMusic.thumbnail && (
