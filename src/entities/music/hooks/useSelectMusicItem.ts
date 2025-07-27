@@ -1,5 +1,6 @@
 import { useAtom } from "jotai";
 import { musicAtom } from "@/store/musicStore";
+import {useCallback} from "react";
 
 export default function useSelectMusicItem() {
   const [selectedMusic, setSelectedMusic] = useAtom(musicAtom);
@@ -12,13 +13,13 @@ export default function useSelectMusicItem() {
     setSelectedMusic(value);
   };
 
-  const handleSelectedMusicReset = () => {
+  const handleSelectedMusicReset = useCallback(() => {
     setSelectedMusic({
       title: "",
       artist: "",
       thumbnail: "",
     });
-  };
+  }, []);
 
   return {
     selectedMusic,
