@@ -1,7 +1,7 @@
 // shared/hooks/useAuth.ts
 import { useState, useEffect } from 'react';
 import { TokenManager } from '../lib/tokenManager';
-import { checkAuthStatus } from '../lib/apiClient';
+import {apiClient, checkAuthStatus} from '../lib/apiClient';
 
 export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -71,11 +71,18 @@ export const useAuth = () => {
     return false;
   };
   
-  const logout = () => {
-    TokenManager.clearTokens();
-    setIsAuthenticated(false);
-    if (typeof window !== 'undefined') {
-      window.location.href = '/login';
+  const logout = async () => {
+    try {
+      await apiClient.post("/api/v1/logout");
+      TokenManager.clearTokens();
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      TokenManager.clearTokens();
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
+      }
     }
   };
   

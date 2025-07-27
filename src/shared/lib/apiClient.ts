@@ -134,27 +134,12 @@ export const checkAuthStatus = async (): Promise<boolean> => {
     if (typeof window !== "undefined" && !TokenManager.hasAccessToken()) {
       return false;
     }
-
+    // TODO 백엔드에서 refreshToken 개발이 완료되면 주석 해제 예정
     // const response = await refreshTokens();
     // return response.status === 200;
     return true;
   } catch (error) {
     console.error("인증 상태 확인 실패:", error);
     return false;
-  }
-};
-
-// 로그아웃 함수
-export const logout = async (): Promise<void> => {
-  try {
-    await apiClient.post("/api/v1/logout");
-    TokenManager.clearTokens();
-  } catch (error) {
-    console.error("Logout error:", error);
-  } finally {
-    TokenManager.clearTokens();
-    if (typeof window !== "undefined") {
-      window.location.href = "/login";
-    }
   }
 };

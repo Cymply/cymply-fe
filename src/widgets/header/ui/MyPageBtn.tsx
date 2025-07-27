@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {logout} from "@/shared/lib/apiClient";
 
 export const MyPageBtn = () => {
   return (
@@ -11,6 +10,5 @@ export const MyPageBtn = () => {
         <Image src="/icons/ico-user.svg" alt="icon-user" fill className="object-contain" />
       </Link>
     </>
-
   );
 };
