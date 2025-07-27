@@ -33,7 +33,12 @@ export default function LoginPage() {
           />
           카카오로 쉬운 시작
         </Button>
-        <Button variant="google">
+        <Button
+          variant="google"
+          onClick={() =>
+            (window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/oauth2/authorization/google`)
+          }
+        >
           <Image
             src="/images/img-google-logo.png"
             alt="kakao-logo"

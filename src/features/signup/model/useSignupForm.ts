@@ -35,7 +35,7 @@ export default function useSignupForm() {
     return null;
   };
   
-  const setCookie = (name: string, value: string, maxAge: number = 3600): void => {
+  const setCookie = (name: string, value: string, maxAge: number = 360): void => {
     if (typeof window !== 'undefined') {
       const secure = process.env.NODE_ENV === 'production' ? '; secure' : '';
       document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; samesite=lax${secure}`;
