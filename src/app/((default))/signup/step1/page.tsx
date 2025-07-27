@@ -1,12 +1,10 @@
-//src/app/signup/step1/page.tsx
-"use client"
+"use client";
 
 import SignupView from "@/widgets/signup/ui/SignupView";
 import SignupHeader from "@/features/signup/ui/SignupHeader";
 import SignupFooter from "@/features/signup/ui/SignupFooter";
 import SignupProfileForm from "@/features/signup/ui/SignupProfileForm";
-import {useRouter, useSearchParams} from "next/navigation";
-import {Suspense} from "react";
+import { Suspense } from "react";
 
 export default function SignupProfilePage() {
   return (
@@ -19,12 +17,10 @@ export default function SignupProfilePage() {
             desc={"당신을 살짝 알려주세요"}
           />
         }
-        footer={
-          <SignupFooter/>
-        }
+        footer={<SignupFooter />}
       >
         <SignupProfileForm />
       </SignupView>
     </Suspense>
-  )
+  );
 }

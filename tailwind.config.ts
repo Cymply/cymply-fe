@@ -67,7 +67,8 @@ export default {
     plugin(function ({ addUtilities }) {
       addUtilities({
         ".gradient-grad": {
-          background: "linear-gradient(180deg, #FFF 74.57%, #EEB33D 123.03%)",
+          background:
+            "linear-gradient(180deg, rgba(255, 255, 255, 0.3) 74.57%, rgba(238, 179, 61, 0.3) 123.03%)",
         },
       });
     }),
