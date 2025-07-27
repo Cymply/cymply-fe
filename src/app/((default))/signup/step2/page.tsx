@@ -1,32 +1,21 @@
-// src/app/signup/step2/page.tsx
-
 import SignupView from "@/widgets/signup/ui/SignupView";
 import SignupHeader from "@/features/signup/ui/SignupHeader";
 import SignupFooter from "@/features/signup/ui/SignupFooter";
 import NicknameForm from "@/features/signup/ui/NicknameForm";
-import {Suspense} from "react";
+import { Suspense } from "react";
 
 export default function SignupNickname() {
   return (
     <Suspense fallback={<div> 불러오는 중...</div>}>
       <SignupView
-        header={
-          <SignupHeader
-            highlightTitle={"당신"}
-            title={"을 어떻게"}
-            desc={"부르면 좋을까요?"}
-          />
-        }
-        footer={
-          <SignupFooter/>
-        }
+        header={<SignupHeader title={"당신을 어떻게"} desc={"부르면 좋을까요?"} />}
+        footer={<SignupFooter />}
       >
-        <NicknameForm/>
+        <NicknameForm />
       </SignupView>
     </Suspense>
-  )
+  );
 }
-
 
 // 현재 미사용
 // "use client";

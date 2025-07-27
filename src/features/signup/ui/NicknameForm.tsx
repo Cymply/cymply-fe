@@ -1,13 +1,11 @@
-// src/features/signup/ui/NicknameForm.tsx
-'use client'
+"use client";
 
-import SetNickname from "@/entities/signup/ui/SetNickname"
-import {Suspense} from "react";
+import SetNickname from "@/entities/signup/ui/SetNickname";
 
 export default function NicknameForm() {
   return (
-    <div className="space-y-6">
-        <SetNickname />
+    <div className="flex flex-col gap-[3.375rem]">
+      <SetNickname placeholder="편지를 작성하고 받을 별명을 정해주세요" maxLength={10} showCount />
     </div>
-  )
+  );
 }

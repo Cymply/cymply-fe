@@ -20,6 +20,7 @@ const buttonVariants = cva(
         kakao: "bg-kakao-yellow font-semibold text-kakao-black shadow-xs hover:bg-kakao-yellow/90",
         google: "bg-white font-semibold text-black-800 shadow-xs hover:bg-white/90",
         underline: "border-none bg-none text-black-200 underline",
+        disabled: "bg-gray-800 text-white shadow-xs hover:bg-gray-800/90",
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:

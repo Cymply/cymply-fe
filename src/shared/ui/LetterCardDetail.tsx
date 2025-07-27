@@ -29,7 +29,7 @@ export const LetterCardDetail = ({ detailItem }: LetterCardDetailProps) => {
         </div>
       </div>
       <div className="mt-28">
-        <Button variant={"border"}>편지 보내기</Button>
+        <Button variant={"border"}>답장하기</Button>
       </div>
     </>
   );

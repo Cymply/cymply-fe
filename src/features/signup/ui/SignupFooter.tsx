@@ -16,18 +16,18 @@ export default function SignupFooter() {
           onClick={handleSubmit}
           // disabled={!canProceed}
           className={cn(
-            "w-[42.375rem] h-28 bg-primary rounded-[0.625rem] text-white text-3xl font-semibold font-['Pretendard'] leading-9 hover:bg-primary transition-all duration-200"
+            "w-[42.375rem] h-[7.5rem] bg-primary rounded-[0.625rem] text-white text-[2rem] font-semibold leading-9 hover:bg-primary transition-all duration-200"
           )}
         >
           {validation.isChecking ? "확인 중..." : "회원가입 하기"}
         </Button>
       ) : (
-        <>
+        <div className="flex flex-col gap-12">
           <Button
             onClick={handleNext}
             // disabled={!canProceed}
             className={cn(
-              "w-[42.375rem] h-28 rounded-[0.625rem] text-3xl font-semibold font-['Pretendard'] leading-9 transition-all duration-200",
+              "w-[42.375rem] h-[7.5rem] rounded-[0.625rem] text-[2rem] font-semibold leading-9 transition-all duration-200",
               canProceed
                 ? "bg-primary hover:bg-primary text-white"
                 : "bg-gray-200 text-gray-400 cursor-not-allowed hover:bg-gray-200"
@@ -38,11 +38,11 @@ export default function SignupFooter() {
           {/* nickname 페이지가 아닐 때만 "제공하지 않고 넘어가기" 링크 표시 */}
           <Link
             href={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/signup/nickname`}
-            className="text-center text-neutral-400 text-3xl font-normal font-['Pretendard'] underline leading-9"
+            className="text-center text-black-200 text-[2rem] font-normal underline leading-9"
           >
             제공하지 않고 넘어가기
           </Link>
-        </>
+        </div>
       )}
     </div>
   );

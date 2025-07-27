@@ -45,7 +45,7 @@ export const LetterList = ({ letters }: LetterListProps) => {
 
   return (
     <div>
-      <div className="flex flex-col">
+      <div className="flex flex-col mt-2">
         {letters.map((group, idx) => (
           <div
             key={idx}
@@ -65,7 +65,7 @@ export const LetterList = ({ letters }: LetterListProps) => {
                 spaceBetween={24}
                 slidesPerView={"auto"}
                 centeredSlides={false}
-                style={{ width: "100%" }}
+                style={{ width: "100%", overflow: "visible" }}
               >
                 {group.letters.map((letter) => (
                   <SwiperSlide key={letter.id} style={{ width: "76%" }}>

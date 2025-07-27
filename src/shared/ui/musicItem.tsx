@@ -1,5 +1,9 @@
 "use client";
+
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
+
 export type TMusicItem = {
   title: string;
   artist: string;
@@ -10,9 +14,6 @@ interface MusicItemProps {
   option?: "play" | "select" | "none";
   className?: string;
 }
-
-import Image from "next/image";
-import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
 
 export const MusicItem = ({ music, option = "none", className = "" }: MusicItemProps) => {
   const { selectedMusic } = useSelectMusicItem();
