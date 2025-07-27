@@ -67,7 +67,7 @@ export default function useNickname() {
         .then((data) => {
           updateValidation({
             isValid: data.success,
-            isDuplicate : !data.success,
+            isDuplicate: !data.success,
             isChecking: false,
             errorMessage: data.content || data?.errorMessage
           })
@@ -82,7 +82,7 @@ export default function useNickname() {
         })
     }, 500)
     
-    setDebounceTimer(timer)
+    setDebounceTimer(timer as unknown as number)
   }
   
   

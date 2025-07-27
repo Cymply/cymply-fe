@@ -2,7 +2,7 @@
 
 import { useState, KeyboardEvent } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/Input";
 import Image from "next/image";
 import clsx from "clsx";
 

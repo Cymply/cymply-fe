@@ -3,28 +3,28 @@
 import { Button } from "@/components/ui/button";
 import useLetter from "@/features/letter/model/useLetter";
 import { useAuth } from "@/shared/hooks/useAuth";
-import { CopyLinkButton, UrlLinkBox } from "@/shared/ui";
+import {CopyLinkButton, LoadingSpinner, UrlLinkBox} from "@/shared/ui";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 
-export default function LetterSentPage() {
+function LetterSentContent() {
   const router = useRouter();
   const { createUserLink, recipientUrl } = useLetter();
   const { isAuthenticated } = useAuth();
-
+  
   useEffect(() => {
     if (!isAuthenticated) return;
-
+    
     const init = async () => {
       await createUserLink();
     };
     init();
-  }, [isAuthenticated]);
-
+  }, [isAuthenticated, createUserLink]);
+  
   const handleGoMain = () => {
     router.push("/main");
   };
-
+  
   return (
     <div className="flex flex-col gap-[7.5rem] mt-10">
       <div className="flex flex-col gap-16 h-full">
@@ -44,5 +44,13 @@ export default function LetterSentPage() {
         </Button>
       </div>
     </div>
+  );
+}
+
+export default function LetterSentPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <LetterSentContent />
+    </Suspense>
   );
 }

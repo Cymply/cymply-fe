@@ -6,7 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="6a0e67ab-fd62-43af-9d25-985317bb0d3c" name="변경" comment="기본 로그인 api 설정 관련 기본 뼈대 구축&#10;accessToken : useContext(메모리 저장)&#10;refreshToken : HttpOnly(서버(스프링부트) 쿠키에 저장)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/((default))/signup/model/useSignupRedirect.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/((default))/letter/sent/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/letter/sent/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/((default))/search/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/search/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/((default))/signin/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/signin/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/main/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/signup/hooks/useSelectAgeGroup.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/signup/hooks/useSelectAgeGroup.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/signup/ui/SelectAgeGroup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/signup/ui/SelectAgeGroup.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/letter/model/useLetter.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/letter/model/useLetter.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,6 +90,7 @@
       <workItem from="1749919009322" duration="2775000" />
       <workItem from="1750760465695" duration="1264000" />
       <workItem from="1750777973783" duration="654000" />
+      <workItem from="1753518026846" duration="4527000" />
     </task>
     <task id="LOCAL-00001" summary="supabase package.json 추가">
       <option name="closed" value="true" />
@@ -125,7 +132,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749471889417</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="front build 배포 준비 및 편지 보내기 로직 추가">
+      <option name="closed" value="true" />
+      <created>1753518048597</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1753518048597</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -1,4 +1,4 @@
-// @/components/ui/label.tsx (수정된 버전)
+// @/components/ui/Label.tsx (수정된 버전)
 import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
 

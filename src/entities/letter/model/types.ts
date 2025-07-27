@@ -35,6 +35,8 @@ export interface LetterDetail {
 
 // 편지 보내기
 export interface SendLetterRequest {
-  receipt: string;
-  content: string;
+  recipientCode?: string | null;
+  content?: string;
+  title?: string;
+  artist?: string
 }

@@ -2,7 +2,7 @@
 
 import useLetter from "@/features/letter/model/useLetter";
 import { LetterEmpty, LetterList } from "@/features/letter";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { lettersAtom } from "@/entities/letter/store/letterStore";
 import { useAuth } from "@/shared/hooks/useAuth";
@@ -10,14 +10,14 @@ import { alertAtom } from "@/widgets/alert";
 import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/shared/ui";
 
-export default function MainPage() {
+function MainPageContent() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const letters = useAtomValue(lettersAtom);
   const setAlert = useSetAtom(alertAtom);
-  const { getLetters } = useLetter();
+  const { getLetters } = useLetter(); // 이 훅 내부에서 useSearchParams() 사용
   const { isAuthenticated, isLoading: authLoading } = useAuth();
-
+  
   useEffect(() => {
     const fetchLetters = async () => {
       try {
@@ -34,10 +34,10 @@ export default function MainPage() {
         setLoading(false);
       }
     };
-
+    
     fetchLetters();
-  }, [isAuthenticated, authLoading, getLetters]); // 의존성 배열에 필요한 값들 추가
-
+  }, [isAuthenticated, authLoading, getLetters]);
+  
   useEffect(() => {
     // 인증되지 않은 경우
     if (!loading && !authLoading && !isAuthenticated) {
@@ -59,17 +59,29 @@ export default function MainPage() {
       });
     }
   }, [loading, authLoading, isAuthenticated, setAlert, router]);
-
+  
   // 인증 로딩 중이거나 편지 로딩 중일 때
   if (authLoading || loading) {
     return <LoadingSpinner />;
   }
-
+  
   if (!isAuthenticated) {
     return null;
   }
-
+  
   console.log("📮 편지 목록:", letters);
+  
+  return letters.length > 1 ? (
+    <LetterList letters={letters} />
+  ) : (
+    <LetterEmpty />
+  );
+}
 
-  return letters.length > 1 ? <LetterList letters={letters} /> : <LetterEmpty />;
+export default function MainPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <MainPageContent />
+    </Suspense>
+  );
 }

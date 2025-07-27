@@ -1,7 +1,7 @@
 // src/entities/signup/ui/SelectAgeGroup.tsx
 "use client";
 
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui/Label";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radioGroup";
 import useSelectAgeGroup from "@/entities/signup/hooks/useSelectAgeGroup";
@@ -13,6 +13,8 @@ const AGE_GROUPS = [
   { value: "AGE_25_30", label: "25 ~ 30세" },
   { value: "AGE_OVER_30", label: "31세 이상" },
 ] as const;
+
+export type AgeGroup = typeof AGE_GROUPS[number]["value"];
 
 export default function SelectAgeGroup() {
   const { selectedAgeGroup, handleAgeGroupSelect } = useSelectAgeGroup();

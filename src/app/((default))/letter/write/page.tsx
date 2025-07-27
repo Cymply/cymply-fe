@@ -4,9 +4,9 @@ import { LetterForm } from "@/features/letter";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
-// import Image from "next/image";
 import { MusicItem } from "@/shared/ui/musicItem";
 import { isEmpty } from "@/lib/utils";
+import {Suspense} from "react";
 
 export default function LetterWritePage() {
   const router = useRouter();
@@ -53,9 +53,9 @@ export default function LetterWritePage() {
             <p className="text-black-300">{selectedMusic.artist || "가수명"}</p>
           </div> */}
         </div>
-        <div>
+        <Suspense fallback={<div>편지 폼을 불러오는 중...</div>}>
           <LetterForm id="letterForm" />
-        </div>
+        </Suspense>
       </div>
       <div className="flex flex-col gap-6">
         <Button type="submit" form="letterForm" variant="primary">
