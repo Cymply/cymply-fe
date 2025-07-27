@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/Alert';
 import { Loader2, User, Calendar, Users } from 'lucide-react';
 import useSignup from "@/widgets/account/model/useSignup";
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radioGroup";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 
 export default function Signup() {
   const {
@@ -165,7 +165,7 @@ export default function Signup() {
               type="submit"
               disabled={loading}
               className="w-full"
-              size="lg"
+              size="default"
             >
               {loading ? (
                 <>

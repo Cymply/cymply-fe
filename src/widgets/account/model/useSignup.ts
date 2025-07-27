@@ -28,9 +28,9 @@ export default function useSignup() {
     label: moment().month(i).format('M월')
   }));
   
-  // moment를 사용한 일 옵션 생성
-  const getDaysInMonth = (year: string, month: string) => {
-    if (!year || !month) return [];
+  // moment를 사용한 일 옵션 생성 - 타입 수정
+  const getDaysInMonth = (year: string, month: string): number => {
+    if (!year || !month) return 0; // 빈 배열 대신 0 반환
     return moment(`${year}-${month}`, 'YYYY-M').daysInMonth();
   };
   

@@ -17,11 +17,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { User } from "@/entities/user/model/user-dummy-data";
 import { JSX, useState } from "react";
 import useUserTable from "@/features/model/useUserTable";
+import {Badge} from "@/components/ui/Badge";
 
 export interface UserTableProps {
 }
