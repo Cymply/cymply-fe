@@ -19,7 +19,8 @@ function SearchPageContent() {
   const urlSearchParams = useSearchParams(); // 이 부분이 Suspense 필요
   const [userCode, setUserCode] = useState<string | null>(null);
 
-  const { selectedMusic, handleMusicSelect, handleSelectedMusicReset } = useSelectMusicItem();
+  const { selectedMusic, handleMusicSelect, handleSelectedMusicReset } =
+    useSelectMusicItem();
 
   const { data, search, loadMore, hasNextPage, isFetching, searchParams } =
     useInfiniteSearch<TMusicItem>({
@@ -39,7 +40,8 @@ function SearchPageContent() {
     hasNextPage,
     isFetching,
     onLoadMore: loadMore,
-    scrollContainerRef: scrollContainerRef as React.RefObject<HTMLElement | null>,
+    scrollContainerRef:
+      scrollContainerRef as React.RefObject<HTMLElement | null>,
     threshold: 50,
   });
 
@@ -58,7 +60,7 @@ function SearchPageContent() {
 
   useEffect(() => {
     handleSelectedMusicReset();
-  }, [handleSelectedMusicReset]);
+  }, []); // 컴포넌트 마운트 시에만 실행
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -91,7 +93,9 @@ function SearchPageContent() {
         {!isEmpty(searchParams.keyword) && data.length > 0 ? (
           <RadioGroup
             value={
-              selectedMusic.title && selectedMusic.artist ? getMusicId(selectedMusic) : undefined
+              selectedMusic.title && selectedMusic.artist
+                ? getMusicId(selectedMusic)
+                : undefined
             }
             onValueChange={(value) => {
               // 선택된 value로 전체 음악 객체 찾기
