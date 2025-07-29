@@ -27,7 +27,7 @@ export default function LetterCodePage() {
     
     // 로딩 중이면 대기
     if (isLoading) {
-      console.log('⏳ 인증 상태 로딩 중...');
+      // console.log('⏳ 인증 상태 로딩 중...');
       return;
     }
     

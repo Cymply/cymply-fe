@@ -16,11 +16,11 @@ export const useAuth = () => {
         return;
       }
       
-      console.log('🔍 인증 상태 확인 시작');
+      // console.log('🔍 인증 상태 확인 시작');
       
       // checkAuthStatus가 토큰 검증 및 재발급까지 모두 처리
       const isValid = await checkAuthStatus();
-      console.log('🔍 최종 인증 결과:', isValid);
+      // console.log('🔍 최종 인증 결과:', isValid);
       
       setIsAuthenticated(isValid);
       
@@ -33,7 +33,7 @@ export const useAuth = () => {
   };
   
   const login = async (tokens: { accessToken: string; refreshToken?: string }) => {
-    console.log('🔍 useAuth login 시작 : tokens', tokens);
+    // console.log('🔍 useAuth login 시작 : tokens', tokens);
     
     // accessToken은 쿠키에, refreshToken은 sessionStorage에 저장
     TokenManager.setTokens(tokens);
@@ -48,14 +48,14 @@ export const useAuth = () => {
   
   // 토큰 저장 완료까지 대기하는 함수
   const waitForTokenSave = async (token: string, maxWaitTime = 2000): Promise<boolean> => {
-    console.log('⏳ 토큰 저장 확인 시작...');
+    // console.log('⏳ 토큰 저장 확인 시작...');
     const startTime = Date.now();
     
     while (Date.now() - startTime < maxWaitTime) {
       const cookieToken = TokenManager.getAccessToken();
       
       if (cookieToken === token) {
-        console.log('✅ 토큰 저장 확인됨 (쿠키)');
+        // console.log('✅ 토큰 저장 확인됨 (쿠키)');
         return true;
       }
       await new Promise(resolve => setTimeout(resolve, 100));

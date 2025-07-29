@@ -6,7 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="6a0e67ab-fd62-43af-9d25-985317bb0d3c" name="변경" comment="기본 로그인 api 설정 관련 기본 뼈대 구축&#10;accessToken : useContext(메모리 저장)&#10;refreshToken : HttpOnly(서버(스프링부트) 쿠키에 저장)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/music/hooks/useSelectMusicItem.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/music/hooks/useSelectMusicItem.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/((default))/letter/code/[code]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/letter/code/[code]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/((default))/signup/model/useSigninRedirect.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/signup/model/useSigninRedirect.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/main/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/hooks/useAuth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/hooks/useAuth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/lib/apiClient.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/lib/apiClient.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/lib/tokenManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/lib/tokenManager.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
