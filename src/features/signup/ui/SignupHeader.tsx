@@ -1,6 +1,6 @@
 // src/features/signup/ui/SignupHeader.tsx
 interface SignupHeaderProps {
-  highlightTitle: string;
+  highlightTitle?: string;
   title: string;
   desc: string;
 }

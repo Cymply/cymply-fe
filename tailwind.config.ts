@@ -20,6 +20,7 @@ export default {
       },
       boxShadow: {
         button: "0px -30px 30px rgba(255, 255, 255, 0.5)",
+        card: "30px 30px 40px 0 rgba(0, 0, 0, 0.12)",
       },
       colors: {
         ...colors,
@@ -67,7 +68,8 @@ export default {
     plugin(function ({ addUtilities }) {
       addUtilities({
         ".gradient-grad": {
-          background: "linear-gradient(180deg, #FFF 74.57%, #FFB700 123.03%)",
+          background:
+            "linear-gradient(180deg, rgba(255, 255, 255, 0.3) 74.57%, rgba(238, 179, 61, 0.3) 123.03%)",
         },
       });
     }),

@@ -19,7 +19,7 @@ export const LetterEmpty = () => {
   }, [isAuthenticated]);
 
   return (
-    <div className="flex flex-col gap-24 mt-[7.5rem]">
+    <div className="flex flex-col gap-[3.75rem] mt-[6.25rem]">
       <div className="flex flex-col font-gangwonEduAll font-bold">
         <h3 className="text-black-800 text-[4rem] leading-tight mb-[4.5rem]">
           ✉️ 아직 도착한 <br />

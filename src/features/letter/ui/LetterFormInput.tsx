@@ -44,7 +44,7 @@ export const LetterFormInput = React.forwardRef<HTMLInputElement, LetterFormInpu
             value={value}
             className={clsx(
               "w-full border-b border-gray-800 pt-[2.625rem] pb-[2.625rem] shadow-none bg-transparent focus:outline-none font-gangwonEduAll font-bold",
-              isOverLimit ? "border-states-red" : "border-gray-800 ",
+              isOverLimit ? "border-states-red" : "border-gray-800",
               className
             )}
           />

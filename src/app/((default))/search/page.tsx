@@ -3,7 +3,7 @@
 import { SearchInput } from "@/features/search";
 import { useInfiniteSearch } from "@/shared/hooks/useInfiniteSearch";
 import { useScrollInfiniteLoad } from "@/shared/hooks/useScrollInfiniteLoad";
-import { MusicItem, TMusicItem } from "@/shared/ui/musicItem";
+import { MusicItem, TMusicItem } from "@/shared/ui";
 import { isEmpty } from "../../../lib/utils";
 import { Button } from "@/components/ui/button";
 import { musicApi } from "@/entities/music/api/musicApi";
@@ -18,10 +18,10 @@ function SearchPageContent() {
   const router = useRouter();
   const urlSearchParams = useSearchParams(); // 이 부분이 Suspense 필요
   const [userCode, setUserCode] = useState<string | null>(null);
-  
+
   const { selectedMusic, handleMusicSelect, handleSelectedMusicReset } =
     useSelectMusicItem();
-  
+
   const { data, search, loadMore, hasNextPage, isFetching, searchParams } =
     useInfiniteSearch<TMusicItem>({
       queryKey: "searchMusic",
@@ -31,50 +31,51 @@ function SearchPageContent() {
       },
       initialLimit: 10,
     });
-  
+
   // 스크롤 컨테이너 ref
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  
+
   // 스크롤 기반 무한스크롤 설정
   useScrollInfiniteLoad({
     hasNextPage,
     isFetching,
     onLoadMore: loadMore,
-    scrollContainerRef: scrollContainerRef as React.RefObject<HTMLElement | null>,
+    scrollContainerRef:
+      scrollContainerRef as React.RefObject<HTMLElement | null>,
     threshold: 50,
   });
-  
+
   // 음악 고유 식별자 생성 함수
   const getMusicId = (music: TMusicItem) =>
     `${music.title || ""}-${music.artist || ""}-${music.thumbnail || ""}`;
-  
+
   // user-code 파라미터 확인
   useEffect(() => {
-    const code = urlSearchParams.get('user-code');
+    const code = urlSearchParams.get("user-code");
     if (code) {
-      console.log('🔍 편지 받는 사람 코드:', code);
+      console.log("🔍 편지 받는 사람 코드:", code);
       setUserCode(code);
     }
   }, [urlSearchParams]);
-  
+
   useEffect(() => {
     handleSelectedMusicReset();
-  }, [handleSelectedMusicReset]);
-  
+  }, []); // 컴포넌트 마운트 시에만 실행
+
   return (
     <div className="w-full h-full flex flex-col">
       {/* 헤더 영역 */}
       <div className="flex flex-col gap-6 font-gangwonEduAll font-bold flex-shrink-0">
         <h3 className="text-black-800 text-5xl leading-snug">
-          편지의 감정이 담긴 <br/>
+          편지의 감정이 담긴 <br />
           노래를 골라주세요
         </h3>
         <p className="text-black-200 text-[2rem] leading-normal">
-          노래를 더 정확하게 찾기 위해 <br/>
+          노래를 더 정확하게 찾기 위해 <br />
           &quot;가수 이름 + 곡명&quot; 형태로 입력해 주세요.
         </p>
       </div>
-      
+
       {/* 검색창 */}
       <div className="mt-6 mb-6 flex-shrink-0">
         <SearchInput
@@ -86,20 +87,22 @@ function SearchPageContent() {
           placeholder="가수명과 곡명을 함께 입력해 주세요"
         />
       </div>
-      
+
       {/* 검색 결과 영역 - 최대 높이 제한 */}
       <div ref={scrollContainerRef} className="overflow-y-auto flex-1">
         {!isEmpty(searchParams.keyword) && data.length > 0 ? (
           <RadioGroup
             value={
-              selectedMusic.title && selectedMusic.artist ? getMusicId(selectedMusic) : undefined
+              selectedMusic.title && selectedMusic.artist
+                ? getMusicId(selectedMusic)
+                : undefined
             }
             onValueChange={(value) => {
               // 선택된 value로 전체 음악 객체 찾기
               const selectedMusicItem = data.find(
                 (music: TMusicItem) => getMusicId(music) === value
               );
-              
+
               if (selectedMusicItem) {
                 handleMusicSelect({
                   title: selectedMusicItem.title,
@@ -117,9 +120,9 @@ function SearchPageContent() {
                 className={cn(
                   "pt-6 pb-6 pl-9 pr-9 flex items-center gap-4 justify-center transition delay-100 duration-300 ease-in-out",
                   selectedMusic.title === result.title &&
-                  selectedMusic.artist === result.artist &&
-                  selectedMusic.thumbnail === result.thumbnail &&
-                  "!bg-primary-light"
+                    selectedMusic.artist === result.artist &&
+                    selectedMusic.thumbnail === result.thumbnail &&
+                    "!bg-primary-light"
                 )}
               >
                 <MusicItem
@@ -129,7 +132,7 @@ function SearchPageContent() {
                 />
               </RadioGroupItem>
             ))}
-            
+
             {/* 로딩 표시 */}
             {isFetching && (
               <div className="h-4 flex items-center justify-center">
@@ -146,7 +149,7 @@ function SearchPageContent() {
           </div>
         )}
       </div>
-      
+
       {/* 하단 버튼 영역 - 고정 간격 */}
       <div className="block mb-[11.25rem] w-full shadow-button">
         <Button

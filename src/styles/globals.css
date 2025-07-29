@@ -99,6 +99,7 @@ body {
   -moz-text-size-adjust: none;
   -ms-text-size-adjust: none;
   word-break: keep-all;
+  background-color: #ffffff;
 }
 
 img {

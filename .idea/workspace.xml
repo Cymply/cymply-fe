@@ -5,14 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a0e67ab-fd62-43af-9d25-985317bb0d3c" name="변경" comment="기본 로그인 api 설정 관련 기본 뼈대 구축&#10;accessToken : useContext(메모리 저장)&#10;refreshToken : HttpOnly(서버(스프링부트) 쿠키에 저장)">
+      <change afterPath="$PROJECT_DIR$/public/icons/ico-plus.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/img-error.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/not-found.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/json/loadingBeat.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/shared/ui/LoadingBeat.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/shared/ui/SelectMusicBox.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/((default))/letter/code/[code]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/letter/code/[code]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/((default))/signup/model/useSigninRedirect.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/signup/model/useSigninRedirect.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/main/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/main/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shared/hooks/useAuth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/hooks/useAuth.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shared/lib/apiClient.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/lib/apiClient.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shared/lib/tokenManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/lib/tokenManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/((default))/letter/write/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/letter/write/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/((default))/search/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/search/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/((default))/signup/step1/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/signup/step1/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/((default))/signup/step2/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/signup/step2/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/login/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/json/loadingSpinner.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/json/loadingSpinner.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/sonner.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/sonner.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/music/hooks/useSelectMusicItem.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/music/hooks/useSelectMusicItem.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/signup/ui/SelectAgeGroup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/signup/ui/SelectAgeGroup.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/signup/ui/SelectSex.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/signup/ui/SelectSex.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/signup/ui/SetNickname.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/signup/ui/SetNickname.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/letter/model/useLetter.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/letter/model/useLetter.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/letter/ui/LetterEmpty.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/letter/ui/LetterEmpty.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/letter/ui/LetterFormInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/letter/ui/LetterFormInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/letter/ui/LetterList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/letter/ui/LetterList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/signup/ui/NicknameForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/signup/ui/NicknameForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/signup/ui/SignupFooter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/signup/ui/SignupFooter.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/signup/ui/SignupHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/signup/ui/SignupHeader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/signup/ui/SignupProfileForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/signup/ui/SignupProfileForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/ui/LetterCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/ui/LetterCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/ui/LetterCardDetail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/ui/LetterCardDetail.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/ui/UrlLinkBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/ui/UrlLinkBox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/ui/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/ui/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/ui/musicItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/ui/musicItem.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/widgets/signup/ui/SignupView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/signup/ui/SignupView.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

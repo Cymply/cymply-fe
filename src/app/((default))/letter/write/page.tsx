@@ -4,15 +4,15 @@ import { LetterForm } from "@/features/letter";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
-import { MusicItem } from "@/shared/ui/musicItem";
+import { MusicItem, SelectMusicBox } from "@/shared/ui";
 import { isEmpty } from "@/lib/utils";
-import {Suspense} from "react";
+import { Suspense } from "react";
 
 export default function LetterWritePage() {
   const router = useRouter();
   const { selectedMusic } = useSelectMusicItem();
 
-  const handleGoMain = () => {
+  const onGoToMain = () => {
     router.push("/main");
   };
 
@@ -32,14 +32,7 @@ export default function LetterWritePage() {
           </div> */}
           <div className="w-full">
             {isEmpty(selectedMusic.title) ? (
-              <div
-                className="w-full h-40 border border-gray-300 flex items-center justify-center rounded-[0.625rem] text-2xl"
-                onClick={() => {
-                  router.push("/search");
-                }}
-              >
-                음악을 선택해주세요
-              </div>
+              <SelectMusicBox onGoToSearch={() => router.push("/search")} />
             ) : (
               <MusicItem
                 music={selectedMusic}
@@ -58,10 +51,14 @@ export default function LetterWritePage() {
         </Suspense>
       </div>
       <div className="flex flex-col gap-6">
-        <Button type="submit" form="letterForm" variant="primary">
+        <Button
+          type="submit"
+          form="letterForm"
+          variant={isEmpty(selectedMusic.title) ? "disabled" : "primary"}
+        >
           편지 보내기
         </Button>
-        <Button onClick={handleGoMain} variant="secondary">
+        <Button onClick={onGoToMain} variant="secondary">
           홈으로 돌아가기
         </Button>
       </div>
