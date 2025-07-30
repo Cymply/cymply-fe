@@ -41,13 +41,12 @@ jobs:
             pm2 stop nextjs-app || true
             
             # 백업 생성
-            if [ -d "/var/www/nextjs-app" ]; then
-              sudo cp -r /var/www/nextjs-app /var/www/nextjs-app-backup-$(date +%Y%m%d_%H%M%S)
+            if [ -d "~/nextjs-app" ]; then
+              cp -r ~/nextjs-app ~/nextjs-app-backup-$(date +%Y%m%d_%H%M%S)
             fi
             
             # 애플리케이션 디렉토리 생성
-            sudo mkdir -p /var/www/nextjs-app
-            sudo chown $USER:$USER /var/www/nextjs-app
+            mkdir -p ~/nextjs-app
 
       - name: Copy files to EC2
         uses: appleboy/scp-action@v0.1.7
@@ -68,7 +67,7 @@ jobs:
           port: 22
           script: |
             # 파일 압축 해제
-            cd /var/www/nextjs-app
+            cd ~/nextjs-app
             tar -xzf /tmp/deployment.tar.gz
             rm /tmp/deployment.tar.gz
             

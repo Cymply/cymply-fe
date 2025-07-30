@@ -74,8 +74,11 @@ export default function useSigninRedirect() {
       
       // 토큰 저장 - TokenManager를 통해서만 저장
       console.log('🔍 토큰 저장 시작 (TokenManager 사용)');
-      login({ accessToken, refreshToken });
       
+      login({
+        accessToken,
+        refreshToken: refreshToken || undefined
+      });
       // 토큰 저장 완료까지 대기
       const tokenSaved = await waitForTokenSave(accessToken);
       
