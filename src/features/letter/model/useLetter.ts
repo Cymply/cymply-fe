@@ -65,11 +65,6 @@ export default function useLetter() {
   // 나의 편지를 받을 주소 생성하는 곳
   const createUserLink = async () => {
       try {
-        if (!isAuthenticated) {
-          console.log("❌ 인증되지 않음 - createUserLink");
-          router.push("/login");
-          return;
-        }
         
         // 토큰 확인
         const token = TokenManager.getAccessToken();

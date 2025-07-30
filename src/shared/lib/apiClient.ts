@@ -35,7 +35,7 @@ const processQueue = (error: any, token: string | null = null) => {
 const refreshTokens = async (): Promise<string> => {
   const refreshToken = TokenManager.getRefreshToken();
   const accessToken = TokenManager.getAccessToken();
-  // console.log("🔍 리프레시 토큰 확인:", refreshToken ? "✅ 있음" : "❌ 없음");
+  console.log("🔍 리프레시 토큰 확인:", refreshToken ? "✅ 있음" : "❌ 없음");
   
   if (!refreshToken) {
     throw new Error("No refresh token available");
