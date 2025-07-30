@@ -21,9 +21,10 @@ const nextConfig: NextConfig = {
     if (dev && !isServer) {
     }
     console.log("next.config.js/webpack.plugins", config.plugins);
-    
+
     config.module.rules.push({
-      test: /\.svg$/,
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
       use: ["@svgr/webpack"],
     });
     return config;
