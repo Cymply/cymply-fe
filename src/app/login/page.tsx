@@ -8,13 +8,13 @@ export default function LoginPage() {
   return (
     <div className="flex flex-col h-full justify-between mt-[9.75rem]">
       <div className="flex flex-col gap-16 font-gangwonEduAll">
-        <h3 className="text-black-800 text-7xl leading-snug">
+        <h3 className="text-black-400 text-7xl leading-snug">
           마음 위로 번진 빛, <br /> 빛을 담은 <br />{" "}
-          <span className="font-bold">마음을 전해보세요.</span>
+          <span className="font-bold text-black-800">마음을 전해보세요.</span>
         </h3>
         <p className="text-black-400 text-5xl leading-normal">
-          펼쳐진 마음의 물결 위로 <br />
-          편지 한 장 띄워보세요.
+          윤슬은 편지와 음악으로 <br />
+          마음을 전하는 공간이에요.
         </p>
       </div>
       <div className="flex gap-7 flex-col mb-24">

@@ -13,7 +13,7 @@ export const LetterCardDetail = ({ detailItem }: LetterCardDetailProps) => {
 
   return (
     <>
-      <div className="flex flex-col gap-9">
+      <div className="flex flex-col ga p-9">
         {/* 노래 영역 */}
         <div className="flex pt-9 pb-9">
           <MusicItem
@@ -28,8 +28,10 @@ export const LetterCardDetail = ({ detailItem }: LetterCardDetailProps) => {
           <div className="text-4xl leading-normal text-black-300">{detailItem.content}</div>
         </div>
       </div>
-      <div className="mt-28">
-        <Button variant={"border"}>답장하기</Button>
+      <div className="mt-28 font-gangwonEduAll font-bold">
+        <Button variant={"border"} className="pt-7 pb-7">
+          답장하기
+        </Button>
       </div>
     </>
   );

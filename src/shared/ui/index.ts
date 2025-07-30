@@ -5,5 +5,4 @@ export * from "./LetterCardDetail";
 export * from "./UrlLinkBox";
 export * from "./LoadingSpinner";
 export * from "./LoadingBeat";
-export * from "./CopyLinkButton";
 export * from "./SelectMusicBox";
