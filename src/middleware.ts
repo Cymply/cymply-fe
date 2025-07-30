@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from 'next/server'
 export function middleware(request: NextRequest) {
   const publicPaths = ['/login', '/main', '/signup', '/signin', '/fonts']
   const letterCodePath = "/letter/code"  // /letter/code/[code] 패턴용
-  const recipientCodePath = "/letters"   // 기존 /letters?code= 패턴용
   
   // URL 디코딩 후 경로 정규화
   const rawPathname = decodeURIComponent(request.nextUrl.pathname)
@@ -20,6 +19,7 @@ export function middleware(request: NextRequest) {
   
   const token = request.cookies.get('accessToken')?.value ||
     request.headers.get('authorization')?.replace('Bearer ', '')
+  
   
   if (!token) {
     console.log('❌ 토큰 없음, 리다이렉트 필요:', pathname)
@@ -48,40 +48,18 @@ export function middleware(request: NextRequest) {
         
         console.log('📝 Saved letter code redirect URL:', redirectUrl, 'with code:', code)
       }
-    }
-    // 기존 /letters?code= 패턴 처리
-    else if (pathname.startsWith(recipientCodePath)) {
-      const recipientCode = request.nextUrl.searchParams.get('code')
-      if (recipientCode) {
-        const redirectUrl = `/search`  // URL에서 code 제거
-        
-        response.cookies.set('recipientCode', recipientCode, {
-          maxAge: 30 * 60,
-          httpOnly: false,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax'
-        })
-        response.cookies.set('recipientRedirectUrl', redirectUrl, {
-          maxAge: 30 * 60,
-          httpOnly: false,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax'
-        })
-        
-        console.log('📝 Saved recipient redirect URL:', redirectUrl, 'with code:', recipientCode)
-      }
     } else {
       // 일반 경로 저장
-      response.cookies.set('generalRedirectUrl', pathname, {
-        maxAge: 30 * 60,
-        httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
-      })
-      
+      // response.cookies.set('generalRedirectUrl', pathname, {
+      //   maxAge: 30 * 60,
+      //   httpOnly: false,
+      //   secure: process.env.NODE_ENV === 'production',
+      //   sameSite: 'lax'
+      // })
+
       console.log('📝 Saved general redirect URL:', pathname)
     }
-    
+
     return response
   }
   

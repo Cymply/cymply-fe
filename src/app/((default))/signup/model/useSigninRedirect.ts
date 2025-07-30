@@ -2,7 +2,7 @@
 import { useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/shared/hooks/useAuth";
-import {TokenManager} from "@/shared/lib/tokenManager";
+import { TokenManager } from "@/shared/lib/tokenManager";
 
 export default function useSigninRedirect() {
   const router = useRouter();
@@ -22,9 +22,10 @@ export default function useSigninRedirect() {
   };
   
   const clearRedirectCookies = () => {
-    document.cookie = 'recipientCode=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
-    document.cookie = 'recipientRedirectUrl=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
-    document.cookie = 'generalRedirectUrl=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+    // max-age=0을 사용하여 즉시 만료 (일관성 유지)
+    document.cookie = 'recipientCode=; path=/; max-age=0';
+    document.cookie = 'recipientRedirectUrl=; path=/; max-age=0';
+    document.cookie = 'generalRedirectUrl=; path=/; max-age=0';
   };
   
   const normalizePath = (path: string): string => {
@@ -61,7 +62,9 @@ export default function useSigninRedirect() {
   const afterSocialSignin = useCallback(async () => {
     try {
       const accessToken = searchParams.get('access_token');
-      console.log('🔍 토큰 확인:', accessToken ? '있음' : '없음');
+      const refreshToken = searchParams.get('refresh_token');
+      console.log('🔍 access token 확인:', accessToken ? '있음' : '없음');
+      console.log('🔍 refresh token 확인:', refreshToken ? '있음' : '없음');
       
       if (!accessToken) {
         console.error('❌ 토큰이 URL 파라미터에 없습니다.');
@@ -69,26 +72,40 @@ export default function useSigninRedirect() {
         return;
       }
       
-      // 토큰 저장
-      console.log('🔍 토큰 저장 시작');
-      login({ accessToken });
+      // 토큰 저장 - TokenManager를 통해서만 저장
+      console.log('🔍 토큰 저장 시작 (TokenManager 사용)');
+      login({ accessToken, refreshToken });
       
       // 토큰 저장 완료까지 대기
       const tokenSaved = await waitForTokenSave(accessToken);
       
       if (!tokenSaved) {
-        console.log('🔧 토큰 저장 실패, 직접 저장 시도');
-        // 토큰 직접 저장 시도
-        document.cookie = `accessToken=${accessToken}; path=/; max-age=360`;
+        console.log('🔧 TokenManager 저장 실패, 재시도');
         
-        // 직접 저장 후 다시 확인
-        const retryTokenSaved = await waitForTokenSave(accessToken, 1000);
+        // 직접 쿠키 설정 대신 TokenManager 재사용
+        console.log('🔄 TokenManager.setTokens() 직접 호출');
+        TokenManager.setTokens({
+          accessToken,
+          refreshToken: refreshToken || undefined
+        });
+        
+        // 재시도 후 다시 확인
+        const retryTokenSaved = await waitForTokenSave(accessToken, 2000);
         if (!retryTokenSaved) {
           console.error('❌ 토큰 저장 완전 실패');
-          router.push('/login');
+          console.log('🔍 현재 쿠키 상태 디버깅');
+          TokenManager.debugCookieStatus();
+          
+          // 최후의 수단: 페이지 새로고침 후 재시도
+          console.log('🔄 페이지 새로고침 후 재시도');
+          window.location.reload();
           return;
         }
       }
+      
+      // 토큰 저장 성공 후 상태 확인
+      console.log('✅ 토큰 저장 성공, 현재 상태 확인');
+      TokenManager.debugCookieStatus();
       
       // 리다이렉트 URL 확인
       const recipientRedirectUrl = getCookie('recipientRedirectUrl');
@@ -112,12 +129,21 @@ export default function useSigninRedirect() {
       // 쿠키 정리
       clearRedirectCookies();
       
+      // 페이지 이동 전 최종 토큰 상태 확인
+      const finalToken = TokenManager.getAccessToken();
+      if (!finalToken) {
+        console.error('❌ 페이지 이동 직전 토큰 없음!');
+        TokenManager.debugCookieStatus();
+      }
+      
       // 페이지 이동
       console.log('🚀 페이지 이동:', targetUrl);
       window.location.href = targetUrl;
       
     } catch (error) {
-      console.error("❌ afterSocialLogin error", error);
+      console.error("❌ afterSocialSignin error", error);
+      console.log('🔍 에러 발생 시 쿠키 상태');
+      TokenManager.debugCookieStatus();
       router.push('/login');
     }
   }, [searchParams, login, router]);

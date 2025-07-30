@@ -9,6 +9,7 @@ import { useAuth } from "@/shared/hooks/useAuth";
 import { alertAtom } from "@/widgets/alert";
 import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/shared/ui";
+import {logout} from "@/shared/lib/apiClient";
 
 function MainPageContent() {
   const [loading, setLoading] = useState(true);
@@ -23,7 +24,7 @@ function MainPageContent() {
       try {
         // 인증 로딩이 완료되고 인증된 상태에서만 API 호출
         if (!authLoading && isAuthenticated) {
-          console.log("✅ 인증 완료, 편지 목록 조회 시작");
+          // console.log("✅ 인증 완료, 편지 목록 조회 시작");
           await getLetters();
         } else if (!authLoading && !isAuthenticated) {
           console.log("❌ 인증되지 않음, 편지 목록 조회 건너뜀");
@@ -81,6 +82,9 @@ function MainPageContent() {
 export default function MainPage() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
+      <button onClick={logout}>
+        로그아웃
+      </button>
       <MainPageContent />
     </Suspense>
   );
