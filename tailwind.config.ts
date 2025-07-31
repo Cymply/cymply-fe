@@ -49,6 +49,7 @@ export default {
           DEFAULT: "#EEB33D", // 기본(primary)
           dark: "#EEB33D", // 진한색(primary-dark)
           light: "#FFF7E4", // 밝은색(primary-light)
+          hover: "#F0C265", // 호버(primary-hover)"
         },
         borderColor: {
           focus: "#EEB33D",

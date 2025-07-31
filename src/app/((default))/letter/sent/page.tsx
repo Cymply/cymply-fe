@@ -21,7 +21,7 @@ function LetterSentContent() {
     init();
   }, [isAuthenticated, createUserLink]);
 
-  const handleGoMain = () => {
+  const onGoToMain = () => {
     router.push("/main");
   };
 
@@ -37,11 +37,9 @@ function LetterSentContent() {
         </div>
         <UrlLinkBox recipientUrl={recipientUrl} backgroundColor="primary" />
       </div>
-      <div className="flex flex-col gap-6">
-        <Button onClick={handleGoMain} variant="secondary">
-          홈으로 돌아가기
-        </Button>
-      </div>
+      <Button onClick={onGoToMain} variant="secondary">
+        홈으로 돌아가기
+      </Button>
     </div>
   );
 }
