@@ -71,7 +71,7 @@ jobs:
             tar -xzf /tmp/deployment.tar.gz
             rm /tmp/deployment.tar.gz
             
-            # 의존성 설치 (프로덕션용)ㅁ
+            # 의존성 설치 (프로덕션용)
             npm ci --only=production
             
             # PM2로 애플리케이션 시작
