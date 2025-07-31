@@ -55,7 +55,7 @@ export default function useSigninRedirect() {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
     
-    // console.log('❌ 토큰 저장 타임아웃');
+    console.log('❌ 토큰 저장 타임아웃');
     return false;
   };
   
