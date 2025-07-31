@@ -51,6 +51,7 @@
     --primary: theme("colors.primary.DEFAULT");
     --primary-dark: theme("colors.primary.dark");
     --primary-light: theme("colors.primary.light");
+    --primary-hover: theme("colors.primary.hover");
     --kakao-yellow: theme("colors.kakao.yellow");
     --kakao-black: theme("colors.kakao.black");
     --states-red: theme("colors.states.red");
