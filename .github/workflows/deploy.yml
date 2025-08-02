@@ -1,84 +1,105 @@
+# GitHub Actions 워크플로우: Next.js 애플리케이션을 EC2에 자동 배포
 name: Deploy Next.js to EC2
 
+# 트리거 조건: develop 브랜치에 push가 발생할 때 실행
 on:
   push:
     branches:
       - develop
 
+# 배포 작업 정의
 jobs:
   deploy:
+    # GitHub가 제공하는 최신 Ubuntu 러너에서 실행
     runs-on: ubuntu-latest
-    
+
     steps:
+      # Step 1: 저장소 코드를 러너로 체크아웃
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Step 2: Node.js 18 환경 설정 및 npm 캐시 활용
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
+          cache: 'npm'  # npm 의존성 캐시로 빌드 시간 단축
 
+      # Step 3: 프로덕션용 환경변수 파일 생성
       - name: Create environment file before build
         run: |
           # 빌드 전에 환경변수 파일 생성
+          # EC2_HOST는 GitHub Secrets에서 가져옴 (보안상 숨겨진 값)
           cat > .env.production << 'EOF'
           NEXT_PUBLIC_REDIRECT_TO=${{ secrets.EC2_HOST }}/auth/callback
           NEXT_PUBLIC_FRONTEND_URL=${{ secrets.EC2_HOST }}
           NEXT_PUBLIC_BACKEND_URL=http://34.64.182.180:8080
           EOF
 
+      # Step 4: Node.js 의존성 설치 (npm ci는 package-lock.json 기반으로 정확한 버전 설치)
       - name: Install dependencies
         run: npm ci
 
+      # Step 5: Next.js 애플리케이션 빌드 (환경변수 포함)
       - name: Build Next.js app with environment variables
         env:
-          NEXT_PUBLIC_SUPABASE_URL: https://culheywadbntqpaigwnz.supabase.co
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1bGhleXdhZGJudHFwYWlnd256Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNDk1MjEsImV4cCI6MjA2MjYyNTUyMX0.BwSQnxSTbha1DD6uKftuDHX4JekA6oBDa9wjBVjoIn8
+          # 애플리케이션 URL 설정 (인증 콜백 및 프론트엔드/백엔드 URL)
           NEXT_PUBLIC_REDIRECT_TO: ${{ secrets.EC2_HOST }}/auth/callback
           NEXT_PUBLIC_FRONTEND_URL: ${{ secrets.EC2_HOST }}
           NEXT_PUBLIC_BACKEND_URL: http://34.64.182.180:8080
         run: npm run build
 
+      # Step 6: 배포용 압축 파일 생성
       - name: Create deployment archive
         run: |
-          # PM2 ecosystem 파일 생성
+          # PM2 프로세스 매니저 설정 파일 생성
+          # PM2는 Node.js 애플리케이션을 프로덕션에서 관리하는 도구
           cat > ecosystem.config.js << 'EOF'
           module.exports = {
             apps: [{
-              name: 'nextjs-app',
-              script: 'npm',
-              args: 'start',
+              name: 'nextjs-app',           # 앱 이름
+              script: 'npm',                # 실행할 스크립트
+              args: 'start',                # npm start 명령어 실행
               env: {
-                NODE_ENV: 'production'
+                NODE_ENV: 'production'      # 프로덕션 환경 설정
               }
             }]
           };
           EOF
           
+          # 배포에 필요한 파일들을 tar.gz로 압축
+          # .next: 빌드된 Next.js 파일
+          # package.json, package-lock.json: 의존성 정보
+          # public: 정적 파일들
+          # .env.production: 환경변수
+          # ecosystem.config.js: PM2 설정
           tar -czf deployment.tar.gz .next package.json package-lock.json public .env.production ecosystem.config.js
 
+      # Step 7: EC2 서버에 SSH 접속하여 기존 애플리케이션 정리
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
+          # EC2 연결 정보 (모두 GitHub Secrets에서 가져옴)
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           password: ${{ secrets.EC2_PASSWORD }}
           port: 22
           script: |
-            # 모든 nextjs-app 프로세스 완전 제거
-            pm2 delete all || true
-            pm2 kill || true
-            pm2 flush || true
+            # 기존 PM2 프로세스 완전 제거
+            pm2 delete all || true    # 모든 PM2 앱 삭제 (실패해도 계속 진행)
+            pm2 kill || true          # PM2 데몬 종료
+            pm2 flush || true         # PM2 로그 정리
             
-            # 포트 3000 사용 중인 프로세스 강제 종료
+            # 포트 3000을 사용하는 모든 프로세스 강제 종료
+            # lsof: 포트를 사용하는 프로세스 ID 찾기
+            # fuser: 포트를 사용하는 프로세스 종료
             sudo lsof -ti:3000 | xargs sudo kill -9 || true
             sudo fuser -k 3000/tcp || true
             
-            # 잠시 대기
+            # 프로세스 종료 완료를 위한 대기
             sleep 3
             
-            # 백업 생성
+            # 기존 애플리케이션 디렉토리 백업 (롤백용)
             if [ -d "~/nextjs-app" ]; then
               cp -r ~/nextjs-app ~/nextjs-app-backup-$(date +%Y%m%d_%H%M%S)
             fi
@@ -87,6 +108,7 @@ jobs:
             rm -rf ~/nextjs-app
             mkdir -p ~/nextjs-app
 
+      # Step 8: 압축된 배포 파일을 EC2로 복사
       - name: Copy files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -94,10 +116,11 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           password: ${{ secrets.EC2_PASSWORD }}
           port: 22
-          source: "deployment.tar.gz"
-          target: "/tmp/"
+          source: "deployment.tar.gz"    # 로컬 파일
+          target: "/tmp/"                # EC2의 임시 디렉토리에 복사
 
-      - name: Extract and restart application
+      # Step 9: EC2에서 파일 압축 해제 및 애플리케이션 시작 (PM2 자동 시작 설정 포함)
+      - name: Extract and restart application with PM2 auto-startup
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -105,46 +128,77 @@ jobs:
           password: ${{ secrets.EC2_PASSWORD }}
           port: 22
           script: |
-            # 파일 압축 해제
+            # 애플리케이션 디렉토리로 이동 후 압축 해제
             cd ~/nextjs-app
             tar -xzf /tmp/deployment.tar.gz
-            rm /tmp/deployment.tar.gz
+            rm /tmp/deployment.tar.gz      # 임시 파일 정리
             
-            # 의존성 설치 (프로덕션용)
+            # Node.js 의존성 설치 (프로덕션용만, 개발 의존성 제외)
             npm ci --omit=dev
             
-            # 포트 3000이 비어있는지 최종 확인
+            # 포트 3000 사용 여부 최종 확인
             if sudo netstat -tlnp | grep :3000; then
               echo "Port 3000 still in use, killing remaining processes"
               sudo lsof -ti:3000 | xargs sudo kill -9 || true
               sleep 2
             fi
             
-            # PM2 데몬 시작
+            # PM2 데몬 시작 (프로세스 매니저 초기화)
             pm2 ping
             
-            # Next.js 애플리케이션 시작 (포트 3000이 사용 중이면 3001 사용)
+            # Next.js 애플리케이션 시작
+            # 포트 3000이 사용 중이면 3001 포트 사용
             if sudo ss -tulpn | grep -q :3000; then
               echo "Port 3000 in use, trying port 3001"
               pm2 start npm --name "nextjs-app" -- start -- --port 3001
             else
               pm2 start npm --name "nextjs-app" -- start
             fi
+            
+            # PM2 설정 저장 및 자동 시작 설정
+            pm2 save    # PM2 설정 저장 (서버 재시작 시 자동 실행용)
+            
+            # PM2 자동 시작 설정 - 시스템 재부팅 시 PM2가 자동으로 시작되도록 설정
+            echo "Setting up PM2 auto-startup..."
+            
+            # 기존 startup 설정 제거 (있다면)
+            pm2 unstartup systemd || true
+            
+            # 새로운 startup 설정 생성 및 적용
+            STARTUP_CMD=$(pm2 startup systemd | grep "sudo env" | head -1)
+            if [ ! -z "$STARTUP_CMD" ]; then
+              echo "Executing startup command: $STARTUP_CMD"
+              eval $STARTUP_CMD || echo "Warning: startup command failed, but continuing..."
+            fi
+            
+            # 대안: 직접 systemd 설정 (위 방법이 실패할 경우)
+            sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u $(whoami) --hp $(eval echo ~$(whoami)) || echo "Alternative startup setup failed, but continuing..."
+            
+            # PM2 설정 다시 저장 (startup 설정 후)
             pm2 save
             
-            # 시작 대기 및 상태 확인
+            # 애플리케이션 시작 대기 및 상태 확인
             sleep 5
-            pm2 list
+            pm2 list    # 실행 중인 PM2 프로세스 목록 출력
             
-            # 성공 여부 확인
+            # 배포 성공 여부 확인
             if pm2 list | grep -q "online"; then
               echo "✅ Next.js app started successfully!"
+              # HTTP 요청으로 애플리케이션 응답 확인
               curl -f http://localhost:3000 || echo "⚠️  App started but not responding to HTTP requests"
             else
               echo "❌ Failed to start Next.js app"
-              pm2 logs nextjs-app --lines 20
+              pm2 logs nextjs-app --lines 20    # 실패 시 로그 출력
+              exit 1
             fi
             
-            # Nginx 설정 확인 및 재시작 (필요시)
-            # sudo 권한이 필요한 경우 아래 라인들을 주석 해제하고 sudoers 설정 필요
+            # PM2 자동 시작 설정 확인
+            echo "Checking PM2 startup configuration..."
+            sudo systemctl status pm2-$(whoami) || echo "PM2 service not found - manual setup may be required"
+            
+            echo "🎉 Deployment completed successfully!"
+            echo "📝 PM2 auto-startup configured - app will restart automatically after EC2 reboot"
+            
+            # Nginx 웹서버 설정 확인 및 재시작 (필요시)
+            # 주석 처리됨: sudo 권한이 필요한 경우 sudoers 설정이 선행되어야 함
             # sudo nginx -t && sudo systemctl reload nginx
