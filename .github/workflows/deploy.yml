@@ -3,7 +3,7 @@ name: Deploy Next.js to EC2
 on:
   push:
     branches:
-      - feat/signup/bj
+      - develop
 
 jobs:
   deploy:
