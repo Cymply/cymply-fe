@@ -27,7 +27,14 @@ jobs:
 
       - name: Create deployment archive
         run: |
-          tar -czf deployment.tar.gz .next package.json package-lock.json public
+          # 프로덕션용 환경변수 파일 생성
+          cat > .env.production << 'EOF'
+          NEXT_PUBLIC_REDIRECT_TO=${{ secrets.EC2_HOST }}/auth/callback
+          NEXT_PUBLIC_FRONTEND_URL=${{ secrets.EC2_HOST }}
+          NEXT_PUBLIC_BACKEND_URL=http://34.64.182.180:8080
+          EOF
+          
+          tar -czf deployment.tar.gz .next package.json package-lock.json public .env.production
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
