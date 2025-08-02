@@ -34,7 +34,21 @@ jobs:
           NEXT_PUBLIC_BACKEND_URL=http://34.64.182.180:8080
           EOF
           
-          tar -czf deployment.tar.gz .next package.json package-lock.json public .env.production
+          # PM2 ecosystem 파일 생성
+          cat > ecosystem.config.js << 'EOF'
+          module.exports = {
+            apps: [{
+              name: 'nextjs-app',
+              script: 'npm',
+              args: 'start',
+              env: {
+                NODE_ENV: 'production'
+              }
+            }]
+          };
+          EOF
+          
+          tar -czf deployment.tar.gz .next package.json package-lock.json public .env.production ecosystem.config.js
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -46,8 +60,15 @@ jobs:
           script: |
             # 모든 nextjs-app 프로세스 완전 제거
             pm2 delete all || true
-            pm2 kill
-            pm2 flush
+            pm2 kill || true
+            pm2 flush || true
+            
+            # 포트 3000 사용 중인 프로세스 강제 종료
+            sudo lsof -ti:3000 | xargs sudo kill -9 || true
+            sudo fuser -k 3000/tcp || true
+            
+            # 잠시 대기
+            sleep 3
             
             # 백업 생성
             if [ -d "~/nextjs-app" ]; then
@@ -84,16 +105,37 @@ jobs:
             # 의존성 설치 (프로덕션용)
             npm ci --omit=dev
             
-            # PM2 데몬 시작 및 기존 프로세스 정리
-            pm2 ping
-            pm2 delete all || true
+            # 포트 3000이 비어있는지 최종 확인
+            if sudo netstat -tlnp | grep :3000; then
+              echo "Port 3000 still in use, killing remaining processes"
+              sudo lsof -ti:3000 | xargs sudo kill -9 || true
+              sleep 2
+            fi
             
-            # Next.js 애플리케이션 시작
-            pm2 start npm --name "nextjs-app" -- start
+            # PM2 데몬 시작
+            pm2 ping
+            
+            # Next.js 애플리케이션 시작 (포트 3000이 사용 중이면 3001 사용)
+            if sudo ss -tulpn | grep -q :3000; then
+              echo "Port 3000 in use, trying port 3001"
+              pm2 start npm --name "nextjs-app" -- start -- --port 3001
+            else
+              pm2 start npm --name "nextjs-app" -- start
+            fi
             pm2 save
             
-            # PM2 상태 확인
+            # 시작 대기 및 상태 확인
+            sleep 5
             pm2 list
+            
+            # 성공 여부 확인
+            if pm2 list | grep -q "online"; then
+              echo "✅ Next.js app started successfully!"
+              curl -f http://localhost:3000 || echo "⚠️  App started but not responding to HTTP requests"
+            else
+              echo "❌ Failed to start Next.js app"
+              pm2 logs nextjs-app --lines 20
+            fi
             
             # Nginx 설정 확인 및 재시작 (필요시)
             # sudo 권한이 필요한 경우 아래 라인들을 주석 해제하고 sudoers 설정 필요
