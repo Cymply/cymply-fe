@@ -43,6 +43,9 @@ jobs:
       # Step 5: Next.js 애플리케이션 빌드 (환경변수 포함)
       - name: Build Next.js app with environment variables
         env:
+          # Supabase 설정 (데이터베이스 연결용)
+          NEXT_PUBLIC_SUPABASE_URL: https://culheywadbntqpaigwnz.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1bGhleXdhZGJudHFwYWlnd256Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNDk1MjEsImV4cCI6MjA2MjYyNTUyMX0.BwSQnxSTbha1DD6uKftuDHX4JekA6oBDa9wjBVjoIn8
           # 애플리케이션 URL 설정 (인증 콜백 및 프론트엔드/백엔드 URL)
           NEXT_PUBLIC_REDIRECT_TO: ${{ secrets.EC2_HOST }}/auth/callback
           NEXT_PUBLIC_FRONTEND_URL: ${{ secrets.EC2_HOST }}
@@ -57,11 +60,11 @@ jobs:
           cat > ecosystem.config.js << 'EOF'
           module.exports = {
             apps: [{
-              name: 'nextjs-app',           # 앱 이름
-              script: 'npm',                # 실행할 스크립트
-              args: 'start',                # npm start 명령어 실행
+              name: 'nextjs-app',           // 앱 이름
+              script: 'npm',                // 실행할 스크립트
+              args: 'start',                // npm start 명령어 실행
               env: {
-                NODE_ENV: 'production'      # 프로덕션 환경 설정
+                NODE_ENV: 'production'      // 프로덕션 환경 설정
               }
             }]
           };
@@ -119,8 +122,8 @@ jobs:
           source: "deployment.tar.gz"    # 로컬 파일
           target: "/tmp/"                # EC2의 임시 디렉토리에 복사
 
-      # Step 9: EC2에서 파일 압축 해제 및 PM2로 애플리케이션 시작 (자동 재시작 설정)
-      - name: Extract and restart application with PM2 auto-startup
+      # Step 9: EC2에서 파일 압축 해제 및 systemd 서비스로 자동 재시작 설정
+      - name: Extract and setup auto-restart service
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -131,95 +134,75 @@ jobs:
             # 애플리케이션 디렉토리로 이동 후 압축 해제
             cd ~/nextjs-app
             tar -xzf /tmp/deployment.tar.gz
-            rm /tmp/deployment.tar.gz      # 임시 파일 정리
+            rm /tmp/deployment.tar.gz
             
-            # Node.js 의존성 설치 (프로덕션용만, 개발 의존성 제외)
+            # Node.js 의존성 설치
             npm ci --omit=dev
             
-            # 기존 PM2 프로세스 정리
+            # 기존 서비스 정지 및 PM2 정리
+            echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl stop nextjs-app || true
             pm2 delete all || true
             pm2 kill || true
             
-            # 포트 3000 사용 프로세스 강제 종료
-            sudo lsof -ti:3000 | xargs sudo kill -9 || true
-            sudo fuser -k 3000/tcp || true
+            # 포트 사용 프로세스 정리
+            echo ${{ secrets.EC2_PASSWORD }} | sudo -S lsof -ti:3000 | xargs sudo kill -9 || true
+            echo ${{ secrets.EC2_PASSWORD }} | sudo -S fuser -k 3000/tcp || true
             sleep 3
             
-            # PM2 데몬 시작
-            pm2 ping
+            # systemd 서비스 파일 생성
+            echo ${{ secrets.EC2_PASSWORD }} | sudo -S tee /etc/systemd/system/nextjs-app.service > /dev/null <<EOF
+            [Unit]
+            Description=Next.js Application
+            After=network.target
+            Wants=network-online.target
+            After=network-online.target
             
-            # 현재 디렉토리가 ~/nextjs-app인지 확인
-            echo "Current directory: $(pwd)"
-            echo "Files in directory:"
-            ls -la
+            [Service]
+            Type=simple
+            User=$(whoami)
+            WorkingDirectory=/home/$(whoami)/nextjs-app
+            ExecStart=/usr/bin/npm start
+            Restart=always
+            RestartSec=10
+            Environment=NODE_ENV=production
+            StandardOutput=journal
+            StandardError=journal
+            SyslogIdentifier=nextjs-app
             
-            # ecosystem.config.js 파일이 있으면 사용, 없으면 직접 실행
-            if [ -f "ecosystem.config.js" ]; then
-              echo "Using ecosystem.config.js"
-              pm2 start ecosystem.config.js
-            else
-              echo "Starting with npm directly"
-              if sudo ss -tulpn | grep -q :3000; then
-                echo "Port 3000 in use, trying port 3001"
-                pm2 start npm --name "nextjs-app" -- start -- --port 3001
-              else
-                pm2 start npm --name "nextjs-app" -- start
-              fi
-            fi
+            [Install]
+            WantedBy=multi-user.target
+            EOF
             
-            # PM2 설정 저장
-            pm2 save
+            # systemd 서비스 활성화 및 시작
+            echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl daemon-reload
+            echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl enable nextjs-app.service
+            echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl start nextjs-app.service
             
-            # PM2 자동 시작 설정
-            echo "Setting up PM2 auto-startup..."
+            # 서비스 시작 대기
+            sleep 10
             
-            # 기존 startup 설정 제거
-            pm2 unstartup systemd || true
-            
-            # startup 명령어 실행
-            STARTUP_CMD=$(pm2 startup systemd -u $(whoami) --hp $(eval echo ~$(whoami)) | grep "sudo env" | tail -1)
-            if [ ! -z "$STARTUP_CMD" ]; then
-              echo "Executing startup command: $STARTUP_CMD"
-              eval $STARTUP_CMD || echo "Startup command failed, continuing..."
-            fi
-            
-            # PM2 설정 다시 저장 (startup 설정 후)
-            pm2 save
-            
-            # 애플리케이션 시작 확인
-            sleep 5
-            pm2 list
+            # 서비스 상태 확인
+            echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl status nextjs-app.service
             
             # 애플리케이션 응답 확인
-            if pm2 list | grep -q "online"; then
-              echo "✅ Next.js app started successfully!"
-            
-              # HTTP 응답 확인
-              if curl -f http://localhost:3000 >/dev/null 2>&1; then
-                echo "✅ App responding on port 3000"
-              elif curl -f http://localhost:3001 >/dev/null 2>&1; then
-                echo "✅ App responding on port 3001"
-              else
-                echo "⚠️ App started but not responding to HTTP requests"
-                pm2 logs nextjs-app --lines 10
-              fi
+            if curl -f http://localhost:3000 >/dev/null 2>&1; then
+              echo "✅ Next.js app started successfully on port 3000!"
             else
-              echo "❌ Failed to start Next.js app"
-              pm2 logs nextjs-app --lines 20
+              echo "❌ App not responding, checking logs..."
+              echo ${{ secrets.EC2_PASSWORD }} | sudo -S journalctl -u nextjs-app.service --lines=20
               exit 1
             fi
             
-            # PM2 startup 서비스 상태 확인
-            echo "Checking PM2 startup service..."
-            if sudo systemctl is-active pm2-$(whoami) >/dev/null 2>&1; then
-              echo "✅ PM2 startup service is active"
+            # 자동 시작 설정 확인
+            if echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl is-enabled nextjs-app.service | grep -q "enabled"; then
+              echo "✅ Auto-start on boot: ENABLED"
+              echo "🎉 EC2 재부팅 시 자동으로 앱이 시작됩니다!"
             else
-              echo "⚠️ PM2 startup service not active - manual setup may be required"
-              echo "Run these commands manually if needed:"
-              echo "  pm2 startup"
-              echo "  # Execute the command it outputs"
-              echo "  pm2 save"
+              echo "❌ Auto-start on boot: DISABLED"
+              exit 1
             fi
             
-            echo "🎉 Deployment completed successfully!"
-            echo "📝 PM2 configured for auto-restart on EC2 reboot"
+            echo "🚀 Deployment completed successfully!"
+            echo "📋 Service status:"
+            echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl is-active nextjs-app.service
+            echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl is-enabled nextjs-app.service
