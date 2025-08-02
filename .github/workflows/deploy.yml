@@ -1,0 +1,150 @@
+name: Deploy Next.js to EC2
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Create environment file before build
+        run: |
+          # 빌드 전에 환경변수 파일 생성
+          cat > .env.production << 'EOF'
+          NEXT_PUBLIC_REDIRECT_TO=${{ secrets.EC2_HOST }}/auth/callback
+          NEXT_PUBLIC_FRONTEND_URL=${{ secrets.EC2_HOST }}
+          NEXT_PUBLIC_BACKEND_URL=http://34.64.182.180:8080
+          EOF
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js app with environment variables
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://culheywadbntqpaigwnz.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1bGhleXdhZGJudHFwYWlnd256Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNDk1MjEsImV4cCI6MjA2MjYyNTUyMX0.BwSQnxSTbha1DD6uKftuDHX4JekA6oBDa9wjBVjoIn8
+          NEXT_PUBLIC_REDIRECT_TO: ${{ secrets.EC2_HOST }}/auth/callback
+          NEXT_PUBLIC_FRONTEND_URL: ${{ secrets.EC2_HOST }}
+          NEXT_PUBLIC_BACKEND_URL: http://34.64.182.180:8080
+        run: npm run build
+
+      - name: Create deployment archive
+        run: |
+          # PM2 ecosystem 파일 생성
+          cat > ecosystem.config.js << 'EOF'
+          module.exports = {
+            apps: [{
+              name: 'nextjs-app',
+              script: 'npm',
+              args: 'start',
+              env: {
+                NODE_ENV: 'production'
+              }
+            }]
+          };
+          EOF
+          
+          tar -czf deployment.tar.gz .next package.json package-lock.json public .env.production ecosystem.config.js
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          password: ${{ secrets.EC2_PASSWORD }}
+          port: 22
+          script: |
+            # 모든 nextjs-app 프로세스 완전 제거
+            pm2 delete all || true
+            pm2 kill || true
+            pm2 flush || true
+            
+            # 포트 3000 사용 중인 프로세스 강제 종료
+            sudo lsof -ti:3000 | xargs sudo kill -9 || true
+            sudo fuser -k 3000/tcp || true
+            
+            # 잠시 대기
+            sleep 3
+            
+            # 백업 생성
+            if [ -d "~/nextjs-app" ]; then
+              cp -r ~/nextjs-app ~/nextjs-app-backup-$(date +%Y%m%d_%H%M%S)
+            fi
+            
+            # 애플리케이션 디렉토리 정리 후 재생성
+            rm -rf ~/nextjs-app
+            mkdir -p ~/nextjs-app
+
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          password: ${{ secrets.EC2_PASSWORD }}
+          port: 22
+          source: "deployment.tar.gz"
+          target: "/tmp/"
+
+      - name: Extract and restart application
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          password: ${{ secrets.EC2_PASSWORD }}
+          port: 22
+          script: |
+            # 파일 압축 해제
+            cd ~/nextjs-app
+            tar -xzf /tmp/deployment.tar.gz
+            rm /tmp/deployment.tar.gz
+            
+            # 의존성 설치 (프로덕션용)
+            npm ci --omit=dev
+            
+            # 포트 3000이 비어있는지 최종 확인
+            if sudo netstat -tlnp | grep :3000; then
+              echo "Port 3000 still in use, killing remaining processes"
+              sudo lsof -ti:3000 | xargs sudo kill -9 || true
+              sleep 2
+            fi
+            
+            # PM2 데몬 시작
+            pm2 ping
+            
+            # Next.js 애플리케이션 시작 (포트 3000이 사용 중이면 3001 사용)
+            if sudo ss -tulpn | grep -q :3000; then
+              echo "Port 3000 in use, trying port 3001"
+              pm2 start npm --name "nextjs-app" -- start -- --port 3001
+            else
+              pm2 start npm --name "nextjs-app" -- start
+            fi
+            pm2 save
+            
+            # 시작 대기 및 상태 확인
+            sleep 5
+            pm2 list
+            
+            # 성공 여부 확인
+            if pm2 list | grep -q "online"; then
+              echo "✅ Next.js app started successfully!"
+              curl -f http://localhost:3000 || echo "⚠️  App started but not responding to HTTP requests"
+            else
+              echo "❌ Failed to start Next.js app"
+              pm2 logs nextjs-app --lines 20
+            fi
+            
+            # Nginx 설정 확인 및 재시작 (필요시)
+            # sudo 권한이 필요한 경우 아래 라인들을 주석 해제하고 sudoers 설정 필요
+            # sudo nginx -t && sudo systemctl reload nginx

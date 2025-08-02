@@ -74,13 +74,167 @@ export default function useSigninRedirect() {
       
       // 토큰 저장 - TokenManager를 통해서만 저장
       console.log('🔍 토큰 저장 시작 (TokenManager 사용)');
-      login({ accessToken, refreshToken });
       
+      login({
+        accessToken,
+        refreshToken: refreshToken || undefined
+      });
       // 토큰 저장 완료까지 대기
       const tokenSaved = await waitForTokenSave(accessToken);
       
       if (!tokenSaved) {
         console.log('🔧 TokenManager 저장 실패, 재시도');
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         // 직접 쿠키 설정 대신 TokenManager 재사용
         console.log('🔄 TokenManager.setTokens() 직접 호출');
