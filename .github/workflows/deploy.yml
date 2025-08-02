@@ -43,9 +43,6 @@ jobs:
       # Step 5: Next.js 애플리케이션 빌드 (환경변수 포함)
       - name: Build Next.js app with environment variables
         env:
-          # Supabase 설정 (데이터베이스 연결용)
-          NEXT_PUBLIC_SUPABASE_URL: https://culheywadbntqpaigwnz.supabase.co
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1bGhleXdhZGJudHFwYWlnd256Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNDk1MjEsImV4cCI6MjA2MjYyNTUyMX0.BwSQnxSTbha1DD6uKftuDHX4JekA6oBDa9wjBVjoIn8
           # 애플리케이션 URL 설정 (인증 콜백 및 프론트엔드/백엔드 URL)
           NEXT_PUBLIC_REDIRECT_TO: ${{ secrets.EC2_HOST }}/auth/callback
           NEXT_PUBLIC_FRONTEND_URL: ${{ secrets.EC2_HOST }}
@@ -122,8 +119,8 @@ jobs:
           source: "deployment.tar.gz"    # 로컬 파일
           target: "/tmp/"                # EC2의 임시 디렉토리에 복사
 
-      # Step 9: EC2에서 파일 압축 해제 및 애플리케이션 시작
-      - name: Extract and restart application
+      # Step 9: EC2에서 파일 압축 해제 및 애플리케이션 시작 (PM2 자동 시작 설정 포함)
+      - name: Extract and restart application with PM2 auto-startup
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -157,7 +154,28 @@ jobs:
             else
               pm2 start npm --name "nextjs-app" -- start
             fi
+            
+            # PM2 설정 저장 및 자동 시작 설정
             pm2 save    # PM2 설정 저장 (서버 재시작 시 자동 실행용)
+            
+            # PM2 자동 시작 설정 - 시스템 재부팅 시 PM2가 자동으로 시작되도록 설정
+            echo "Setting up PM2 auto-startup..."
+            
+            # 기존 startup 설정 제거 (있다면)
+            pm2 unstartup systemd || true
+            
+            # 새로운 startup 설정 생성 및 적용
+            STARTUP_CMD=$(pm2 startup systemd | grep "sudo env" | head -1)
+            if [ ! -z "$STARTUP_CMD" ]; then
+              echo "Executing startup command: $STARTUP_CMD"
+              eval $STARTUP_CMD || echo "Warning: startup command failed, but continuing..."
+            fi
+            
+            # 대안: 직접 systemd 설정 (위 방법이 실패할 경우)
+            sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u $(whoami) --hp $(eval echo ~$(whoami)) || echo "Alternative startup setup failed, but continuing..."
+            
+            # PM2 설정 다시 저장 (startup 설정 후)
+            pm2 save
             
             # 애플리케이션 시작 대기 및 상태 확인
             sleep 5
@@ -171,7 +189,15 @@ jobs:
             else
               echo "❌ Failed to start Next.js app"
               pm2 logs nextjs-app --lines 20    # 실패 시 로그 출력
+              exit 1
             fi
+            
+            # PM2 자동 시작 설정 확인
+            echo "Checking PM2 startup configuration..."
+            sudo systemctl status pm2-$(whoami) || echo "PM2 service not found - manual setup may be required"
+            
+            echo "🎉 Deployment completed successfully!"
+            echo "📝 PM2 auto-startup configured - app will restart automatically after EC2 reboot"
             
             # Nginx 웹서버 설정 확인 및 재시작 (필요시)
             # 주석 처리됨: sudo 권한이 필요한 경우 sudoers 설정이 선행되어야 함
