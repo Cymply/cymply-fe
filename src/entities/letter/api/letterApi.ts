@@ -20,5 +20,5 @@ export const letterApi = {
   createUserLetterLink: async () => await apiClient.post(`/api/v1/users/me/recipient-code`, {}),
   
   // 수신자 정보 조회
-  getRecipientName: async (code) => await apiClient.get(`/api/v1/users/recipient-code/${code}`)
+  getRecipientName: async (code : string | null) => await apiClient.get(`/api/v1/users/recipient-code/${code || ""}`)
 };
