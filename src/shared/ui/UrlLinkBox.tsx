@@ -36,12 +36,12 @@ export const UrlLinkBox = ({ recipientUrl, backgroundColor = "black-600" }: UrlL
 
   return (
     <div
-      className={`flex flex-col gap-12 pt-12 pb-12 pl-9 pr-9 bg-${backgroundColor} rounded-[0.625rem]`}
+      className={`flex flex-col gap-9 pt-12 pb-12 pl-9 pr-9 bg-${backgroundColor} rounded-[0.625rem]`}
     >
       <div className="flex flex-col gap-6">
         <p className="text-[2rem] font-bold text-white">✉️ 내 링크</p>
         {recipientUrl ? (
-          <p className="text-[1.375rem] font-medium text-white">{recipientUrl}</p>
+          <p className="text-[2rem] font-medium text-white break-all">{recipientUrl}</p>
         ) : (
           <p></p>
         )}
