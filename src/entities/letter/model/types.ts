@@ -38,5 +38,6 @@ export interface SendLetterRequest {
   recipientCode?: string | null;
   content?: string;
   title?: string;
-  artist?: string
+  musicTitle?: string
+  musicArtist?: string
 }

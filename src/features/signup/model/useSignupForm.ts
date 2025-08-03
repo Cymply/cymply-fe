@@ -8,6 +8,7 @@ import { useState } from 'react'
 import {signupApi} from "@/entities/signup/api/signupApi";
 import {useAuth} from "@/shared/hooks/useAuth";
 import {TokenManager} from "@/shared/lib/tokenManager";
+import {getCookie} from "@/utils/authUtils";
 
 export default function useSignupForm() {
   const router = useRouter()
@@ -22,43 +23,6 @@ export default function useSignupForm() {
     isValid: false
   });
   const { login } = useAuth();
-  
-  // 쿠키 헬퍼 함수들
-  const getCookie = (name: string): string | null => {
-    if (typeof window === 'undefined') return null;
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) {
-      const cookieValue = parts.pop()?.split(';').shift() || null;
-      return cookieValue ? decodeURIComponent(cookieValue) : null;
-    }
-    return null;
-  };
-  
-  const setCookie = (name: string, value: string, maxAge: number = 36000): void => {
-    if (typeof window !== 'undefined') {
-      const secure = process.env.NODE_ENV === 'production' ? '; secure' : '';
-      document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; samesite=lax${secure}`;
-    }
-  };
-  
-  const clearRedirectCookies = () => {
-    document.cookie = 'recipientCode=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
-    document.cookie = 'recipientRedirectUrl=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
-    document.cookie = 'generalRedirectUrl=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
-  };
-  
-  const normalizePath = (path: string): string => {
-    try {
-      const normalized = path.replace(/\/+/g, '/').trim();
-      return normalized.length > 1 && normalized.endsWith('/')
-        ? normalized.slice(0, -1)
-        : normalized;
-    } catch (error) {
-      console.error('Path normalization error:', error);
-      return path;
-    }
-  };
   
   // 토큰 저장 완료까지 최대 3초 대기 (쿠키에서 accessToken 확인)
   const waitForTokenSave = async (token: string, maxWaitTime = 3000) => {
@@ -83,23 +47,6 @@ export default function useSignupForm() {
     
     console.log('❌ 토큰 저장 타임아웃');
     return false;
-  };
-  
-  // 리다이렉트 URL 결정 함수
-  const getRedirectUrl = () => {
-    const recipientRedirectUrl = getCookie('recipientRedirectUrl');
-    const generalRedirectUrl = getCookie('generalRedirectUrl');
-    
-    if (recipientRedirectUrl) {
-      console.log('🔍 Found recipient redirect URL:', recipientRedirectUrl);
-      return normalizePath(recipientRedirectUrl);
-    } else if (generalRedirectUrl) {
-      console.log('🔍 Found general redirect URL:', generalRedirectUrl);
-      return normalizePath(generalRedirectUrl);
-    } else {
-      console.log('🔍 No redirect URL found, using default');
-      return '/main'; // 기본값
-    }
   };
   
   const isSignupNickname = pathname.endsWith('/step2')

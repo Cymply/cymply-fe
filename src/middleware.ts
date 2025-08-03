@@ -36,13 +36,13 @@ export function middleware(request: NextRequest) {
         response.cookies.set('recipientCode', code, {
           // maxAge: 30 * 60,
           httpOnly: false,
-          secure: process.env.NODE_ENV === 'production',
+          // secure: process.env.NODE_ENV === 'production',
           sameSite: 'lax'
         })
         response.cookies.set('recipientRedirectUrl', redirectUrl, {
           // maxAge: 30 * 60,
           httpOnly: false,
-          secure: process.env.NODE_ENV === 'production',
+          // secure: process.env.NODE_ENV === 'production',
           sameSite: 'lax'
         })
         
