@@ -143,11 +143,11 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         console.error("❌ 토큰 재발급 완전 실패, 로그인 페이지로 이동");
         processQueue(refreshError, null);
-        // TokenManager.clearTokens();
+        TokenManager.clearTokens();
         
         // 로그인 페이지로 리다이렉트
         if (typeof window !== "undefined") {
-          // window.location.href = "/login";
+          window.location.href = "/login";
         }
         
         return Promise.reject(refreshError);

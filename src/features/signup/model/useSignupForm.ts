@@ -166,15 +166,16 @@ export default function useSignupForm() {
       
       setValidation({ isChecking: false, isValid: true })
       
-      // 리다이렉트 URL 결정
-      const redirectUrl = getRedirectUrl();
-      console.log('✅ 회원가입 완료, 리다이렉트 URL:', redirectUrl);
-      
-      // 쿠키 정리
-      clearRedirectCookies();
-      
-      console.log('🚀 페이지 이동:', redirectUrl);
-      router.push(redirectUrl);
+      // // 리다이렉트 URL 결정
+      // const redirectUrl = getRedirectUrl();
+      // console.log('✅ 회원가입 완료, 리다이렉트 URL:', redirectUrl);
+      //
+      // // 쿠키 정리
+      // clearRedirectCookies();
+      //
+      // console.log('🚀 페이지 이동:', redirectUrl);
+      // router.push(redirectUrl);
+      router.push("/tutorial")
       
     } catch (error) {
       console.error('❌ 회원가입 실패:', error)
