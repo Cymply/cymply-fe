@@ -13,14 +13,14 @@ import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, Suspense } from "react";
 import { LoadingSpinner } from "@/shared/ui"; // 실제 경로에 맞게 수정
+import { usePageLayout } from "@/shared/hooks/usePageLayout";
 
 function SearchPageContent() {
   const router = useRouter();
   const urlSearchParams = useSearchParams(); // 이 부분이 Suspense 필요
   const [userCode, setUserCode] = useState<string | null>(null);
 
-  const { selectedMusic, handleMusicSelect, handleSelectedMusicReset } =
-    useSelectMusicItem();
+  const { selectedMusic, handleMusicSelect, handleSelectedMusicReset } = useSelectMusicItem();
 
   const { data, search, loadMore, hasNextPage, isFetching, searchParams } =
     useInfiniteSearch<TMusicItem>({
@@ -40,8 +40,7 @@ function SearchPageContent() {
     hasNextPage,
     isFetching,
     onLoadMore: loadMore,
-    scrollContainerRef:
-      scrollContainerRef as React.RefObject<HTMLElement | null>,
+    scrollContainerRef: scrollContainerRef as React.RefObject<HTMLElement | null>,
     threshold: 50,
   });
 
@@ -62,10 +61,17 @@ function SearchPageContent() {
     handleSelectedMusicReset();
   }, []); // 컴포넌트 마운트 시에만 실행
 
+  // layout 설정
+  usePageLayout({
+    hasBackButton: true,
+    hasGradient: false,
+    hasPadding: false,
+  });
+
   return (
     <div className="w-full h-full flex flex-col">
       {/* 헤더 영역 */}
-      <div className="flex flex-col gap-6 font-gangwonEduAll font-bold flex-shrink-0">
+      <div className="flex flex-col gap-[1.875rem] font-gangwonEduAll font-bold flex-shrink-0 mt-[2.8rem] pl-9 pr-9">
         <h3 className="text-black-800 text-5xl leading-snug">
           편지의 감정이 담긴 <br />
           노래를 골라주세요
@@ -77,7 +83,7 @@ function SearchPageContent() {
       </div>
 
       {/* 검색창 */}
-      <div className="mt-6 mb-6 flex-shrink-0">
+      <div className="mt-6 mb-6 flex-shrink-0 pl-9 pr-9">
         <SearchInput
           onSearch={(query) => {
             handleSelectedMusicReset();
@@ -93,9 +99,7 @@ function SearchPageContent() {
         {!isEmpty(searchParams.keyword) && data.length > 0 ? (
           <RadioGroup
             value={
-              selectedMusic.title && selectedMusic.artist
-                ? getMusicId(selectedMusic)
-                : undefined
+              selectedMusic.title && selectedMusic.artist ? getMusicId(selectedMusic) : undefined
             }
             onValueChange={(value) => {
               // 선택된 value로 전체 음악 객체 찾기
@@ -143,24 +147,26 @@ function SearchPageContent() {
         ) : (
           // 아직 검색하지 않은 경우
           <div className="flex items-center justify-center h-full">
-            <div className="text-center text-gray-800">
-              <p className="text-lg mb-2">검색어를 입력해주세요</p>
-            </div>
+            <div className="text-center text-gray-800"></div>
           </div>
         )}
       </div>
 
       {/* 하단 버튼 영역 - 고정 간격 */}
-      <div className="block mb-[11.25rem] w-full shadow-button">
-        <Button
-          onClick={() => {
-            router.push("/letter/write");
-          }}
-          variant="primary"
-          disabled={!selectedMusic.title || !selectedMusic.artist}
-        >
-          노래 선택
-        </Button>
+      <div className="block mb-40 w-full shadow-button pl-9 pr-9">
+        {selectedMusic.title || selectedMusic.artist ? (
+          <Button
+            onClick={() => {
+              router.push("/letter/write");
+            }}
+            variant="primary"
+            // disabled={!selectedMusic.title || !selectedMusic.artist}
+          >
+            노래 선택
+          </Button>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

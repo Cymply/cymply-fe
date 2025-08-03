@@ -30,7 +30,7 @@ export default function SignupFooter() {
               "w-[42.375rem] h-[7.5rem] rounded-[0.625rem] text-[2rem] font-semibold leading-9 transition-all duration-200",
               canProceed
                 ? "bg-primary hover:bg-primary text-white"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed hover:bg-gray-200"
+                : "bg-black-200 text-white cursor-not-allowed hover:bg-gray-200"
             )}
           >
             다음
