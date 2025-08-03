@@ -22,7 +22,7 @@ export default function SelectAgeGroup() {
   return (
     <div className="space-y-11">
       {/* 나이 제목 */}
-      <Label className="text-neutral-600 text-5xl font-bold font-gangwonEduAll leading-[3rem]">
+      <Label className="text-black-400 text-5xl font-bold font-gangwonEduAll leading-[3rem]">
         나이를 알려주세요
       </Label>
 
