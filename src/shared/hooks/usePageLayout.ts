@@ -1,4 +1,4 @@
-import { useLayoutConfig } from "@/app/((default))/layout";
+import { useLayoutConfig } from "../contexts/layoutContext";
 import { useEffect } from "react";
 
 interface PageLayoutConfig {
@@ -20,5 +20,5 @@ export function usePageLayout(config: PageLayoutConfig) {
         hasPadding: true,
       });
     };
-  }, [setConfig]);
+  }, [setConfig, config.hasBackButton, config.hasGradient, config.hasPadding]);
 }
