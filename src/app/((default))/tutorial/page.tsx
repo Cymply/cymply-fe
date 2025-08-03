@@ -39,7 +39,7 @@ const TutorialSlideData = [
 
 export default function TutorialPage() {
   const router = useRouter();
-  const setRedirectCode = useSetAtom<string | null>(recipientCodeAtom);
+  const setRedirectCode = useSetAtom(recipientCodeAtom as any);
 
   usePageLayout({
     hasBackButton: false,
