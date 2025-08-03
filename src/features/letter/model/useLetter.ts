@@ -48,7 +48,8 @@ export default function useLetter() {
         recipientCode: recipientCode,
         content: data.contents,
         title: data.title,
-        artist: selectedMusic.artist
+        musicArtist: selectedMusic.artist,
+        musicTitle: selectedMusic.title,
       }
       console.log("편지 전송 확인, ", sendRequest)
       

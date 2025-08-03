@@ -28,16 +28,23 @@ export const normalizePath = (path: string): string => {
 export const getRedirectUrl = () => {
   const recipientRedirectUrl = getCookie('recipientRedirectUrl');
   const generalRedirectUrl = getCookie('generalRedirectUrl');
+  const recipientCode = getCookie('recipientCode')
+  let redirectUrl = null;
   
   if (recipientRedirectUrl) {
     console.log('🔍 Found recipient redirect URL:', recipientRedirectUrl);
-    return normalizePath(recipientRedirectUrl);
+    redirectUrl= normalizePath(recipientRedirectUrl);
   } else if (generalRedirectUrl) {
     console.log('🔍 Found general redirect URL:', generalRedirectUrl);
-    return normalizePath(generalRedirectUrl);
+    redirectUrl= normalizePath(generalRedirectUrl);
   } else {
     console.log('🔍 No redirect URL found, using default');
-    return '/main'; // 기본값
+    redirectUrl= '/main'; // 기본값
+  }
+  
+  return {
+    redirectUrl: redirectUrl,
+    recipientCode: recipientCode
   }
 };
 

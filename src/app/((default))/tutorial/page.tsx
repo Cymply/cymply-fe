@@ -10,6 +10,8 @@ import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import {clearRedirectCookies, getRedirectUrl} from "@/utils/authUtils";
+import {useSetAtom} from "jotai";
+import {recipientCodeAtom} from "@/entities/letter";
 
 const TutorialSlideData = [
   {
@@ -36,18 +38,23 @@ const TutorialSlideData = [
 
 export default function TutorialPage() {
   const router = useRouter();
+  const setRedirectCode = useSetAtom<string | null>(recipientCodeAtom);
   
   const onGoToMain = () => {
     // router.push("/main");
     // 리다이렉트 URL 결정
-    const redirectUrl = getRedirectUrl();
-    console.log('✅ 회원가입 완료, 리다이렉트 URL:', redirectUrl);
+    const redirect = getRedirectUrl();
+    console.log('✅ 회원가입 완료, 리다이렉트 URL:', redirect.redirectUrl);
+    
+    if(redirect?.recipientCode) {
+      setRedirectCode(redirect?.recipientCode)
+    }
     
     // 쿠키 정리
     clearRedirectCookies();
     
-    console.log('🚀 페이지 이동:', redirectUrl);
-    router.push(redirectUrl);
+    console.log('🚀 페이지 이동:', redirect.redirectUrl);
+    router.push(redirect.redirectUrl);
   };
 
   return (
