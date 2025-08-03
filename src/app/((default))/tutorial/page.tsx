@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
+import {clearRedirectCookies, getRedirectUrl} from "@/utils/authUtils";
 
 const TutorialSlideData = [
   {
@@ -35,8 +36,18 @@ const TutorialSlideData = [
 
 export default function TutorialPage() {
   const router = useRouter();
+  
   const onGoToMain = () => {
-    router.push("/main");
+    // router.push("/main");
+    // 리다이렉트 URL 결정
+    const redirectUrl = getRedirectUrl();
+    console.log('✅ 회원가입 완료, 리다이렉트 URL:', redirectUrl);
+    
+    // 쿠키 정리
+    clearRedirectCookies();
+    
+    console.log('🚀 페이지 이동:', redirectUrl);
+    router.push(redirectUrl);
   };
 
   return (

@@ -82,9 +82,6 @@ function MainPageContent() {
 export default function MainPage() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <button onClick={logout}>
-        로그아웃
-      </button>
       <MainPageContent />
     </Suspense>
   );
