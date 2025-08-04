@@ -36,7 +36,7 @@ export const UrlLinkBox = ({ recipientUrl, backgroundColor = "black-600" }: UrlL
 
   return (
     <div
-      className={`flex flex-col gap-12 pt-12 pb-12 pl-9 pr-9 bg-${backgroundColor} rounded-[0.625rem]`}
+      className={`flex flex-col gap-12 pt-12 pb-12 pl-9 pr-9 bg-${backgroundColor} rounded-[0.625rem] w-full`}
     >
       <div className="flex flex-col gap-6">
         <p className="text-[2rem] font-bold text-white">✉️ 내 링크</p>
