@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { Letter, LetterDetail, Letters } from "@/entities/letter";
 import { LetterCard, LetterCardDetail } from "@/shared/ui";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
 import { Modal } from "@/widgets/modal/ui/Modal";
 import useLetter from "../model/useLetter";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 
 interface LetterListProps {
   letters: Letters[];
@@ -21,7 +21,7 @@ export const LetterList = ({ letters }: LetterListProps) => {
 
   const handleModalOpen = async (letter: Letter) => {
     try {
-      if (!letter.id) {
+      if (!letter.letterId) {
         console.error("편지 id가 없습니다.");
         return;
       }
@@ -29,7 +29,7 @@ export const LetterList = ({ letters }: LetterListProps) => {
       setLoading(true);
       setIsModalOpen(true);
 
-      const fetchedDetail = await getLetter(letter.id);
+      const fetchedDetail = await getLetter(letter.letterId);
       setDetailLetter(fetchedDetail ?? null);
     } catch (error) {
       console.error("편지 상세 조회 실패:", error);
@@ -54,8 +54,8 @@ export const LetterList = ({ letters }: LetterListProps) => {
             {/* 타이틀 */}
             <div className="mt-[4.5rem] mb-[4.5rem]">
               <h3 className="text-[3.25rem] font-semibold text-black-400">
-                ✉️ <span className="text-black-800">{group.senderNickname ?? "알 수 없음"}</span>{" "}
-                님에게 온 편지
+                ✉️ <span className="text-black-800">{group.senderName ?? "알 수 없음"}</span> 님에게
+                온 편지
               </h3>
             </div>
 
@@ -68,7 +68,7 @@ export const LetterList = ({ letters }: LetterListProps) => {
                 style={{ width: "100%", overflow: "visible" }}
               >
                 {group.letters.map((letter) => (
-                  <SwiperSlide key={letter.id} style={{ width: "76%" }}>
+                  <SwiperSlide key={letter.letterId} style={{ width: "76%" }}>
                     <LetterCard letter={letter} handleModalOpen={() => handleModalOpen(letter)} />
                   </SwiperSlide>
                 ))}

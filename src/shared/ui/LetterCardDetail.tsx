@@ -24,7 +24,7 @@ export const LetterCardDetail = ({ detailItem }: LetterCardDetailProps) => {
         </div>
         {/* 컨텐츠 영역 */}
         <div className="flex flex-col gap-11 font-gangwonEduAll font-bold">
-          <h3 className="text-5xl text-black-600">편지 제목</h3>
+          <h3 className="text-5xl text-black-600">{detailItem.title}</h3>
           <div className="text-4xl leading-normal text-black-300">{detailItem.content}</div>
         </div>
       </div>
