@@ -1,9 +1,11 @@
 // shared/hooks/useAuth.ts
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { TokenManager } from '../lib/tokenManager';
-import {apiClient, checkAuthStatus} from '../lib/apiClient';
+import { apiClient, checkAuthStatus } from '../lib/apiClient';
 
 export const useAuth = () => {
+  const pathname = usePathname();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   
@@ -16,11 +18,22 @@ export const useAuth = () => {
         return;
       }
       
-      // console.log('🔍 인증 상태 확인 시작');
+      // /signup 경로에서는 간단한 토큰 존재 여부만 확인
+      if (pathname?.startsWith('/signup')) {
+        console.log('🔍 Signup 경로에서 토큰 존재 여부만 확인');
+        const accessToken = TokenManager.getAccessToken();
+        const hasToken = !!accessToken;
+        console.log(`🔍 Signup 경로 토큰 확인 결과: ${hasToken ? '✅ 있음' : '❌ 없음'}`);
+        setIsAuthenticated(hasToken);
+        setIsLoading(false);
+        return;
+      }
       
-      // checkAuthStatus가 토큰 검증 및 재발급까지 모두 처리
+      console.log('🔍 일반 경로에서 인증 상태 확인 시작');
+      
+      // 일반 경로에서는 토큰 검증 및 재발급까지 모두 처리
       const isValid = await checkAuthStatus();
-      // console.log('🔍 최종 인증 결과:', isValid);
+      console.log('🔍 최종 인증 결과:', isValid);
       
       setIsAuthenticated(isValid);
       
@@ -33,7 +46,7 @@ export const useAuth = () => {
   };
   
   const login = async (tokens: { accessToken: string; refreshToken?: string }) => {
-    // console.log('🔍 useAuth login 시작 : tokens', tokens);
+    console.log('🔍 useAuth login 시작');
     
     // accessToken은 쿠키에, refreshToken은 sessionStorage에 저장
     TokenManager.setTokens(tokens);
@@ -48,14 +61,14 @@ export const useAuth = () => {
   
   // 토큰 저장 완료까지 대기하는 함수
   const waitForTokenSave = async (token: string, maxWaitTime = 2000): Promise<boolean> => {
-    // console.log('⏳ 토큰 저장 확인 시작...');
+    console.log('⏳ 토큰 저장 확인 시작...');
     const startTime = Date.now();
     
     while (Date.now() - startTime < maxWaitTime) {
       const cookieToken = TokenManager.getAccessToken();
       
       if (cookieToken === token) {
-        // console.log('✅ 토큰 저장 확인됨 (쿠키)');
+        console.log('✅ 토큰 저장 확인됨 (쿠키)');
         return true;
       }
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -67,7 +80,10 @@ export const useAuth = () => {
   
   const logout = async () => {
     try {
-      await apiClient.post("/api/v1/logout");
+      // /signup 경로가 아닐 때만 로그아웃 API 호출
+      if (!pathname?.startsWith('/signup')) {
+        await apiClient.post("/api/v1/logout");
+      }
       TokenManager.clearTokens();
       setIsAuthenticated(false);
     } catch (error) {
@@ -83,7 +99,7 @@ export const useAuth = () => {
   // 컴포넌트 마운트 시 인증 상태 확인
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [pathname]); // pathname 변경 시에도 재확인
   
   return {
     isAuthenticated,
