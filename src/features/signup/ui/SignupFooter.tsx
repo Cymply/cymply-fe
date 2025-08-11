@@ -37,7 +37,7 @@ export default function SignupFooter() {
           </Button>
           {/* nickname 페이지가 아닐 때만 "제공하지 않고 넘어가기" 링크 표시 */}
           <Link
-            href={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/signup/nickname`}
+            href={`/signup/nickname`}
             className="text-center text-black-200 text-[2rem] font-normal underline leading-9"
           >
             제공하지 않고 넘어가기
