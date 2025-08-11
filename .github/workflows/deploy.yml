@@ -33,7 +33,7 @@ jobs:
           cat > .env.production << 'EOF'
           NEXT_PUBLIC_REDIRECT_TO=${{ secrets.EC2_HOST }}/auth/callback
           NEXT_PUBLIC_FRONTEND_URL=${{ secrets.EC2_HOST }}
-          NEXT_PUBLIC_BACKEND_URL=http://34.64.182.180:8080
+          NEXT_PUBLIC_BACKEND_URL=http://api.cymply.kr
           EOF
 
       # Step 4: Node.js 의존성 설치 (npm ci는 package-lock.json 기반으로 정확한 버전 설치)
@@ -49,7 +49,7 @@ jobs:
           # 애플리케이션 URL 설정 (인증 콜백 및 프론트엔드/백엔드 URL)
           NEXT_PUBLIC_REDIRECT_TO: ${{ secrets.EC2_HOST }}/auth/callback
           NEXT_PUBLIC_FRONTEND_URL: ${{ secrets.EC2_HOST }}
-          NEXT_PUBLIC_BACKEND_URL: http://34.64.182.180:8080
+          NEXT_PUBLIC_BACKEND_URL: http://api.cymply.kr
         run: npm run build
 
       # Step 6: 배포용 압축 파일 생성
