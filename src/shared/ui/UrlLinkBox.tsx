@@ -47,9 +47,7 @@ export const UrlLinkBox = ({
       <div className="flex flex-col gap-6">
         <p className="text-[2rem] font-bold text-white">✉️ 내 링크</p>
         {recipientUrl ? (
-          <p className="text-[1.375rem] font-medium text-white">
-            {recipientUrl}
-          </p>
+          <p className="text-[2rem] font-medium text-white break-all">{recipientUrl}</p>
         ) : (
           <p></p>
         )}

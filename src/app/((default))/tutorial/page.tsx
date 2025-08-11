@@ -9,9 +9,10 @@ import { useRouter } from "next/navigation";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
-import {clearRedirectCookies, getRedirectUrl} from "@/utils/authUtils";
-import {useSetAtom} from "jotai";
-import {recipientCodeAtom} from "@/entities/letter";
+import { clearRedirectCookies, getRedirectUrl } from "@/utils/authUtils";
+import { useSetAtom } from "jotai";
+import { recipientCodeAtom } from "@/entities/letter";
+import { usePageLayout } from "@/shared/hooks/usePageLayout";
 
 const TutorialSlideData = [
   {
@@ -38,27 +39,32 @@ const TutorialSlideData = [
 
 export default function TutorialPage() {
   const router = useRouter();
-  const setRedirectCode = useSetAtom<string | null>(recipientCodeAtom);
-  
+  const setRedirectCode = useSetAtom(recipientCodeAtom as any);
+
+  usePageLayout({
+    hasBackButton: false,
+    hasGradient: true,
+  });
+
   const onGoToMain = () => {
     // router.push("/main");
     // 리다이렉트 URL 결정
     const redirect = getRedirectUrl();
-    console.log('✅ 회원가입 완료, 리다이렉트 URL:', redirect.redirectUrl);
-    
-    if(redirect?.recipientCode) {
-      setRedirectCode(redirect?.recipientCode)
+    console.log("✅ 회원가입 완료, 리다이렉트 URL:", redirect.redirectUrl);
+
+    if (redirect?.recipientCode) {
+      setRedirectCode(redirect?.recipientCode);
     }
-    
+
     // 쿠키 정리
     clearRedirectCookies();
-    
-    console.log('🚀 페이지 이동:', redirect.redirectUrl);
+
+    console.log("🚀 페이지 이동:", redirect.redirectUrl);
     router.push(redirect.redirectUrl);
   };
 
   return (
-    <div className="h-full flex flex-col justify-between gap-[7.5rem] mt-9 mb-24">
+    <div className="h-full flex flex-col justify-between gap-[7.5rem] mt-[5.75rem] mb-24">
       <div>
         <Swiper
           modules={[EffectCoverflow, Pagination]}
@@ -91,7 +97,7 @@ export default function TutorialPage() {
             <SwiperSlide key={slide.id}>
               <div className="flex flex-col items-center justify-center">
                 <h3 className="text-5xl font-bold text-black-600 mb-6">{slide.title}</h3>
-                <p className="text-[1.75rem] text-center text-black-300 mb-36 whitespace-pre-line">
+                <p className="text-[1.75rem] text-center text-black-300 mb-[6.75rem] whitespace-pre-line">
                   {slide.description}
                 </p>
                 <Image
