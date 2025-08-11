@@ -79,19 +79,20 @@ export class TokenManager {
   // 토큰 저장
   static setTokens(tokens: TokenPair): void {
     if (typeof window !== 'undefined') {
-      // console.log('🔍 === 토큰 저장 시작 ===');
-      // console.log('🕐 시스템 현재 시간:', new Date().toISOString());
-      // console.log('🕐 예상 만료 시간:', new Date(Date.now() + this.ACCESS_TOKEN_MAX_AGE * 1000).toISOString());
+      console.log('🔍 === 토큰 저장 시작 ===');
+      console.log('🕐 시스템 현재 시간:', new Date().toISOString());
+      console.log('🕐 예상 만료 시간:', new Date(Date.now() + this.ACCESS_TOKEN_MAX_AGE * 1000).toISOString());
       
       // accessToken은 쿠키에 저장 (10시간)
       if (tokens.accessToken) {
         this.setCookie(this.ACCESS_TOKEN_KEY, tokens.accessToken, this.ACCESS_TOKEN_MAX_AGE);
+        console.log('💾 AccessToken Cookie 저장 완료');
       }
       
       // refreshToken은 sessionStorage에 저장
       if (tokens.refreshToken) {
         sessionStorage.setItem(this.REFRESH_TOKEN_KEY, tokens.refreshToken);
-        // console.log('💾 RefreshToken sessionStorage 저장 완료');
+        console.log('💾 RefreshToken sessionStorage 저장 완료');
       }
       
       console.log('🔍 === 토큰 저장 완료 ===');
