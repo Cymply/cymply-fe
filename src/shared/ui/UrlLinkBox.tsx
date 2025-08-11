@@ -1,13 +1,19 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { useToast } from "../hooks/useToast";
 import CopyIcon from "@/assets/icons/ico-copy.svg";
+import { isEmpty } from "@/lib/utils";
 
 interface UrlLinkBoxProps {
   recipientUrl: string | null;
   backgroundColor?: string;
 }
 
-export const UrlLinkBox = ({ recipientUrl, backgroundColor = "black-600" }: UrlLinkBoxProps) => {
+export const UrlLinkBox = ({
+  recipientUrl,
+  backgroundColor = "black-600",
+}: UrlLinkBoxProps) => {
   const { addToast } = useToast();
 
   const handleCopyLink = async () => {
@@ -36,7 +42,7 @@ export const UrlLinkBox = ({ recipientUrl, backgroundColor = "black-600" }: UrlL
 
   return (
     <div
-      className={`flex flex-col gap-9 pt-12 pb-12 pl-9 pr-9 bg-${backgroundColor} rounded-[0.625rem]`}
+      className={`flex flex-col gap-12 pt-12 pb-12 pl-9 pr-9 bg-${backgroundColor} rounded-[0.625rem] w-full`}
     >
       <div className="flex flex-col gap-6">
         <p className="text-[2rem] font-bold text-white">✉️ 내 링크</p>
@@ -50,9 +56,12 @@ export const UrlLinkBox = ({ recipientUrl, backgroundColor = "black-600" }: UrlL
         onClick={handleCopyLink}
         variant="default"
         className="flex items-center justify-center bg-white text-black-600 rounded-full text-[2rem] hover:bg-white"
+        disabled={isEmpty(recipientUrl)}
       >
         <div className="relative w-[1.5625rem] h-8">
-          <CopyIcon className={`absolute !w-auto !h-auto text-${backgroundColor}`} />
+          <CopyIcon
+            className={`absolute !w-auto !h-auto text-${backgroundColor}`}
+          />
         </div>
         <span className={`text-${backgroundColor}`}>복사하기</span>
       </Button>

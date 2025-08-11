@@ -1,32 +1,11 @@
-"use client";
-
 import { userApi } from "@/entities/user/api/userApi";
-import useLetter from "@/features/letter/model/useLetter";
-import { useAuth } from "@/shared/hooks/useAuth";
+import { LetterState } from "@/features/myPage/letterState";
+import Menu from "@/features/myPage/menu";
 import { UrlLinkBox } from "@/shared/ui";
-import { LetterLinkButton } from "@/shared/ui/LetterLinkButton";
-import { LiItem } from "@/shared/ui/liItem";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
-function MyPage() {
-  const router = useRouter();
-  const { createUserLink, recipientUrl } = useLetter();
-  const { isAuthenticated } = useAuth();
-  const { data: userInfo } = useQuery({
-    queryKey: ["userInfo"],
-    queryFn: () => userApi.getUserInfo(),
-  });
+export default async function MyPage() {
+  const userInfo = await userApi.getUserInfo();
 
-  useEffect(() => {
-    if (!isAuthenticated) return;
-
-    const init = async () => {
-      await createUserLink();
-    };
-    init();
-  }, [isAuthenticated]);
   return (
     <div className="w-full h-full flex flex-col gap-10">
       {/* 회원정보 영역 */}
@@ -37,60 +16,12 @@ function MyPage() {
             <span className="font-bold">{userInfo?.content?.nickname}</span> 님
           </div>
         </div>
-        <UrlLinkBox recipientUrl={recipientUrl} backgroundColor="primary" />
+        <UrlLinkBox recipientUrl={""} backgroundColor="primary" />
       </div>
       {/* 받은 편지, 보낸편지 영역 */}
-      <div className="flex gap-6">
-        <LetterLinkButton
-          className="w-1/2 h-[13.5rem] flex flex-col justify-between p-9 bg-gray-500 rounded-2xl"
-          title="받은 편지"
-          onClick={() => {}}
-          iconUrl="/images/img-receivedLetter.png"
-          count={10}
-        />
-        <LetterLinkButton
-          className="w-1/2 h-[13.5rem] flex flex-col justify-between p-9 bg-gray-500 rounded-2xl"
-          title="보낸 편지"
-          onClick={() => {}}
-          iconUrl="/images/img-sendLetter.png"
-          count={10}
-        />
-      </div>
+      <LetterState receivedLetterCount={10} sentLetterCount={10} />
       {/* 메뉴 리스트 영역 */}
-      <ul>
-        <LiItem
-          title="공지"
-          onClick={() => {
-            router.push("/notice");
-          }}
-          isLink
-        />
-        <LiItem
-          title="자주 묻는 질문"
-          onClick={() => {
-            router.push("/faq");
-          }}
-          isLink
-        />
-        <LiItem
-          title="문의하기"
-          onClick={() => {
-            router.push("/qna");
-          }}
-          isLink
-        />
-        <LiItem
-          title="연동 계정 정보"
-          onClick={() => {
-            router.push("/connectAccount");
-          }}
-          isLink
-        />
-        <LiItem title="로그아웃" onClick={() => {}} />
-        <LiItem title="회원탈퇴" onClick={() => {}} />
-      </ul>
+      <Menu />
     </div>
   );
 }
-
-export default MyPage;
