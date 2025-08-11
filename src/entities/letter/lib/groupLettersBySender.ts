@@ -5,11 +5,11 @@ export function groupLettersBySender(letters: Letter[]): Letter[][] {
   const groups: Record<number, Letter[]> = {};
 
   letters.forEach((letter) => {
-    if (letter.senderId === undefined || letter.senderId) return;
-    if (!groups[letter.senderId]) {
-      groups[letter.senderId] = [];
+    if (letter.letterId === undefined || letter.letterId) return;
+    if (!groups[letter.letterId]) {
+      groups[letter.letterId] = [];
     }
-    groups[letter.senderId].push(letter);
+    groups[letter.letterId].push(letter);
   });
 
   return Object.values(groups);
