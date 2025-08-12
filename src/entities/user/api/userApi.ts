@@ -8,4 +8,12 @@ export const userApi = {
     }
     return res?.data?.data;
   },
+
+  makeUrl: async () => {
+    const res = await apiClient.post("/api/v1/users/me/recipient-code");
+    if (res.status !== 200) {
+      throw new Error("Failed to make url");
+    }
+    return res?.data?.data;
+  },
 };
