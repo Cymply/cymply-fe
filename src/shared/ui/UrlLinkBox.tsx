@@ -4,21 +4,16 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "../hooks/useToast";
 import CopyIcon from "@/assets/icons/ico-copy.svg";
 import { isEmpty } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { userApi } from "@/entities/user/api/userApi";
 import { useAtom } from "jotai";
 import { recipientUrlAtom } from "@/entities/letter";
 
 interface UrlLinkBoxProps {
-  recipientUrl: string | null;
   backgroundColor?: string;
 }
 
-export const UrlLinkBox = ({
-  recipientUrl,
-  backgroundColor = "black-600",
-}: UrlLinkBoxProps) => {
-  const [url, setUrl] = useState<string | null>(recipientUrl);
+export const UrlLinkBox = ({ backgroundColor = "black-600" }: UrlLinkBoxProps) => {
   const [letterRecipientUrl, setLetterRecipientUrl] = useAtom(recipientUrlAtom);
   const { addToast } = useToast();
 
@@ -48,15 +43,16 @@ export const UrlLinkBox = ({
 
   useEffect(() => {
     const getUrl = async () => {
-      const res = await userApi.makeUrl();
-      setUrl(res?.content?.link);
-      setLetterRecipientUrl(res?.content?.link);
+      try {
+        const res = await userApi.makeUrl();
+        setLetterRecipientUrl(res?.content?.link || "");
+      } catch (error) {
+        console.error("링크 생성 실패:", error);
+      }
     };
 
-    if (isEmpty(recipientUrl)) {
-      getUrl();
-    }
-  }, [recipientUrl, setLetterRecipientUrl]);
+    getUrl();
+  }, [setLetterRecipientUrl]);
 
   return (
     <div
@@ -65,9 +61,7 @@ export const UrlLinkBox = ({
       <div className="flex flex-col gap-6">
         <p className="text-[2rem] font-bold text-white">✉️ 내 링크</p>
         {letterRecipientUrl ? (
-          <p className="text-[2rem] font-medium text-white break-all">
-            {letterRecipientUrl}
-          </p>
+          <p className="text-[2rem] font-medium text-white break-all">{letterRecipientUrl}</p>
         ) : (
           <p></p>
         )}
@@ -79,9 +73,7 @@ export const UrlLinkBox = ({
         disabled={isEmpty(letterRecipientUrl)}
       >
         <div className="relative w-[1.5625rem] h-8">
-          <CopyIcon
-            className={`absolute !w-auto !h-auto text-${backgroundColor}`}
-          />
+          <CopyIcon className={`absolute !w-auto !h-auto text-${backgroundColor}`} />
         </div>
         <span className={`text-${backgroundColor}`}>복사하기</span>
       </Button>

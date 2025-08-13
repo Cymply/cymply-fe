@@ -63,7 +63,6 @@ function SearchPageContent() {
 
   // layout 설정
   usePageLayout({
-    hasBackButton: true,
     hasGradient: false,
     hasPadding: false,
   });

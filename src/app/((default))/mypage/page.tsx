@@ -7,9 +7,9 @@ export default function MyPage() {
   return (
     <div className="w-full h-full flex flex-col gap-10">
       {/* 회원정보 영역 */}
-      <div className="flex flex-col items-center gap-6 font-gangwonEduAll flex-shrink-0 gap-12 ">
+      <div className="flex flex-col items-center flex-shrink-0 gap-[3.75rem]">
         <UserInfo />
-        <UrlLinkBox recipientUrl={""} backgroundColor="primary" />
+        <UrlLinkBox backgroundColor="primary" />
       </div>
       {/* 받은 편지, 보낸편지 영역 */}
       <LetterState receivedLetterCount={10} sentLetterCount={10} />

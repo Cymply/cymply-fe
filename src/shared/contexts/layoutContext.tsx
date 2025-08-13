@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 
 interface LayoutConfig {
   hasBackButton: boolean;
@@ -38,5 +38,13 @@ export function LayoutProvider({ children }: LayoutProviderProps) {
     setConfigState((prev) => ({ ...prev, ...newConfig }));
   }, []);
 
-  return <LayoutContext.Provider value={{ config, setConfig }}>{children}</LayoutContext.Provider>;
+  const contextValue = useMemo(
+    () => ({
+      config,
+      setConfig,
+    }),
+    [config, setConfig]
+  );
+
+  return <LayoutContext.Provider value={contextValue}>{children}</LayoutContext.Provider>;
 }

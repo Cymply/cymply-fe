@@ -1,5 +1,5 @@
 import { useLayoutConfig } from "../contexts/layoutContext";
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
 interface PageLayoutConfig {
   hasBackButton?: boolean;
@@ -10,7 +10,7 @@ interface PageLayoutConfig {
 export function usePageLayout(config: PageLayoutConfig) {
   const { setConfig } = useLayoutConfig();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setConfig(config);
 
     return () => {

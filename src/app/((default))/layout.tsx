@@ -16,9 +16,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
       <div className="flex items-center justify-between p-[1.5625rem] w-full box-border h-[var(--header-height)]">
         {config.hasBackButton && <BackBtn />}
       </div>
-      <div
-        className={`flex flex-col w-full h-full ${config.hasPadding ? "pl-9 pr-9" : "pl-0 pr-0"}`}
-      >
+      <div className={`flex flex-col w-full h-full ${config.hasPadding ? "px-9" : "px-0"}`}>
         {children}
       </div>
     </main>
