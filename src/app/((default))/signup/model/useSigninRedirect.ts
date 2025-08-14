@@ -79,14 +79,13 @@ export default function useSigninRedirect() {
         accessToken,
         refreshToken: refreshToken || undefined
       });
+      
       // 토큰 저장 완료까지 대기
       const tokenSaved = await waitForTokenSave(accessToken);
       
       if (!tokenSaved) {
         console.log('🔧 TokenManager 저장 실패, 재시도');
         
-        // 직접 쿠키 설정 대신 TokenManager 재사용
-        console.log('🔄 TokenManager.setTokens() 직접 호출');
         TokenManager.setTokens({
           accessToken,
           refreshToken: refreshToken || undefined
@@ -110,12 +109,13 @@ export default function useSigninRedirect() {
       console.log('✅ 토큰 저장 성공, 현재 상태 확인');
       TokenManager.debugCookieStatus();
       
-      // 리다이렉트 URL 확인
+      // 리다이렉트 URL 확인 (recipientCode는 더 이상 여기서 처리하지 않음)
       const recipientRedirectUrl = getCookie('recipientRedirectUrl');
       const generalRedirectUrl = getCookie('generalRedirectUrl');
       
       console.log('🔍 Recipient URL:', recipientRedirectUrl);
       console.log('🔍 General URL:', generalRedirectUrl);
+      console.log('ℹ️ recipientCode는 목적지 페이지에서 처리됨');
       
       let targetUrl = '/main'; // 기본값
       
@@ -129,8 +129,10 @@ export default function useSigninRedirect() {
         console.log('ℹ️ 저장된 URL 없음, 메인으로 이동');
       }
       
-      // 쿠키 정리
-      clearRedirectCookies();
+      // 리다이렉트 쿠키만 정리 (recipientCode는 유지)
+      document.cookie = 'recipientRedirectUrl=; path=/; max-age=0';
+      document.cookie = 'generalRedirectUrl=; path=/; max-age=0';
+      // recipientCode는 목적지 페이지에서 사용하므로 유지
       
       // 페이지 이동 전 최종 토큰 상태 확인
       const finalToken = TokenManager.getAccessToken();

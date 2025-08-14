@@ -1,4 +1,4 @@
-// src/middleware.ts (수정된 버전)
+// src/middleware.ts (배포용 버전)
 import { NextRequest, NextResponse } from 'next/server'
 
 export function middleware(request: NextRequest) {
@@ -9,20 +9,28 @@ export function middleware(request: NextRequest) {
   const rawPathname = decodeURIComponent(request.nextUrl.pathname)
   const pathname = rawPathname.replace(/\/+/g, '/').trim()
   
-  console.log('🔍 Middleware 실행:', pathname)
+  // 배포 환경에서는 로그 레벨 조정
+  const isDev = process.env.NODE_ENV === 'development'
+  
+  if (isDev) {
+    console.log('🔍 Middleware 실행:', pathname)
+  }
   
   // public path면 통과
   if (publicPaths.some(path => pathname.startsWith(path))) {
-    console.log('✅ Public path 통과:', pathname)
+    if (isDev) {
+      console.log('✅ Public path 통과:', pathname)
+    }
     return NextResponse.next()
   }
   
   const token = request.cookies.get('accessToken')?.value ||
     request.headers.get('authorization')?.replace('Bearer ', '')
   
-  
   if (!token) {
-    console.log('❌ 토큰 없음, 리다이렉트 필요:', pathname)
+    if (isDev) {
+      console.log('❌ 토큰 없음, 리다이렉트 필요:', pathname)
+    }
     
     const response = NextResponse.redirect(new URL('/login', request.url))
     
@@ -33,37 +41,44 @@ export function middleware(request: NextRequest) {
         const code = codeMatch[1]
         const redirectUrl = `/search`  // URL에서 code 제거
         
-        response.cookies.set('recipientCode', code, {
-          // maxAge: 30 * 60,
-          httpOnly: false,
-          // secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax'
-        })
-        response.cookies.set('recipientRedirectUrl', redirectUrl, {
-          // maxAge: 30 * 60,
-          httpOnly: false,
-          // secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax'
-        })
+        // 환경에 따른 쿠키 옵션 설정
+        const isProduction = process.env.NODE_ENV === 'production'
+        const isHttps = request.headers.get('x-forwarded-proto') === 'https' ||
+          request.nextUrl.protocol === 'https:'
         
-        console.log('📝 Saved letter code redirect URL:', redirectUrl, 'with code:', code)
+        const cookieOptions = {
+          maxAge: 60 * 60, // 1시간
+          httpOnly: false,
+          secure: isProduction && isHttps, // 프로덕션에서는 HTTPS 필요
+          sameSite: 'lax' as const,
+          path: '/'
+        }
+        
+        response.cookies.set('recipientCode', code, cookieOptions)
+        response.cookies.set('recipientRedirectUrl', redirectUrl, cookieOptions)
+        
+        if (isDev) {
+          console.log('📝 Saved letter code redirect URL:', redirectUrl, 'with code:', code)
+          console.log('🍪 Cookie options:', {
+            ...cookieOptions,
+            environment: isProduction ? 'production' : 'development',
+            protocol: isHttps ? 'https' : 'http'
+          })
+        }
       }
     } else {
-      // 일반 경로 저장
-      // response.cookies.set('generalRedirectUrl', pathname, {
-      //   maxAge: 30 * 60,
-      //   httpOnly: false,
-      //   secure: process.env.NODE_ENV === 'production',
-      //   sameSite: 'lax'
-      // })
-
-      console.log('📝 Saved general redirect URL:', pathname)
+      // 일반 경로는 저장하지 않음
+      if (isDev) {
+        console.log('📝 General path - no redirect URL saved:', pathname)
+      }
     }
-
+    
     return response
   }
   
-  console.log('✅ 토큰 있음, 통과:', pathname)
+  if (isDev) {
+    console.log('✅ 토큰 있음, 통과:', pathname)
+  }
   return NextResponse.next()
 }
 
