@@ -39,11 +39,11 @@ const TutorialSlideData = [
 
 export default function TutorialPage() {
   const router = useRouter();
-  const setRedirectCode = useSetAtom(recipientCodeAtom as any);
+  const setRedirectCode = useSetAtom(recipientCodeAtom);
 
+  // layout 설정
   usePageLayout({
     hasBackButton: false,
-    hasGradient: true,
   });
 
   const onGoToMain = () => {

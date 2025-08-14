@@ -1,23 +1,6 @@
-"use client";
-
-import useLetter from "@/features/letter/model/useLetter";
-import { useAuth } from "@/shared/hooks/useAuth";
 import { UrlLinkBox } from "@/shared/ui";
-import { useEffect } from "react";
 
 export const LetterEmpty = () => {
-  const { createUserLink, recipientUrl } = useLetter();
-  const { isAuthenticated } = useAuth();
-
-  useEffect(() => {
-    if (!isAuthenticated) return;
-
-    const init = async () => {
-      await createUserLink();
-    };
-    init();
-  }, [isAuthenticated]);
-
   return (
     <div className="flex flex-col gap-[3.75rem] mt-[6.25rem]">
       <div className="flex flex-col gap-12 font-gangwonEduAll font-bold">
@@ -34,7 +17,7 @@ export const LetterEmpty = () => {
         이 링크를 아는 사람만 <br />
         당신에게 편지를 보낼 수 있어요.
       </p>
-      <UrlLinkBox recipientUrl={recipientUrl} />
+      <UrlLinkBox />
     </div>
   );
 };
