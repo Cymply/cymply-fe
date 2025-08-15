@@ -3,19 +3,26 @@
 
 import { useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { useAuth } from '@/shared/hooks/useAuth';
 import { useAtom } from 'jotai';
-import {recipientCodeAtom, recipientUrlAtom} from "@/entities/letter";
-import { TokenManager } from '@/shared/lib/tokenManager';
+import { recipientCodeAtom } from "@/entities/letter";
 
 export default function LetterCodePage() {
   const router = useRouter();
   const params = useParams();
-  const { isAuthenticated, isLoading } = useAuth();
   const [, setRecipientCode] = useAtom(recipientCodeAtom);
   const code = params.code as string;
-  const [, setRecipientUrl] = useAtom(recipientUrlAtom);
   
+  // 쿠키 헬퍼 함수
+  const getCookie = (name: string): string | null => {
+    if (typeof window === 'undefined') return null;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      const cookieValue = parts.pop()?.split(';').shift() || null;
+      return cookieValue ? decodeURIComponent(cookieValue) : null;
+    }
+    return null;
+  };
   
   useEffect(() => {
     // 코드가 유효하지 않은 경우 메인으로 리다이렉트
@@ -25,37 +32,25 @@ export default function LetterCodePage() {
       return;
     }
     
-    // 로딩 중이면 대기
-    if (isLoading) {
-      // console.log('⏳ 인증 상태 로딩 중...');
-      return;
+    // URL의 code를 atom에 저장
+    setRecipientCode(code);
+    console.log('✅ URL에서 recipientCode atom에 저장:', code);
+    
+    // 쿠키에서도 recipientCode 확인하여 atom에 저장 (middleware에서 설정된 경우)
+    const cookieCode = getCookie('recipientCode');
+    if (cookieCode) {
+      setRecipientCode(cookieCode);
+      console.log('✅ 쿠키에서 recipientCode atom에 저장:', cookieCode);
     }
     
-    // 토큰 직접 체크 - useAuth보다 우선
-    const accessToken = TokenManager.getAccessToken();
+    // 이 페이지는 middleware에서 이미 리다이렉트 처리되므로
+    // 실제로는 이 코드가 실행되지 않을 수 있음
+    console.log('🔍 LetterCodePage 렌더링 - middleware에서 처리되지 않은 경우');
     
-    console.log('🔍 LetterCodePage 상태:');
-    console.log('- code:', code);
-    console.log('- accessToken 존재:', !!accessToken);
-    console.log('- isAuthenticated:', isAuthenticated);
-    console.log('- accessToken 값:', accessToken ? `${accessToken.slice(0, 20)}...` : 'null');
-    
-    // accessToken이 있으면 무조건 로그인된 것으로 처리
-    if (accessToken) {
-      console.log('✅ accessToken 존재 - /search로 이동 (isAuthenticated 무시)');
-      setRecipientCode(code);
-      router.push('/search');
-      return;
-    }
-    
-    // accessToken이 정말 없는 경우에만 로그인 필요
-    console.log('❌ accessToken 정말 없음 - /login으로 리다이렉트');
-    router.push('/login');
-    
-  }, [code, isLoading, router, setRecipientCode]);
+  }, [code, router, setRecipientCode]);
   
   // 현재 상태를 화면에도 표시
-  const accessToken = TokenManager.getAccessToken();
+  const cookieCode = getCookie('recipientCode');
   
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -71,10 +66,9 @@ export default function LetterCodePage() {
         {/* 디버깅 정보 표시 (개발 환경에서만) */}
         {process.env.NODE_ENV === 'development' && (
           <div className="text-left text-xs text-gray-500 bg-gray-100 p-4 rounded mt-4">
-            <div>Code: {code}</div>
-            <div>Loading: {isLoading ? 'Yes' : 'No'}</div>
-            <div>Authenticated: {isAuthenticated ? 'Yes' : 'No'}</div>
-            <div>Has Token: {accessToken ? 'Yes' : 'No'}</div>
+            <div>URL Code: {code}</div>
+            <div>Cookie Code: {cookieCode || 'None'}</div>
+            <div>Middleware가 이미 처리했을 가능성이 높습니다.</div>
           </div>
         )}
       </div>

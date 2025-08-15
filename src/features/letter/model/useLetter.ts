@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { letterApi } from "@/entities/letter/api/letterApi";
 import { LetterFormValues } from "@/features/letter/model/types";
 import { useCallback, useEffect } from "react";
-import {useAtom, useAtomValue} from "jotai";
+import {useAtom, useAtomValue, useSetAtom} from "jotai";
 import {
   letterAtom,
   lettersAtom,
@@ -25,6 +25,7 @@ export default function useLetter() {
   const router = useRouter();
   const [recipientUrl, setRecipientUrl] = useAtom(recipientUrlAtom);
   const recipientCode = useAtomValue(recipientCodeAtom);
+  const setRecipientCode = useSetAtom(recipientCodeAtom);
   const [letter, setLetter] = useAtom(letterAtom);
   const [letters, setLetters] = useAtom(lettersAtom);
   const {isAuthenticated} = useAuth()
@@ -37,6 +38,42 @@ export default function useLetter() {
     watch,
   } = useForm<LetterFormValues>();
   
+  // 쿠키 헬퍼 함수
+  const getCookie = (name: string): string | null => {
+    if (typeof window === 'undefined') return null;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      const cookieValue = parts.pop()?.split(';').shift() || null;
+      return cookieValue ? decodeURIComponent(cookieValue) : null;
+    }
+    return null;
+  };
+  
+  // 새로고침 시 쿠키에서 recipientCode 복원
+  const restoreRecipientCodeFromCookie = useCallback(() => {
+    // 이미 recipientCode가 atom에 있으면 스킵
+    if (recipientCode) {
+      console.log('✅ recipientCode 이미 존재:', recipientCode);
+      return;
+    }
+    
+    // 쿠키에서 recipientCode 확인
+    const cookieCode = getCookie('recipientCode');
+    if (cookieCode) {
+      setRecipientCode(cookieCode);
+      console.log('🔄 새로고침 후 쿠키에서 recipientCode 복원:', cookieCode);
+
+    } else {
+      console.log('ℹ️ 쿠키에 recipientCode 없음');
+    }
+  }, [recipientCode, setRecipientCode]);
+  
+  // 컴포넌트 마운트 시 recipientCode 복원 시도
+  useEffect(() => {
+    restoreRecipientCodeFromCookie();
+  }, [restoreRecipientCodeFromCookie]);
+  
   // 편지 보내기
   const onSubmit = async (data: LetterFormValues) => {
     try {
@@ -44,6 +81,14 @@ export default function useLetter() {
         router.push("/login");
         return;
       }
+      
+      // recipientCode 확인
+      if (!recipientCode) {
+        console.error('❌ recipientCode 없음 - 편지 전송 불가');
+        alert('수신자 정보가 없습니다. 다시 시도해주세요.');
+        return;
+      }
+      
       const sendRequest : SendLetterRequest = {
         recipientCode: recipientCode,
         content: data.contents,
@@ -65,21 +110,21 @@ export default function useLetter() {
   
   // 나의 편지를 받을 주소 생성하는 곳
   const createUserLink = async () => {
-      try {
-        
-        // 토큰 확인
-        const token = TokenManager.getAccessToken();
-        if (!token) {
-          console.log("❌ AccessToken 없음 - createUserLink");
-          router.push("/login");
-          return;
-        }
-        
-        console.log("✅ 인증 완료, 편지 링크 생성 시작");
-        const res = await letterApi.createUserLetterLink();
-        console.log("내 편지 받을 링크 조회", res);
-        if (res.status != 200) throw res.statusText;
-        setRecipientUrl(res.data.data?.content?.link);
+    try {
+      
+      // 토큰 확인
+      const token = TokenManager.getAccessToken();
+      if (!token) {
+        console.log("❌ AccessToken 없음 - createUserLink");
+        router.push("/login");
+        return;
+      }
+      
+      console.log("✅ 인증 완료, 편지 링크 생성 시작");
+      const res = await letterApi.createUserLetterLink();
+      console.log("내 편지 받을 링크 조회", res);
+      if (res.status != 200) throw res.statusText;
+      setRecipientUrl(res.data.data?.content?.link);
     } catch (error) {
       console.error("편지 링크 생성 실패:", error);
     }
@@ -166,5 +211,7 @@ export default function useLetter() {
     getLetter,
     getLetters,
     recipientUrl,
+    recipientCode, // 디버깅용으로 추가
+    restoreRecipientCodeFromCookie, // 수동 복원이 필요한 경우를 위해 노출
   };
 }
