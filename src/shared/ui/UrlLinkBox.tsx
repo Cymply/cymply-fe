@@ -18,8 +18,8 @@ export const UrlLinkBox = ({ backgroundColor = "black-600" }: UrlLinkBoxProps) =
   const { addToast } = useToast();
   
   // 환경에 따라 도메인을 교체하는 함수
-  const replaceDomainForDev = (url: string): string => {
-    if (!url) return url;
+  const replaceDomainForDev = (url: string | null): string => {
+    if (!url) return '';
     
     const isDev = process.env.NODE_ENV === 'development';
     

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LiItem } from "@/shared/ui/liItem";
+import {LogoutButton} from "@/features/myPage/ui/LogoutButton";
 
 export default function Menu() {
   return (
@@ -39,17 +40,12 @@ export default function Menu() {
           <span>연동 계정 정보</span>
         </Link>
       </LiItem>
-
-      {/* 로그아웃/탈퇴: Server Action */}
+      
+      {/* 로그아웃 */}
       <li>
-        <form>
-          <button
-            type="submit"
-            className="w-full flex items-center justify-between py-8 text-4xl text-left"
-          >
-            로그아웃
-          </button>
-        </form>
+        <LogoutButton className="w-full flex items-center justify-between py-8 text-4xl text-left">
+          로그아웃
+        </LogoutButton>
       </li>
 
       <li>

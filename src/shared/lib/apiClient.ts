@@ -236,6 +236,7 @@ export const logout = async (): Promise<void> => {
   } finally {
     console.log("🗑️ 토큰 삭제 및 로그인 페이지로 이동");
     TokenManager.clearTokens();
+    TokenManager.clearAllCookies();
     if (typeof window !== "undefined") {
       window.location.href = "/login";
     }

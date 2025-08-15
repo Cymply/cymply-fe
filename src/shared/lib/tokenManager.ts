@@ -188,6 +188,21 @@ export class TokenManager {
     }
   }
   
+  // 모든 관련 쿠키 삭제 (토큰 + 리다이렉트 쿠키)
+  static clearAllCookies(): void {
+    if (typeof window !== 'undefined') {
+      // 기존 토큰 쿠키들 삭제
+      this.clearTokens();
+      
+      // 리다이렉트 관련 쿠키들 삭제
+      this.deleteCookie('recipientCode');
+      this.deleteCookie('recipientRedirectUrl');
+      this.deleteCookie('generalRedirectUrl');
+      
+      console.log('🗑️ 모든 관련 쿠키 삭제 완료');
+    }
+  }
+  
   // 토큰 존재 여부 확인
   static hasTokens(): boolean {
     return !!(this.getAccessToken() && this.getRefreshToken());
