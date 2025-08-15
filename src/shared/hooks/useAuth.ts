@@ -84,12 +84,12 @@ export const useAuth = () => {
       if (!pathname?.startsWith('/signup')) {
         await apiClient.post("/api/v1/logout");
       }
-      TokenManager.clearTokens();
       setIsAuthenticated(false);
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
       TokenManager.clearTokens();
+      TokenManager.clearAllCookies();
       if (typeof window !== "undefined") {
         window.location.href = "/login";
       }
