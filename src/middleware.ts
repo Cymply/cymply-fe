@@ -1,4 +1,4 @@
-// src/middleware.ts (배포용 버전)
+// src/middleware.ts (회원가입 경로 예외 처리 버전)
 import { NextRequest, NextResponse } from 'next/server'
 
 export function middleware(request: NextRequest) {
@@ -16,6 +16,61 @@ export function middleware(request: NextRequest) {
     console.log('🔍 Middleware 실행:', pathname)
   }
   
+  // **먼저 /letter/code/[code] 패턴 처리 (토큰 유무와 관계없이)**
+  if (pathname.startsWith(letterCodePath)) {
+    const codeMatch = pathname.match(/\/letter\/code\/(.+)/)
+    if (codeMatch) {
+      const code = codeMatch[1]
+      const redirectUrl = `/search`
+      
+      // 환경에 따른 쿠키 옵션 설정
+      const isProduction = process.env.NODE_ENV === 'production'
+      const isHttps = request.headers.get('x-forwarded-proto') === 'https' ||
+        request.nextUrl.protocol === 'https:'
+      
+      const cookieOptions = {
+        maxAge: 60 * 60, // 1시간
+        httpOnly: false,
+        secure: isProduction && isHttps,
+        sameSite: 'lax' as const,
+        path: '/'
+      }
+      
+      // 토큰 확인
+      const token = request.cookies.get('accessToken')?.value ||
+        request.headers.get('authorization')?.replace('Bearer ', '')
+      
+      if (token) {
+        // **로그인된 상태: 쿠키에 저장하고 /search로 리다이렉트**
+        const response = NextResponse.redirect(new URL('/search', request.url))
+        response.cookies.set('recipientCode', code, cookieOptions)
+        response.cookies.set('recipientRedirectUrl', redirectUrl, cookieOptions)
+        
+        if (isDev) {
+          console.log('✅ 로그인된 상태 - 쿠키 저장 후 /search로 리다이렉트')
+          console.log('📝 Saved letter code:', code, 'redirect to:', redirectUrl)
+        }
+        
+        return response
+      } else {
+        // **로그인되지 않은 상태: 쿠키에 저장하고 /login으로 리다이렉트**
+        const response = NextResponse.redirect(new URL('/login', request.url))
+        response.cookies.set('recipientCode', code, cookieOptions)
+        response.cookies.set('recipientRedirectUrl', redirectUrl, cookieOptions)
+        
+        // **추가: 회원가입 플로우 방지를 위한 플래그 쿠키**
+        response.cookies.set('isFromLetterCode', 'true', cookieOptions)
+        
+        if (isDev) {
+          console.log('❌ 로그인 필요 - 쿠키 저장 후 /login으로 리다이렉트')
+          console.log('📝 Saved letter code:', code, 'redirect to:', redirectUrl)
+        }
+        
+        return response
+      }
+    }
+  }
+  
   // public path면 통과
   if (publicPaths.some(path => pathname.startsWith(path))) {
     if (isDev) {
@@ -24,56 +79,16 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
   
+  // 일반 보호된 경로 처리
   const token = request.cookies.get('accessToken')?.value ||
     request.headers.get('authorization')?.replace('Bearer ', '')
   
   if (!token) {
     if (isDev) {
-      console.log('❌ 토큰 없음, 리다이렉트 필요:', pathname)
+      console.log('❌ 토큰 없음, /login으로 리다이렉트:', pathname)
     }
     
-    const response = NextResponse.redirect(new URL('/login', request.url))
-    
-    // /letter/code/[code] 패턴 처리
-    if (pathname.startsWith(letterCodePath)) {
-      const codeMatch = pathname.match(/\/letter\/code\/(.+)/)
-      if (codeMatch) {
-        const code = codeMatch[1]
-        const redirectUrl = `/search`  // URL에서 code 제거
-        
-        // 환경에 따른 쿠키 옵션 설정
-        const isProduction = process.env.NODE_ENV === 'production'
-        const isHttps = request.headers.get('x-forwarded-proto') === 'https' ||
-          request.nextUrl.protocol === 'https:'
-        
-        const cookieOptions = {
-          maxAge: 60 * 60, // 1시간
-          httpOnly: false,
-          secure: isProduction && isHttps, // 프로덕션에서는 HTTPS 필요
-          sameSite: 'lax' as const,
-          path: '/'
-        }
-        
-        response.cookies.set('recipientCode', code, cookieOptions)
-        response.cookies.set('recipientRedirectUrl', redirectUrl, cookieOptions)
-        
-        if (isDev) {
-          console.log('📝 Saved letter code redirect URL:', redirectUrl, 'with code:', code)
-          console.log('🍪 Cookie options:', {
-            ...cookieOptions,
-            environment: isProduction ? 'production' : 'development',
-            protocol: isHttps ? 'https' : 'http'
-          })
-        }
-      }
-    } else {
-      // 일반 경로는 저장하지 않음
-      if (isDev) {
-        console.log('📝 General path - no redirect URL saved:', pathname)
-      }
-    }
-    
-    return response
+    return NextResponse.redirect(new URL('/login', request.url))
   }
   
   if (isDev) {
