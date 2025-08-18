@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { LiItem } from "@/shared/ui/liItem";
-import {LogoutButton} from "@/features/myPage/ui/LogoutButton";
+import { LogoutButton } from "@/features/myPage/ui/LogoutButton";
 
 export default function Menu() {
   return (
     <ul>
       <LiItem asChild isLink rightIcon>
         <Link
-          href="/notice"
+          href="https://www.notion.so/2458d05bbad380e19072e76d7dc36fa0?source=copy_link"
           className="w-full flex items-center justify-between  text-4xl"
         >
           <span>공지</span>
@@ -16,7 +16,7 @@ export default function Menu() {
 
       <LiItem asChild isLink rightIcon>
         <Link
-          href="/faq"
+          href="https://www.notion.so/2458d05bbad3808084d1ffcc09dbdb5f?source=copy_link"
           className="w-full flex items-center justify-between  text-4xl"
         >
           <span>자주 묻는 질문</span>
@@ -40,7 +40,7 @@ export default function Menu() {
           <span>연동 계정 정보</span>
         </Link>
       </LiItem>
-      
+
       {/* 로그아웃 */}
       <li>
         <LogoutButton className="w-full flex items-center justify-between py-8 text-4xl text-left">
