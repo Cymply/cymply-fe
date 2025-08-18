@@ -6,8 +6,8 @@ import process from "process";
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col h-full justify-between mt-[9.75rem]">
-      <div className="flex flex-col gap-16 font-gangwonEduAll">
+    <div className="flex flex-col min-h-[calc(100vh-var(--header-height)-6rem)] justify-between">
+      <div className="flex flex-col gap-8 md:gap-16 font-gangwonEduAll flex-1 justify-center">
         <h3 className="text-black-400 text-7xl leading-snug">
           마음 위로 번진 빛, <br /> 빛을 담은 <br />{" "}
           <span className="font-bold text-black-800">마음을 전해보세요.</span>
@@ -17,7 +17,7 @@ export default function LoginPage() {
           마음을 전하는 공간이에요.
         </p>
       </div>
-      <div className="flex gap-7 flex-col mb-24">
+      <div className="flex gap-7 flex-col flex-shrink-0">
         <Button
           variant="kakao"
           onClick={() =>
