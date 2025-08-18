@@ -19,6 +19,10 @@ export const letterApi = {
   // 편지 작성 링크 생성
   createUserLetterLink: async () => await apiClient.post(`/api/v1/users/me/recipient-code`, {}),
   
+
+  // 편지 개수 조회
+  getLetterCount: async () => await apiClient.get(`/api/v1/letters/count`),
+
   // 수신자 정보 조회
   getRecipientName: async (code) => await apiClient.get(`/api/v1/users/recipient-code/${code}`)
 };
