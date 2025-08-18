@@ -12,7 +12,7 @@ export default function MyPage() {
         <UrlLinkBox backgroundColor="primary" />
       </div>
       {/* 받은 편지, 보낸편지 영역 */}
-      <LetterState receivedLetterCount={10} sentLetterCount={10} />
+      <LetterState />
       {/* 메뉴 리스트 영역 */}
       <Menu />
     </div>
