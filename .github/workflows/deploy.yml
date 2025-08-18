@@ -1,5 +1,5 @@
-# GitHub Actions 워크플로우: Next.js 애플리케이션을 EC2에 자동 배포
-name: Deploy Next.js to EC2
+# GitHub Actions 워크플로우: Next.js 애플리케이션을 ALB + EC2에 자동 배포
+name: Deploy Next.js to ALB + EC2
 
 # 트리거 조건: develop 브랜치에 push가 발생할 때 실행
 on:
@@ -25,28 +25,28 @@ jobs:
           node-version: '18'
           cache: 'npm'  # npm 의존성 캐시로 빌드 시간 단축
 
-      # Step 3: 프로덕션용 환경변수 파일 생성
+      # Step 3: 프로덕션용 환경변수 파일 생성 (HTTPS 설정)
       - name: Create environment file before build
         run: |
           # 빌드 전에 환경변수 파일 생성
-          # EC2_HOST는 GitHub Secrets에서 가져옴 (보안상 숨겨진 값)
+          # ALB를 통한 HTTPS 접근을 위해 도메인 사용
           cat > .env.production << 'EOF'
           NEXT_PUBLIC_REDIRECT_TO=${{ secrets.EC2_HOST }}/auth/callback
           NEXT_PUBLIC_FRONTEND_URL=${{ secrets.EC2_HOST }}
           NEXT_PUBLIC_BACKEND_URL=http://api.cymply.kr
           EOF
 
-      # Step 4: Node.js 의존성 설치 (npm ci는 package-lock.json 기반으로 정확한 버전 설치)
+      # Step 4: Node.js 의존성 설치
       - name: Install dependencies
         run: npm ci
 
-      # Step 5: Next.js 애플리케이션 빌드 (환경변수 포함)
+      # Step 5: Next.js 애플리케이션 빌드 (HTTPS 환경변수 포함)
       - name: Build Next.js app with environment variables
         env:
           # Supabase 설정 (데이터베이스 연결용)
           NEXT_PUBLIC_SUPABASE_URL: https://culheywadbntqpaigwnz.supabase.co
           NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1bGhleXdhZGJudHFwYWlnd256Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNDk1MjEsImV4cCI6MjA2MjYyNTUyMX0.BwSQnxSTbha1DD6uKftuDHX4JekA6oBDa9wjBVjoIn8
-          # 애플리케이션 URL 설정 (인증 콜백 및 프론트엔드/백엔드 URL)
+          # ALB를 통한 HTTPS 설정
           NEXT_PUBLIC_REDIRECT_TO: ${{ secrets.EC2_HOST }}/auth/callback
           NEXT_PUBLIC_FRONTEND_URL: ${{ secrets.EC2_HOST }}
           NEXT_PUBLIC_BACKEND_URL: http://api.cymply.kr
@@ -56,53 +56,46 @@ jobs:
       - name: Create deployment archive
         run: |
           # PM2 프로세스 매니저 설정 파일 생성
-          # PM2는 Node.js 애플리케이션을 프로덕션에서 관리하는 도구
           cat > ecosystem.config.js << 'EOF'
           module.exports = {
             apps: [{
-              name: 'nextjs-app',           // 앱 이름
-              script: 'npm',                // 실행할 스크립트
-              args: 'start',                // npm start 명령어 실행
+              name: 'nextjs-app',
+              script: 'npm',
+              args: 'start',
               env: {
-                NODE_ENV: 'production'      // 프로덕션 환경 설정
+                NODE_ENV: 'production',
+                PORT: 3000,  // ALB 타겟 그룹에서 사용할 포트
+                HOST: '0.0.0.0'  // 모든 인터페이스에서 접근 허용
               }
             }]
           };
           EOF
           
           # 배포에 필요한 파일들을 tar.gz로 압축
-          # .next: 빌드된 Next.js 파일
-          # package.json, package-lock.json: 의존성 정보
-          # public: 정적 파일들
-          # .env.production: 환경변수
-          # ecosystem.config.js: PM2 설정
           tar -czf deployment.tar.gz .next package.json package-lock.json public .env.production ecosystem.config.js
 
       # Step 7: EC2 서버에 SSH 접속하여 기존 애플리케이션 정리
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
-          # EC2 연결 정보 (모두 GitHub Secrets에서 가져옴)
-          host: ${{ secrets.EC2_HOST }}
+          # EC2 연결 정보 - host는 EC2 인스턴스의 실제 IP 주소 사용
+          host: ${{ secrets.EC2_INSTANCE_IP }}  # 새로운 시크릿: EC2 실제 IP
           username: ${{ secrets.EC2_USERNAME }}
           password: ${{ secrets.EC2_PASSWORD }}
           port: 22
           script: |
-            # 기존 PM2 프로세스 완전 제거
-            pm2 delete all || true    # 모든 PM2 앱 삭제 (실패해도 계속 진행)
-            pm2 kill || true          # PM2 데몬 종료
-            pm2 flush || true         # PM2 로그 정리
+            # 기존 프로세스 정리
+            pm2 delete all || true
+            pm2 kill || true
+            pm2 flush || true
             
             # 포트 3000을 사용하는 모든 프로세스 강제 종료
-            # lsof: 포트를 사용하는 프로세스 ID 찾기
-            # fuser: 포트를 사용하는 프로세스 종료
             sudo lsof -ti:3000 | xargs sudo kill -9 || true
             sudo fuser -k 3000/tcp || true
             
-            # 프로세스 종료 완료를 위한 대기
             sleep 3
             
-            # 기존 애플리케이션 디렉토리 백업 (롤백용)
+            # 기존 애플리케이션 디렉토리 백업
             if [ -d "~/nextjs-app" ]; then
               cp -r ~/nextjs-app ~/nextjs-app-backup-$(date +%Y%m%d_%H%M%S)
             fi
@@ -115,15 +108,15 @@ jobs:
       - name: Copy files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.EC2_INSTANCE_IP }}  # EC2 실제 IP 주소
           username: ${{ secrets.EC2_USERNAME }}
           password: ${{ secrets.EC2_PASSWORD }}
           port: 22
-          source: "deployment.tar.gz"    # 로컬 파일
-          target: "/tmp/"                # EC2의 임시 디렉토리에 복사
+          source: "deployment.tar.gz"
+          target: "/tmp/"
 
-      # Step 9: EC2에서 파일 압축 해제 및 systemd 서비스로 자동 재시작 설정
-      - name: Extract and setup auto-restart service
+      # Step 9: EC2에서 파일 압축 해제 및 서비스 설정
+      - name: Extract and setup service
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -139,7 +132,7 @@ jobs:
             # Node.js 의존성 설치
             npm ci --omit=dev
             
-            # 기존 서비스 정지 및 PM2 정리
+            # 기존 서비스 정지
             echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl stop nextjs-app || true
             pm2 delete all || true
             pm2 kill || true
@@ -149,10 +142,10 @@ jobs:
             echo ${{ secrets.EC2_PASSWORD }} | sudo -S fuser -k 3000/tcp || true
             sleep 3
             
-            # systemd 서비스 파일 생성
+            # systemd 서비스 파일 생성 (ALB용 최적화)
             echo ${{ secrets.EC2_PASSWORD }} | sudo -S tee /etc/systemd/system/nextjs-app.service > /dev/null <<EOF
             [Unit]
-            Description=Next.js Application
+            Description=Next.js Application for ALB
             After=network.target
             Wants=network-online.target
             After=network-online.target
@@ -165,9 +158,15 @@ jobs:
             Restart=always
             RestartSec=10
             Environment=NODE_ENV=production
+            Environment=PORT=3000
+            Environment=HOST=0.0.0.0
             StandardOutput=journal
             StandardError=journal
             SyslogIdentifier=nextjs-app
+            
+            # ALB 헬스체크를 위한 설정
+            TimeoutStartSec=60
+            TimeoutStopSec=30
             
             [Install]
             WantedBy=multi-user.target
@@ -178,15 +177,27 @@ jobs:
             echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl enable nextjs-app.service
             echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl start nextjs-app.service
             
-            # 서비스 시작 대기
-            sleep 10
+            # 서비스 시작 대기 (ALB 헬스체크 고려)
+            sleep 15
             
             # 서비스 상태 확인
             echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl status nextjs-app.service
             
-            # 애플리케이션 응답 확인
+            # 애플리케이션 응답 확인 (ALB가 사용할 경로)
+            echo "🔍 Checking application health..."
+            for i in {1..5}; do
+              if curl -f http://localhost:3000 >/dev/null 2>&1; then
+                echo "✅ Next.js app is responding on port 3000!"
+                break
+              else
+                echo "⏳ Attempt $i/5: App not responding yet, waiting..."
+                sleep 5
+              fi
+            done
+            
+            # 최종 확인
             if curl -f http://localhost:3000 >/dev/null 2>&1; then
-              echo "✅ Next.js app started successfully on port 3000!"
+              echo "✅ Deployment successful! App is ready for ALB health checks."
             else
               echo "❌ App not responding, checking logs..."
               echo ${{ secrets.EC2_PASSWORD }} | sudo -S journalctl -u nextjs-app.service --lines=20
@@ -206,3 +217,4 @@ jobs:
             echo "📋 Service status:"
             echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl is-active nextjs-app.service
             echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl is-enabled nextjs-app.service
+            echo "🌐 Application will be available at: https://www.cymply.kr"
