@@ -78,8 +78,8 @@ jobs:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
-          # EC2 연결 정보 - host는 EC2 인스턴스의 실제 IP 주소 사용
-          host: ${{ secrets.EC2_INSTANCE_IP }}  # 새로운 시크릿: EC2 실제 IP
+          # EC2 연결 정보 - SSH는 IP 주소 사용
+          host: ${{ secrets.EC2_INSTANCE_IP }}
           username: ${{ secrets.EC2_USERNAME }}
           password: ${{ secrets.EC2_PASSWORD }}
           port: 22
@@ -108,7 +108,7 @@ jobs:
       - name: Copy files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.EC2_INSTANCE_IP }}  # EC2 실제 IP 주소
+          host: ${{ secrets.EC2_INSTANCE_IP }}
           username: ${{ secrets.EC2_USERNAME }}
           password: ${{ secrets.EC2_PASSWORD }}
           port: 22
@@ -119,7 +119,7 @@ jobs:
       - name: Extract and setup service
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.EC2_INSTANCE_IP }}
           username: ${{ secrets.EC2_USERNAME }}
           password: ${{ secrets.EC2_PASSWORD }}
           port: 22
@@ -217,4 +217,4 @@ jobs:
             echo "📋 Service status:"
             echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl is-active nextjs-app.service
             echo ${{ secrets.EC2_PASSWORD }} | sudo -S systemctl is-enabled nextjs-app.service
-            echo "🌐 Application will be available at: https://www.cymply.kr"
+            echo "🌐 Application will be available at: ${{ secrets.EC2_HOST }}"
