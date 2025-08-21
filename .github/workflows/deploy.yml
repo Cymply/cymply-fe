@@ -33,7 +33,7 @@ jobs:
           cat > .env.production << 'EOF'
           NEXT_PUBLIC_REDIRECT_TO=${{ secrets.EC2_HOST }}/auth/callback
           NEXT_PUBLIC_FRONTEND_URL=${{ secrets.EC2_HOST }}
-          NEXT_PUBLIC_BACKEND_URL=http://api.cymply.kr
+          NEXT_PUBLIC_BACKEND_URL=https://api.cymply.kr
           EOF
 
       # Step 4: Node.js 의존성 설치
@@ -43,13 +43,10 @@ jobs:
       # Step 5: Next.js 애플리케이션 빌드 (HTTPS 환경변수 포함)
       - name: Build Next.js app with environment variables
         env:
-          # Supabase 설정 (데이터베이스 연결용)
-          NEXT_PUBLIC_SUPABASE_URL: https://culheywadbntqpaigwnz.supabase.co
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN1bGhleXdhZGJudHFwYWlnd256Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNDk1MjEsImV4cCI6MjA2MjYyNTUyMX0.BwSQnxSTbha1DD6uKftuDHX4JekA6oBDa9wjBVjoIn8
           # ALB를 통한 HTTPS 설정
           NEXT_PUBLIC_REDIRECT_TO: ${{ secrets.EC2_HOST }}/auth/callback
           NEXT_PUBLIC_FRONTEND_URL: ${{ secrets.EC2_HOST }}
-          NEXT_PUBLIC_BACKEND_URL: http://api.cymply.kr
+          NEXT_PUBLIC_BACKEND_URL: https://api.cymply.kr
         run: npm run build
 
       # Step 6: 배포용 압축 파일 생성
