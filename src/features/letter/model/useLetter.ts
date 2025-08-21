@@ -149,6 +149,7 @@ export default function useLetter() {
         console.log("편지 조회 단건", res);
         if (res.status != 200) throw res.statusText;
         setLetter(res.data.data.content);
+        return res.data.data.content;
       } catch (error) {
         console.error("편지 단건 조회 실패:", error);
       }
