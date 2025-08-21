@@ -71,8 +71,8 @@ function MainPageContent() {
   }
   
   console.log("📮 편지 목록:", letters);
-  
-  return letters.length > 1 ? (
+
+  return letters.length >= 1 ? (
     <LetterList letters={letters} />
   ) : (
     <LetterEmpty />
