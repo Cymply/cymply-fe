@@ -17,7 +17,7 @@ async function FaqPageContent() {
   );
 }
 
-export default async function FaqPage() {
+export default function FaqPage() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <FaqPageContent />
