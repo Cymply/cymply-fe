@@ -9,7 +9,6 @@ import { useAuth } from "@/shared/hooks/useAuth";
 import { alertAtom } from "@/widgets/alert";
 import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/shared/ui";
-import { logout } from "@/shared/lib/apiClient";
 
 function MainPageContent() {
   const [loading, setLoading] = useState(true);

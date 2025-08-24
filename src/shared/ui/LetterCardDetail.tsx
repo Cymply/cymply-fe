@@ -1,12 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { LetterDetail } from "@/entities/letter";
 import { MusicItem } from "@/shared/ui";
+import { useRouter } from "next/navigation";
 
 interface LetterCardDetailProps {
   detailItem: LetterDetail;
 }
 
 export const LetterCardDetail = ({ detailItem }: LetterCardDetailProps) => {
+  const router = useRouter();
+
   if (!detailItem) {
     return null;
   }
@@ -29,7 +32,7 @@ export const LetterCardDetail = ({ detailItem }: LetterCardDetailProps) => {
         </div>
       </div>
       <div className="mt-28 font-gangwonEduAll font-bold">
-        <Button variant={"border"} className="pt-7 pb-7">
+        <Button variant={"border"} className="pt-7 pb-7" onClick={() => router.push("/search")}>
           답장하기
         </Button>
       </div>

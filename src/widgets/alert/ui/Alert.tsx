@@ -3,6 +3,7 @@
 import { useAtom } from "jotai";
 import { alertAtom } from "../model/alertAtom";
 import Portal from "@/widgets/portal/ui/Potal";
+import { cn } from "@/lib/utils";
 
 export const Alert = () => {
   const [{ open, title, message, buttons = [] }, setAlert] = useAtom(alertAtom);
@@ -32,19 +33,31 @@ export const Alert = () => {
             <p className="text-4xl leading-tight text-gray-800">{message}</p>
           </div>
           <div className="flex justify-center gap-[1.125rem] w-full">
-            {buttons.map((btn, idx) => (
-              <button
-                className="w-full rounded-[0.625rem] pt-[2.625rem] pb-[2.625rem] text-[1.75rem] bg-black-200 text-white"
-                key={idx}
-                onClick={() => {
-                  btn.action();
-                  close();
-                  // setAlert({ open: false, title: "", message: "", buttons: [] });
-                }}
-              >
-                {btn.label}
-              </button>
-            ))}
+            {buttons.map((btn, idx) => {
+              // 버튼이 2개 이상일 때 홀수/짝수 인덱스에 따라 다른 색상 적용
+              const buttonStyle =
+                buttons.length >= 2
+                  ? idx % 2 === 0
+                    ? "bg-black-200" // 짝수 인덱스 (0, 2, 4...)
+                    : "bg-primary" // 홀수 인덱스 (1, 3, 5...)
+                  : "bg-black-200"; // 버튼이 1개일 때
+              return (
+                <button
+                  className={cn(
+                    "w-full rounded-[0.625rem] pt-[2.625rem] pb-[2.625rem] text-[1.75rem] text-white",
+                    buttonStyle
+                  )}
+                  key={idx}
+                  onClick={() => {
+                    btn.action();
+                    close();
+                    // setAlert({ open: false, title: "", message: "", buttons: [] });
+                  }}
+                >
+                  {btn.label}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

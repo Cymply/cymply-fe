@@ -3,6 +3,7 @@
 import React from "react";
 import { BackBtn } from "@/widgets/header/ui/BackBtn";
 import { LayoutProvider, useLayoutConfig } from "@/shared/contexts/layoutContext";
+import { Alert } from "@/widgets/alert";
 
 function AppLayoutContent({ children }: { children: React.ReactNode }) {
   const { config } = useLayoutConfig();
@@ -13,6 +14,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
         config.hasGradient ? "gradient-grad" : "bg-white"
       }`}
     >
+      <Alert />
       <div className="flex items-center justify-between p-[1.5625rem] w-full box-border h-[var(--header-height)]">
         {config.hasBackButton && <BackBtn />}
       </div>
