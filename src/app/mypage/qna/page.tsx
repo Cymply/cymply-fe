@@ -1,3 +1,3 @@
 export default function QnaPage() {
-  return <div>QnaPage</div>;
+  return <div>문의하기</div>;
 }
