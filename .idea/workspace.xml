@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a0e67ab-fd62-43af-9d25-985317bb0d3c" name="변경" comment="front build 배포 준비 및 편지 보내기 로직 추가">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/features/letter/ui/LetterForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/letter/ui/LetterForm.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -88,7 +87,7 @@
       <workItem from="1754915108365" duration="15704000" />
       <workItem from="1755508329575" duration="4890000" />
       <workItem from="1755701035384" duration="1088000" />
-      <workItem from="1756042574647" duration="1707000" />
+      <workItem from="1756042574647" duration="1903000" />
     </task>
     <task id="LOCAL-00001" summary="supabase package.json 추가">
       <option name="closed" value="true" />
