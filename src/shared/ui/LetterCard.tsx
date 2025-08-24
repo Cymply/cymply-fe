@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Letter } from "@/entities/letter";
 import Image from "next/image";
-import Link from "next/link";
 
 type LetterCardProps = {
   letter: Letter;

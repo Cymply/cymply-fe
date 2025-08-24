@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { LetterDetail } from "@/entities/letter";
 import { MusicItem } from "@/shared/ui";
