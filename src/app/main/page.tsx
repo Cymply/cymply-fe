@@ -2,7 +2,7 @@
 
 import useLetter from "@/features/letter/model/useLetter";
 import { LetterEmpty, LetterList } from "@/features/letter";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { lettersAtom } from "@/entities/letter/store/letterStore";
 import { useAuth } from "@/shared/hooks/useAuth";
@@ -11,11 +11,10 @@ import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/shared/ui";
 
 function MainPageContent() {
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const letters = useAtomValue(lettersAtom);
   const setAlert = useSetAtom(alertAtom);
-  const { getLetters } = useLetter(); // 이 훅 내부에서 useSearchParams() 사용
+  const { getLetters, isLettersLoading } = useLetter(); // 이 훅 내부에서 useSearchParams() 사용
   const { isAuthenticated, isLoading: authLoading } = useAuth();
 
   useEffect(() => {
@@ -30,8 +29,6 @@ function MainPageContent() {
         }
       } catch (error) {
         console.error("편지 목록 조회 실패:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -40,7 +37,7 @@ function MainPageContent() {
 
   useEffect(() => {
     // 인증되지 않은 경우
-    if (!loading && !authLoading && !isAuthenticated) {
+    if (!isLettersLoading && !authLoading && !isAuthenticated) {
       setAlert({
         open: true,
         title: (
@@ -58,10 +55,10 @@ function MainPageContent() {
         ],
       });
     }
-  }, [loading, authLoading, isAuthenticated, setAlert, router]);
+  }, [isLettersLoading, authLoading, isAuthenticated, setAlert, router]);
 
   // 인증 로딩 중이거나 편지 로딩 중일 때
-  if (authLoading || loading) {
+  if (authLoading || isLettersLoading) {
     return <LoadingSpinner />;
   }
 
@@ -71,7 +68,7 @@ function MainPageContent() {
 
   console.log("📮 편지 목록:", letters);
 
-  return !loading && letters.length >= 1 ? <LetterList letters={letters} /> : <LetterEmpty />;
+  return letters.length >= 1 ? <LetterList letters={letters} /> : <LetterEmpty />;
 }
 
 export default function MainPage() {
