@@ -67,11 +67,18 @@ export const LetterList = ({ letters }: LetterListProps) => {
                 centeredSlides={false}
                 style={{ width: "100%", overflow: "visible" }}
               >
-                {group.letters.map((letter) => (
-                  <SwiperSlide key={letter.letterId} style={{ width: "76%" }}>
-                    <LetterCard letter={letter} handleModalOpen={() => handleModalOpen(letter)} />
-                  </SwiperSlide>
-                ))}
+                {!loading &&
+                  group.letters
+                    .slice()
+                    .reverse()
+                    .map((letter) => (
+                      <SwiperSlide key={letter.letterId} style={{ width: "76%" }}>
+                        <LetterCard
+                          letter={letter}
+                          handleModalOpen={() => handleModalOpen(letter)}
+                        />
+                      </SwiperSlide>
+                    ))}
               </Swiper>
             </div>
           </div>

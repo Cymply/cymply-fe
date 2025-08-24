@@ -7,13 +7,35 @@ import useSelectMusicItem from "@/entities/music/hooks/useSelectMusicItem";
 import { MusicItem, SelectMusicBox } from "@/shared/ui";
 import { isEmpty } from "@/lib/utils";
 import { Suspense } from "react";
+import { useSetAtom } from "jotai";
+import { alertAtom } from "@/widgets/alert";
 
 export default function LetterWritePage() {
   const router = useRouter();
+  const setAlert = useSetAtom(alertAtom);
   const { selectedMusic } = useSelectMusicItem();
 
   const onGoToMain = () => {
-    router.push("/main");
+    setAlert({
+      open: true,
+      title: (
+        <>
+          작성한 편지 내용이 <br />
+          모두 삭제됩니다.
+        </>
+      ),
+      message: "홈으로 이동하시겠어요?",
+      buttons: [
+        {
+          label: "홈으로 돌아가기",
+          action: () => router.push("/main"),
+        },
+        {
+          label: "계속 편지 작성하기",
+          action: () => {},
+        },
+      ],
+    });
   };
 
   return (

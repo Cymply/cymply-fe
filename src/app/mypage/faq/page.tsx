@@ -8,7 +8,7 @@ export default function FaqPage() {
         src={notionUrl}
         className="w-full h-full border-0"
         title="자주 묻는 질문"
-        loading="lazy"
+        allowFullScreen
       />
     </div>
   );
