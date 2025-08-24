@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/image/**",
       },
+      {
+        protocol: "https",
+        hostname: "*.scdn.co", // Spotify 관련 도메인들
+      },
     ],
   },
   webpack: (config, { dev, isServer }) => {
