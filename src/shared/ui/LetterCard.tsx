@@ -18,20 +18,21 @@ export const LetterCard = ({ letter, handleModalOpen }: LetterCardProps) => {
           </div>
         )}
 
-        <Link href={letter.videoUrl}>
-          {letter.musicThumbnailUrl ? (
-            <Image
-              src={letter.musicThumbnailUrl}
-              alt={letter.musicTitle}
-              fill
-              className="object-contain rounded-[0.625rem]"
-              loading="lazy"
-              unoptimized={true}
-            />
-          ) : (
-            <div className="w-full bg-gray-600"></div>
-          )}
-        </Link>
+        {letter.musicThumbnailUrl ? (
+          <Image
+            src={letter.musicThumbnailUrl}
+            alt={letter.musicTitle}
+            fill
+            className="object-contain rounded-[0.625rem]"
+            loading="lazy"
+            unoptimized={true}
+            onClick={() => {
+              window.open(letter.videoUrl, "_blank");
+            }}
+          />
+        ) : (
+          <div className="w-full bg-gray-600"></div>
+        )}
       </div>
       <div className="flex flex-col gap-4 pt-[1.875rem] pb-11 text-4xl font-bold">
         <p className="text-black-600">{letter.title}</p>
