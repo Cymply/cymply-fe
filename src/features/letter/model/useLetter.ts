@@ -36,6 +36,7 @@ export default function useLetter() {
     handleSubmit,
     formState: { errors },
     watch,
+    clearErrors, // 추가
   } = useForm<LetterFormValues>();
   
   // 쿠키 헬퍼 함수
@@ -208,6 +209,7 @@ export default function useLetter() {
     watch,
     onSubmit,
     errors,
+    clearErrors, // 추가
     createUserLink,
     getLetter,
     getLetters,
