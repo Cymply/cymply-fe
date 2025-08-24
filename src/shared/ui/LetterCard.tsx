@@ -26,6 +26,7 @@ export const LetterCard = ({ letter, handleModalOpen }: LetterCardProps) => {
               fill
               className="object-contain rounded-[0.625rem]"
               loading="lazy"
+              unoptimized={true}
             />
           ) : (
             <div className="w-full bg-gray-600"></div>
