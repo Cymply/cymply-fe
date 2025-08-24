@@ -17,7 +17,7 @@ export const LetterList = ({ letters }: LetterListProps) => {
   const [loading, setLoading] = useState(false);
   const [detailLetter, setDetailLetter] = useState<LetterDetail | null>(null);
 
-  const { getLetter } = useLetter();
+  const { getLetter, isLettersLoading } = useLetter();
 
   const handleModalOpen = async (letter: Letter) => {
     try {
@@ -67,7 +67,7 @@ export const LetterList = ({ letters }: LetterListProps) => {
                 centeredSlides={false}
                 style={{ width: "100%", overflow: "visible" }}
               >
-                {!loading &&
+                {!isLettersLoading &&
                   group.letters
                     .slice()
                     .reverse()

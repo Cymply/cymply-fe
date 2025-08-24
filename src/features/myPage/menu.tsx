@@ -15,7 +15,10 @@ export default function Menu() {
       </LiItem>
 
       <LiItem asChild isLink rightIcon>
-        <Link href="/mypage/faq" className="w-full flex items-center justify-between text-[2rem]">
+        <Link
+          href="https://www.notion.so/2458d05bbad3808084d1ffcc09dbdb5f?source=copy_link"
+          className="w-full flex items-center justify-between text-[2rem]"
+        >
           <span>자주 묻는 질문</span>
         </Link>
       </LiItem>
