@@ -9,12 +9,14 @@ import { alertAtom } from "@/widgets/alert";
 import "react-notion-x/src/styles.css";
 import "prismjs/themes/prism-tomorrow.css";
 import "katex/dist/katex.min.css";
+import { useRouter } from "next/navigation";
 
 function FaqPageContent() {
   const [data, setData] = useState<ExtendedRecordMap | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const setAlert = useSetAtom(alertAtom);
+  const router = useRouter();
 
   const pageId = "2458d05bbad3808084d1ffcc09dbdb5f";
 
@@ -49,8 +51,8 @@ function FaqPageContent() {
       message: "인터넷 상태를 확인하거나,\n 잠시 후 다시 시도해 주세요.",
       buttons: [
         {
-          label: "홈으로 돌아가기",
-          action: () => {},
+          label: "확인",
+          action: () => router.back(),
         },
       ],
     });
