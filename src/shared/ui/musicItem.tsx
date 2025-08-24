@@ -18,7 +18,11 @@ interface MusicItemProps {
   className?: string;
 }
 
-export const MusicItem = ({ music, option = "none", className = "" }: MusicItemProps) => {
+export const MusicItem = ({
+  music,
+  option = "none",
+  className = "",
+}: MusicItemProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const { selectedMusic } = useSelectMusicItem();
 
@@ -51,6 +55,7 @@ export const MusicItem = ({ music, option = "none", className = "" }: MusicItemP
             fill
             className="object-contain rounded-[0.625rem]"
             loading="lazy"
+            unoptimized={true}
           />
         )}
       </div>
