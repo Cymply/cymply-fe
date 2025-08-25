@@ -77,6 +77,7 @@ export const MusicItem = ({
               alt="icon-polygon"
               fill
               className="object-contain"
+              unoptimized={true}
             />
           </button>
         )}
