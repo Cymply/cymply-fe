@@ -11,6 +11,7 @@ export type TMusicItem = {
   title: string;
   artist: string;
   thumbnail?: string;
+  thumbnailUrl?: string;
 };
 interface MusicItemProps {
   music: TMusicItem;
@@ -50,7 +51,7 @@ export const MusicItem = ({
       <div className="relative w-[7.5rem] min-w-[7.5rem] h-[7.5rem]">
         {music.thumbnail && (
           <Image
-            src={music.thumbnail}
+            src={music.thumbnail || music.thumbnailUrl}
             alt={music.title}
             fill
             className="object-contain rounded-[0.625rem]"
