@@ -12,7 +12,7 @@ export const LetterCard = ({ letter, handleModalOpen }: LetterCardProps) => {
     <div className="flex flex-col pt-9 pl-9 pr-9 pb-[3.75rem] shadow-card bg-white text-xl">
       <div className="relative w-full h-[27.75rem] p-5 rounded-[0.625rem]">
         {letter.isRead === false && letter.letterId && (
-          <div className="absolute top-5 left-5 pt-4 pb-4 pl-6 pr-6 bg-primary rounded-full font-gangwonEduAll font-bold text-white text-[2rem]">
+          <div className="absolute z-50 top-5 left-5 pt-4 pb-4 pl-6 pr-6 bg-primary rounded-full font-gangwonEduAll font-bold text-white text-[2rem]">
             New
           </div>
         )}
