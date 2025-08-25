@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 export default function QnaPage() {
   const router = useRouter();
   return (
-    <div className="flex flex-col items-center justify-between h-[calc(100vh-var(--header-height)-6rem)] text-center pt-[21.75rem] pb-24">
+    <div className="flex flex-col items-center justify-between h-[calc(100vh-var(--header-height))] text-center pt-[21.75rem] pb-24">
       <div className="flex flex-col gap-12">
         <Image
           src="/images/img-error.png"
