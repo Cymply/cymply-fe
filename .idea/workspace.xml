@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a0e67ab-fd62-43af-9d25-985317bb0d3c" name="변경" comment="front build 배포 준비 및 편지 보내기 로직 추가">
+      <change afterPath="$PROJECT_DIR$/src/features/myPage/ui/DeleteAccountButton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/myPage/ui/DeleteAccountModal.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shared/hooks/useAuth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/hooks/useAuth.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/widgets/account/ui/AccountSettings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/account/ui/AccountSettings.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/myPage/menu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/myPage/menu.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +94,7 @@
       <workItem from="1756124292307" duration="2855000" />
       <workItem from="1756596396403" duration="1418000" />
       <workItem from="1756602675762" duration="1502000" />
-      <workItem from="1756644700675" duration="485000" />
+      <workItem from="1756644700675" duration="3125000" />
     </task>
     <task id="LOCAL-00001" summary="supabase package.json 추가">
       <option name="closed" value="true" />
