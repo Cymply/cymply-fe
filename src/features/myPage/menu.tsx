@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LiItem } from "@/shared/ui/liItem";
 import { LogoutButton } from "@/features/myPage/ui/LogoutButton";
+import {DeleteAccountButton} from "@/features/myPage/ui/DeleteAccountButton";
 
 export default function Menu() {
   return (
@@ -44,16 +45,12 @@ export default function Menu() {
           로그아웃
         </LogoutButton>
       </li>
-
+      
+      {/* 회원탈퇴 */}
       <li>
-        <form>
-          <button
-            type="submit"
-            className="w-full flex items-center justify-between py-8 text-4xl text-left text-black-300"
-          >
-            회원탈퇴
-          </button>
-        </form>
+        <DeleteAccountButton className="w-full flex items-center justify-between py-8 text-4xl text-left text-black-300">
+          회원탈퇴
+        </DeleteAccountButton>
       </li>
     </ul>
   );
