@@ -33,7 +33,7 @@ export const LetterList = ({ letters }: LetterListProps) => {
 
       const fetchedDetail = await getLetter(letter.letterId);
       setDetailLetter(fetchedDetail ?? null);
-      setRecipientCode(fetchedDetail?.recipientCode);
+      setRecipientCode(fetchedDetail?.recipientCode || null);
       // 쿠키에도 recipient코드 저장
       if (fetchedDetail?.recipientCode) {
         const maxAge = 60 * 60; // 1시간
