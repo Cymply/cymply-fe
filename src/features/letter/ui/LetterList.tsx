@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Letter, LetterDetail, Letters } from "@/entities/letter";
+import {Letter, LetterDetail, Letters, recipientCodeAtom} from "@/entities/letter";
 import { LetterCard, LetterCardDetail } from "@/shared/ui";
 import { Modal } from "@/widgets/modal/ui/Modal";
 import useLetter from "../model/useLetter";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import {useSetAtom} from "jotai/index";
 
 interface LetterListProps {
   letters: Letters[];
@@ -16,6 +17,7 @@ export const LetterList = ({ letters }: LetterListProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [detailLetter, setDetailLetter] = useState<LetterDetail | null>(null);
+  const setRecipientCode = useSetAtom(recipientCodeAtom);
 
   const { getLetter } = useLetter();
 
@@ -31,6 +33,16 @@ export const LetterList = ({ letters }: LetterListProps) => {
 
       const fetchedDetail = await getLetter(letter.letterId);
       setDetailLetter(fetchedDetail ?? null);
+      setRecipientCode(fetchedDetail?.recipientCode);
+      // 쿠키에도 recipient코드 저장
+      if (fetchedDetail?.recipientCode) {
+        const maxAge = 60 * 60; // 1시간
+        const encodedCode = encodeURIComponent(fetchedDetail.recipientCode);
+        
+        document.cookie = `recipientCode=${encodedCode}; max-age=${maxAge}; path=/; samesite=lax`;
+        
+        console.log('📝 recipientCode 쿠키 저장:', fetchedDetail.recipientCode);
+      }
     } catch (error) {
       console.error("편지 상세 조회 실패:", error);
     } finally {
