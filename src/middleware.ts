@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  const publicPaths = ['/login', '/main', '/signup', '/signin', '/fonts']
+  const publicPaths = ['/login', '/signup', '/signin', '/fonts']
   const letterCodePath = "/letter/code"  // /letter/code/[code] 패턴용
 
   // URL 디코딩 후 경로 정규화
