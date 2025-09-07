@@ -30,6 +30,7 @@ export interface LetterDetail {
   senderId: number;
   title: string; // 편지 제목
   content: string; // 편지 내용
+  recipientCode ?: string;
   music: Music;
 }
 
