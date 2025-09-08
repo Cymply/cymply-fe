@@ -6,7 +6,7 @@ export default function useSelectMusicItem() {
   const [selectedMusic, setSelectedMusic] = useAtom(musicAtom);
 
   const handleMusicSelect = useCallback(
-    (value: { title: string; artist: string; thumbnail: string }) => {
+    (value: { title: string; artist: string; thumbnailUrl: string }) => {
       setSelectedMusic(value);
     },
     [setSelectedMusic]
@@ -16,7 +16,7 @@ export default function useSelectMusicItem() {
     setSelectedMusic({
       title: "",
       artist: "",
-      thumbnail: "",
+      thumbnailUrl: "",
     });
   }, [setSelectedMusic]);
 

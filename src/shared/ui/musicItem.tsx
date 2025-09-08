@@ -49,9 +49,9 @@ export const MusicItem = ({
     <div className={cn(className)}>
       {/* <div className="flex items-center gap-4 justify-center"> */}
       <div className="relative w-[7.5rem] min-w-[7.5rem] h-[7.5rem]">
-        {(music.thumbnail || music.thumbnailUrl) && (
+        {(music.thumbnailUrl) && (
           <Image
-            src={music.thumbnail || music.thumbnailUrl || ""}
+            src={ music.thumbnailUrl || ""}
             alt={music.title}
             fill
             className="object-contain rounded-[0.625rem]"

@@ -17,9 +17,9 @@ export const LetterCard = ({ letter, handleModalOpen }: LetterCardProps) => {
           </div>
         )}
 
-        {letter.musicThumbnailUrl ? (
+        {letter.thumbnailUrl ? (
           <Image
-            src={letter.musicThumbnailUrl}
+            src={letter.thumbnailUrl}
             alt={letter.musicTitle}
             fill
             className="object-contain rounded-[0.625rem]"
