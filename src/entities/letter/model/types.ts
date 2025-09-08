@@ -14,7 +14,7 @@ export interface Letter {
   letterId: number;
   musicTitle: string; // 노래 제목
   musicArtist: string; // 노래 가수
-  musicThumbnailUrl: string; // 앨범 커버
+  thumbnailUrl: string; // 앨범 커버
   videoUrl: string; // 음악 재생 url
   title: string; // 편지 제목
   content: string; // 편지 내용

@@ -46,7 +46,7 @@ function SearchPageContent() {
 
   // 음악 고유 식별자 생성 함수
   const getMusicId = (music: TMusicItem) =>
-    `${music.title || ""}-${music.artist || ""}-${music.thumbnail || ""}`;
+    `${music.title || ""}-${music.artist || ""}-${music.thumbnailUrl || ""}`;
 
   // user-code 파라미터 확인
   useEffect(() => {
@@ -110,7 +110,7 @@ function SearchPageContent() {
                 handleMusicSelect({
                   title: selectedMusicItem.title,
                   artist: selectedMusicItem.artist,
-                  thumbnail: selectedMusicItem.thumbnail || "",
+                  thumbnailUrl: selectedMusicItem.thumbnailUrl || "",
                 });
               }
             }}
@@ -119,17 +119,17 @@ function SearchPageContent() {
             {data.map((result: TMusicItem, index: number) => (
               <RadioGroupItem
                 value={getMusicId(result)}
-                key={`${result.title}-${result.artist}-${result.thumbnail}-${index}`}
+                key={`${result.title}-${result.artist}-${result.thumbnailUrl}-${index}`}
                 className={cn(
                   "pt-6 pb-6 pl-9 pr-9 flex items-center gap-4 justify-center transition delay-100 duration-300 ease-in-out",
                   selectedMusic.title === result.title &&
                     selectedMusic.artist === result.artist &&
-                    selectedMusic.thumbnail === result.thumbnail &&
+                    selectedMusic.thumbnailUrl === result.thumbnailUrl &&
                     "!bg-primary-light"
                 )}
               >
                 <MusicItem
-                  key={`${result.title}-${result.artist}-${result.thumbnail}-${index}`}
+                  key={`${result.title}-${result.artist}-${result.thumbnailUrl}-${index}`}
                   music={result}
                   className="w-full gap-9 flex"
                 />
