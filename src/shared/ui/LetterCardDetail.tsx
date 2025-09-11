@@ -18,7 +18,7 @@ export const LetterCardDetail = ({ detailItem }: LetterCardDetailProps) => {
 
   return (
     <>
-      <div className="flex flex-col ga p-9">
+      <div className="flex flex-col gap-9">
         {/* 노래 영역 */}
         <div className="flex pt-9 pb-9">
           <MusicItem
