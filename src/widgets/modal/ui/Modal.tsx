@@ -26,7 +26,7 @@ export const Modal = ({ isModalOpen, isLoading, handleModalClose, children }: Mo
               <Image src="/icons/ico-close.svg" alt="icon-close" fill className="object-contain" />
             </button>
             {isLoading ? (
-              <div className="flex items-center justify-center min-h-12">
+              <div className="flex items-center justify-center">
                 <LoadingSpinner />
               </div>
             ) : (
