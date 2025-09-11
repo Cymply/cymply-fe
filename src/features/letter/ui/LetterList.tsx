@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Letter, LetterDetail, Letters, recipientCodeAtom } from "@/entities/letter";
 import { LetterCard, LetterCardDetail } from "@/shared/ui";
 import { Modal } from "@/widgets/modal/ui/Modal";
 import useLetter from "../model/useLetter";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
 import { useSetAtom } from "jotai/index";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper as SwiperType } from "swiper";
+import "swiper/css";
 
 interface LetterListProps {
   letters: Letters[];
@@ -18,6 +19,9 @@ export const LetterList = ({ letters }: LetterListProps) => {
   const [loading, setLoading] = useState(false);
   const [detailLetter, setDetailLetter] = useState<LetterDetail | null>(null);
   const setRecipientCode = useSetAtom(recipientCodeAtom);
+
+  const swiperRefs = useRef<{ [key: number]: SwiperType }>({});
+  const currentSlideIndexes = useRef<{ [key: number]: number }>({});
 
   const { getLetter } = useLetter();
 
@@ -33,12 +37,14 @@ export const LetterList = ({ letters }: LetterListProps) => {
     };
   }, [isModalOpen]);
 
-  const handleModalOpen = async (letter: Letter) => {
+  const handleModalOpen = async (letter: Letter, groupIndex: number, slideIndex: number) => {
     try {
       if (!letter.letterId) {
         console.error("편지 id가 없습니다.");
         return;
       }
+
+      currentSlideIndexes.current[groupIndex] = slideIndex;
 
       setLoading(true);
       setIsModalOpen(true);
@@ -65,14 +71,23 @@ export const LetterList = ({ letters }: LetterListProps) => {
   const handleModalClose = () => {
     setIsModalOpen(false);
     setDetailLetter(null);
+
+    setTimeout(() => {
+      Object.entries(currentSlideIndexes.current).forEach(([groupIndex, slideIndex]) => {
+        const swiper = swiperRefs.current[Number(groupIndex)];
+        if (swiper && typeof slideIndex === "number") {
+          swiper.slideTo(slideIndex, 0);
+        }
+      });
+    }, 100);
   };
 
   return (
     <div className="overflow-x-hidden">
       <div className="flex flex-col mt-2">
-        {letters.map((group, idx) => (
+        {letters.map((group, groupIdx) => (
           <div
-            key={idx}
+            key={groupIdx}
             className="font-gangwonEduAll border-b border-dashed border-borderColor-dashed"
           >
             {/* 타이틀 */}
@@ -90,16 +105,22 @@ export const LetterList = ({ letters }: LetterListProps) => {
                 slidesPerView={"auto"}
                 centeredSlides={false}
                 style={{ width: "100%", overflow: "visible" }}
+                onSwiper={(swiper) => {
+                  swiperRefs.current[groupIdx] = swiper;
+                }}
+                onSlideChange={(swiper) => {
+                  currentSlideIndexes.current[groupIdx] = swiper.activeIndex;
+                }}
               >
                 {!loading &&
                   group.letters
                     .slice()
                     .reverse()
-                    .map((letter) => (
+                    .map((letter, slideIdx) => (
                       <SwiperSlide key={letter.letterId} style={{ width: "76%" }}>
                         <LetterCard
                           letter={letter}
-                          handleModalOpen={() => handleModalOpen(letter)}
+                          handleModalOpen={() => handleModalOpen(letter, groupIdx, slideIdx)}
                         />
                       </SwiperSlide>
                     ))}
