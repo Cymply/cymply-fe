@@ -48,9 +48,9 @@ export default function useSignupForm() {
     console.log('❌ 토큰 저장 타임아웃');
     return false;
   };
-  
-  const isSignupNickname = pathname.endsWith('/step2')
-  
+
+  const isSignupNickname = pathname.endsWith("/nickname");
+
   const handleNext = () => {
     if (canProceed) {
       router.push('/signup/step2')
