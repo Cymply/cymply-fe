@@ -7,7 +7,13 @@ export default function useSelectSex() {
   const handleGenderSelect = (value: 'M' | 'F') => {
     setSelectedGender(value)
   }
-  
+  const gender = sessionStorage.getItem("selectedGender");
+  const [selectedGender, setSelectedGender] = useAtom(genderAtom || gender);
+  const handleGenderSelect = (value: "M" | "F") => {
+    sessionStorage.setItem("selectedGender", value);
+    setSelectedGender(value);
+  };
+
   return {
     selectedGender,
     handleGenderSelect,
