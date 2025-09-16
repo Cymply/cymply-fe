@@ -5,9 +5,10 @@ import { ageGroupAtom } from "@/store/signupStore"
 import {AgeGroup} from "@/entities/signup/ui";
 
 export default function useSelectAgeGroup() {
-  const ageGroup: AgeGroup | undefined = sessionStorage.getItem(
-    "selectedAgeGroup"
-  ) as AgeGroup | undefined;
+  const ageGroup: AgeGroup | undefined =
+    typeof window !== "undefined"
+      ? (sessionStorage.getItem("selectedAgeGroup") as AgeGroup | undefined)
+      : undefined;
   const [selectedAgeGroup, setSelectedAgeGroup] = useAtom(
     ageGroupAtom || ageGroup
   );
