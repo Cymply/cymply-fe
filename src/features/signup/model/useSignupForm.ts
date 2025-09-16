@@ -62,12 +62,12 @@ export default function useSignupForm() {
       setValidation(prev => ({ ...prev, isChecking: true }))
       
       const signupData = {
-        gender : gender,
-        nickname : nickname,
-        ageRange : ageGroup,
-      }
       
       console.log('🚀 회원가입 API 호출 시작');
+        gender: gender || "",
+        nickname: nickname,
+        ageRange: ageGroup || "",
+      };
       const res = await signupApi.signup(signupData);
       
       if (res.status !== 200) {
