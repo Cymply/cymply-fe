@@ -64,8 +64,8 @@ export default function TutorialPage() {
   };
 
   return (
-    <div className="h-full flex flex-col justify-between gap-[7.5rem] mt-[5.75rem] mb-24">
-      <div>
+    <div className="h-full flex flex-col justify-between gap-[7.5rem] mt-[5.75rem] mb-24 overflow-x-hidden">
+      <div className="overflow-x-hidden">
         <Swiper
           modules={[EffectCoverflow, Pagination]}
           slidesPerView={1}
