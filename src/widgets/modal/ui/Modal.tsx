@@ -1,3 +1,4 @@
+import { LoadingSpinner } from "@/shared/ui";
 import Portal from "@/widgets/portal/ui/Potal";
 import Image from "next/image";
 import { ReactNode } from "react";
@@ -10,18 +11,6 @@ type ModalProps = {
 };
 
 export const Modal = ({ isModalOpen, isLoading, handleModalClose, children }: ModalProps) => {
-  if (isLoading) {
-    return (
-      <Portal containerId="modal-root">
-        {isModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black-900/70">
-            <p className="text-white text-lg">편지 불러오는 중...</p>
-          </div>
-        )}
-      </Portal>
-    );
-  }
-
   return (
     <Portal containerId="modal-root">
       {isModalOpen && (
@@ -36,7 +25,13 @@ export const Modal = ({ isModalOpen, isLoading, handleModalClose, children }: Mo
             <button onClick={handleModalClose} className="absolute top-9 right-9 w-12 h-12">
               <Image src="/icons/ico-close.svg" alt="icon-close" fill className="object-contain" />
             </button>
-            {children}
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <LoadingSpinner />
+              </div>
+            ) : (
+              children
+            )}
           </div>
         </div>
       )}

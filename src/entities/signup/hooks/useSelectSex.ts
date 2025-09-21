@@ -3,11 +3,16 @@ import {useAtom} from "jotai/index";
 import {genderAtom} from "@/store/signupStore";
 
 export default function useSelectSex() {
-  const [selectedGender, setSelectedGender] = useAtom(genderAtom)
-  const handleGenderSelect = (value: 'M' | 'F') => {
-    setSelectedGender(value)
-  }
-  
+  const gender: "M" | "F" | null =
+    typeof window !== "undefined"
+      ? (sessionStorage.getItem("selectedGender") as "M" | "F" | null)
+      : null;
+  const [selectedGender, setSelectedGender] = useAtom(genderAtom || gender);
+  const handleGenderSelect = (value: "M" | "F") => {
+    sessionStorage.setItem("selectedGender", value);
+    setSelectedGender(value);
+  };
+
   return {
     selectedGender,
     handleGenderSelect,

@@ -4,6 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { User, Lock, Phone, Mail, Trash2, Shield } from 'lucide-react';
 import {SettingCard} from "@/shared/ui";
+import {useAuth} from "@/shared/hooks/useAuth";
 
 // 현재 사용자 정보 (zustand store에서 가져온다고 가정)
 const currentUser = {
@@ -14,6 +15,8 @@ const currentUser = {
 };
 
 export const AccountSettings: React.FC = () => {
+  const {deleteUser} = useAuth();
+  
   const router = useRouter();
   
   const handleNicknameChange = () => {
@@ -42,8 +45,9 @@ export const AccountSettings: React.FC = () => {
     router.push('/account/two-factor-auth');
   };
   
-  const handleAccountDeletion = () => {
+  const handleAccountDeletion = async () => {
     console.log('회원 탈퇴');
+    await deleteUser();
   };
   
   const isPasswordChangeDisabled = currentUser.provider !== 'local';

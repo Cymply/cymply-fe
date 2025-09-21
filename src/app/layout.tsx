@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "마음 위로 번진 빛, 빛을 담은 마음을 전해보세요.",
       images: [
         {
-          url: "/images/img-thumbnail.png",
+          url: "http://api.cymply.kr/public/thumbnail.png",
           width: 1200,
           height: 630,
         },

@@ -35,7 +35,7 @@ export default function SetNickname({ placeholder, maxLength, showCount }: SetNi
               ? "border-states-red"
               : "border-gray-800"
           )}
-          maxLength={12}
+          maxLength={10}
         />
 
         {/* 상태 아이콘 */}
@@ -66,14 +66,14 @@ export default function SetNickname({ placeholder, maxLength, showCount }: SetNi
         </div>
 
         {/* 에러 메시지 (중복된 별명) */}
-        {validation.isDuplicate && (
+        {/* {validation.isDuplicate && (
           <div className="text-zinc-400 text-3xl font-normal font-['Pretendard'] leading-9">
             * 중복된 별명입니다.
           </div>
-        )}
+        )} */}
 
         {/* 기타 에러 메시지 */}
-        {validation.errorMessage && !validation.isDuplicate && (
+        {validation.errorMessage && validation.isDuplicate && (
           <div className="text-zinc-400 text-3xl font-normal font-['Pretendard'] leading-9">
             * {validation.errorMessage}
           </div>

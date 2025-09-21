@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "i.scdn.co",
+        port: "",
+        pathname: "/image/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.scdn.co", // Spotify 관련 도메인들
       },
     ],
   },

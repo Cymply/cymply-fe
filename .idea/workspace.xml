@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a0e67ab-fd62-43af-9d25-985317bb0d3c" name="변경" comment="front build 배포 준비 및 편지 보내기 로직 추가">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/((default))/search/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/search/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/letter/mock/mockLetters.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/letter/mock/mockLetters.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/letter/model/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/letter/model/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/music/hooks/useSelectMusicItem.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/music/hooks/useSelectMusicItem.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/music/model/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/music/model/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/ui/LetterCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/ui/LetterCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shared/ui/musicItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/ui/musicItem.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/musicStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/musicStore.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +95,13 @@
       <workItem from="1754915108365" duration="15704000" />
       <workItem from="1755508329575" duration="4890000" />
       <workItem from="1755701035384" duration="1088000" />
+      <workItem from="1756042574647" duration="3199000" />
+      <workItem from="1756124292307" duration="2855000" />
+      <workItem from="1756596396403" duration="1418000" />
+      <workItem from="1756602675762" duration="1502000" />
+      <workItem from="1756644700675" duration="4619000" />
+      <workItem from="1757205255249" duration="6861000" />
+      <workItem from="1757340377736" duration="1172000" />
     </task>
     <task id="LOCAL-00001" summary="supabase package.json 추가">
       <option name="closed" value="true" />

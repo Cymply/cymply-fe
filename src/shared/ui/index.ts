@@ -6,3 +6,4 @@ export * from "./UrlLinkBox";
 export * from "./LoadingSpinner";
 export * from "./LoadingBeat";
 export * from "./SelectMusicBox";
+export * from "./NotionRenderer";

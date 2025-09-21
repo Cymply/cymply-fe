@@ -27,12 +27,10 @@ export const LetterLinkButton = ({
           height={20}
           className="w-[3.375rem] h-[3.375rem] object-contain"
         />
-        <span className="w-full text-black-800 text-2xl font-bold">
-          {title}
-        </span>
+        <span className="w-full text-black-800 text-[2rem] font-bold">{title}</span>
       </div>
-      <div className="flex items-end gap-2 justify-end ">
-        <span className="text-black-800 text-4xl font-bold">{count} </span>통
+      <div className="flex items-end gap-2 justify-end text-[2rem]">
+        <span className="text-black-800 text-[5.25rem] font-bold leading-none">{count} </span>통
       </div>
     </button>
   );

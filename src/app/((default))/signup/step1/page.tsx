@@ -5,10 +5,11 @@ import SignupHeader from "@/features/signup/ui/SignupHeader";
 import SignupFooter from "@/features/signup/ui/SignupFooter";
 import SignupProfileForm from "@/features/signup/ui/SignupProfileForm";
 import { Suspense } from "react";
+import { LoadingSpinner } from "@/shared/ui";
 
 export default function SignupProfilePage() {
   return (
-    <Suspense fallback={<div> 불러오는 중...</div>}>
+    <Suspense fallback={<LoadingSpinner />}>
       <SignupView
         header={
           <SignupHeader

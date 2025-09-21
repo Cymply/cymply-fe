@@ -96,6 +96,22 @@ export const useAuth = () => {
     }
   };
   
+  const deleteUser = async () => {
+    try {
+      // /signup 경로가 아닐 때만 로그아웃 API 호출
+      await apiClient.delete("/api/v1/users/me");
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      TokenManager.clearTokens();
+      TokenManager.clearAllCookies();
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
+      }
+    }
+  };
+  
   // 컴포넌트 마운트 시 인증 상태 확인
   useEffect(() => {
     checkAuth();
@@ -106,6 +122,7 @@ export const useAuth = () => {
     isLoading,
     login,
     logout,
-    checkAuth
+    checkAuth,
+    deleteUser,
   };
 };
