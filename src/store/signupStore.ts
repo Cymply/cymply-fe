@@ -32,10 +32,10 @@ export const ageGroupAtom = atom<string>("");
 
 export const genderAtom = atom<"M" | "F" | null>(null);
 
-// 전체 폼 유효성 검사
-export const formValidAtom = atom((get) => {
-  const gender = get(genderAtom);
-  const ageGroup = get(ageGroupAtom);
-
-  return gender !== null && ageGroup !== "";
-});
+// // 전체 폼 유효성 검사
+// export const formValidAtom = atom((get) => {
+//   const gender = get(genderAtom);
+//   const ageGroup = get(ageGroupAtom);
+//
+//   return gender !== null && ageGroup !== "";
+// });
