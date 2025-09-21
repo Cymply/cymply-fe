@@ -6,14 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="6a0e67ab-fd62-43af-9d25-985317bb0d3c" name="변경" comment="front build 배포 준비 및 편지 보내기 로직 추가">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/((default))/search/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/((default))/search/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/letter/mock/mockLetters.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/letter/mock/mockLetters.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/letter/model/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/letter/model/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/music/hooks/useSelectMusicItem.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/music/hooks/useSelectMusicItem.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/music/model/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/music/model/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shared/ui/LetterCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/ui/LetterCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shared/ui/musicItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/ui/musicItem.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/musicStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/musicStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/signup/model/useSignupForm.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/signup/model/useSignupForm.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/signup/ui/SignupFooter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/signup/ui/SignupFooter.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/signupStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/signupStore.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

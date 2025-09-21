@@ -7,14 +7,14 @@ import useSignupForm from "@/features/signup/model/useSignupForm";
 import Link from "next/link";
 
 export default function SignupFooter() {
-  const { canProceed, validation, handleSubmit, handleNext, isSignupNickname } = useSignupForm();
+  const { validation, handleSubmit, handleNext, isSignupNickname } = useSignupForm();
 
   return (
     <div className="flex flex-col space-y-6">
       {isSignupNickname ? (
         <Button
           onClick={handleSubmit}
-          // disabled={!canProceed}
+          disabled={!validation.isValid || validation.isChecking || validation.isDuplicate}
           className={cn(
             "w-[42.375rem] h-[7.5rem] bg-primary rounded-[0.625rem] text-white text-[2rem] font-semibold leading-9 hover:bg-primary transition-all duration-200"
           )}
@@ -27,17 +27,14 @@ export default function SignupFooter() {
             onClick={handleNext}
             // disabled={!canProceed}
             className={cn(
-              "w-[42.375rem] h-[7.5rem] rounded-[0.625rem] text-[2rem] font-semibold leading-9 transition-all duration-200",
-              canProceed
-                ? "bg-primary hover:bg-primary text-white"
-                : "bg-black-200 text-white cursor-not-allowed hover:bg-gray-200"
+              "w-[42.375rem] h-[7.5rem] rounded-[0.625rem] text-[2rem] font-semibold leading-9 transition-all duration-200 bg-primary hover:bg-primary text-white"
             )}
           >
             다음
           </Button>
           {/* nickname 페이지가 아닐 때만 "제공하지 않고 넘어가기" 링크 표시 */}
           <Link
-            href={`/signup/nickname`}
+            href={`/signup/step2`}
             className="text-center text-black-200 text-[2rem] font-normal underline leading-9"
           >
             제공하지 않고 넘어가기

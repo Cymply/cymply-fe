@@ -6,8 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   genderAtom,
   ageGroupAtom,
-  formValidAtom,
-  nicknameAtom,
+  nicknameAtom, nicknameValidationAtom,
 } from "@/store/signupStore";
 import { useState } from "react";
 import { signupApi } from "@/entities/signup/api/signupApi";
@@ -21,12 +20,9 @@ export default function useSignupForm() {
   const pathname = usePathname();
   const [gender] = useAtom(genderAtom);
   const [ageGroup] = useAtom(ageGroupAtom);
-  const [canProceed] = useAtom(formValidAtom);
   const [nickname, setNickname] = useAtom(nicknameAtom);
-  const [validation, setValidation] = useState({
-    isChecking: false,
-    isValid: false,
-  });
+  const [nicknameValidation, setNicknameValidation] = useAtom(nicknameValidationAtom);
+
   const { login } = useAuth();
 
   // 토큰 저장 완료까지 최대 3초 대기 (쿠키에서 accessToken 확인)
@@ -54,17 +50,15 @@ export default function useSignupForm() {
     return false;
   };
 
-  const isSignupNickname = pathname.endsWith("/nickname");
+  const isSignupNickname = pathname.endsWith("/step2");
 
   const handleNext = () => {
-    if (canProceed) {
-      router.push("/signup/step2");
-    }
+    router.push("/signup/step2");
   };
 
   const handleSubmit = async () => {
     try {
-      setValidation((prev) => ({ ...prev, isChecking: true }));
+      setNicknameValidation((prev) => ({ ...prev, isChecking: true, isValid: false }));
 
       const signupData = {
         gender: gender || "",
@@ -114,27 +108,30 @@ export default function useSignupForm() {
       console.log("최종 RefreshToken:", finalRefreshToken ? "저장됨" : "없음");
       console.log("쿠키 확인:", document.cookie);
 
-      setValidation({ isChecking: false, isValid: true });
-
-      // // 리다이렉트 URL 결정
-      // const redirectUrl = getRedirectUrl();
-      // console.log('✅ 회원가입 완료, 리다이렉트 URL:', redirectUrl);
-      //
-      // // 쿠키 정리
-      // clearRedirectCookies();
-      //
-      // console.log('🚀 페이지 이동:', redirectUrl);
-      // router.push(redirectUrl);
+      // 성공 시:
+      setNicknameValidation({
+        isChecking: false,
+        isValid: true,
+        isDuplicate: false,
+        errorMessage: ''
+      });
+      
+      // 튜토리얼로 이동
       router.push("/tutorial");
     } catch (error) {
       console.error("❌ 회원가입 실패:", error);
-      setValidation({ isChecking: false, isValid: false });
-    }
+      // 실패 시:
+      setNicknameValidation({
+        isChecking: false,
+        isValid: false,
+        isDuplicate: false,
+        errorMessage: '회원가입 중 오류가 발생했습니다.'
+      });    }
   };
 
+// return 부분 수정:
   return {
-    canProceed,
-    validation,
+    validation: nicknameValidation,  // validation 이름 유지하되 nicknameValidation atom 사용
     handleSubmit,
     handleNext,
     isSignupNickname,
