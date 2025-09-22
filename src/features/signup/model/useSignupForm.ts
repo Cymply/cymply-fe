@@ -6,7 +6,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   genderAtom,
   ageGroupAtom,
-  nicknameAtom, nicknameValidationAtom,
+  nicknameAtom,
+  nicknameValidationAtom,
 } from "@/store/signupStore";
 import { useState } from "react";
 import { signupApi } from "@/entities/signup/api/signupApi";
@@ -21,7 +22,9 @@ export default function useSignupForm() {
   const [gender] = useAtom(genderAtom);
   const [ageGroup] = useAtom(ageGroupAtom);
   const [nickname, setNickname] = useAtom(nicknameAtom);
-  const [nicknameValidation, setNicknameValidation] = useAtom(nicknameValidationAtom);
+  const [nicknameValidation, setNicknameValidation] = useAtom(
+    nicknameValidationAtom
+  );
 
   const { login } = useAuth();
 
@@ -58,12 +61,16 @@ export default function useSignupForm() {
 
   const handleSubmit = async () => {
     try {
-      setNicknameValidation((prev) => ({ ...prev, isChecking: true, isValid: false }));
+      setNicknameValidation((prev) => ({
+        ...prev,
+        isChecking: true,
+        isValid: false,
+      }));
 
       const signupData = {
-        gender: gender || "",
+        gender: gender || null,
         nickname: nickname,
-        ageRange: ageGroup || "",
+        ageRange: ageGroup || null,
       };
       const res = await signupApi.signup(signupData);
 
@@ -113,9 +120,9 @@ export default function useSignupForm() {
         isChecking: false,
         isValid: true,
         isDuplicate: false,
-        errorMessage: ''
+        errorMessage: "",
       });
-      
+
       // 튜토리얼로 이동
       router.push("/tutorial");
     } catch (error) {
@@ -125,13 +132,14 @@ export default function useSignupForm() {
         isChecking: false,
         isValid: false,
         isDuplicate: false,
-        errorMessage: '회원가입 중 오류가 발생했습니다.'
-      });    }
+        errorMessage: "회원가입 중 오류가 발생했습니다.",
+      });
+    }
   };
 
-// return 부분 수정:
+  // return 부분 수정:
   return {
-    validation: nicknameValidation,  // validation 이름 유지하되 nicknameValidation atom 사용
+    validation: nicknameValidation, // validation 이름 유지하되 nicknameValidation atom 사용
     handleSubmit,
     handleNext,
     isSignupNickname,

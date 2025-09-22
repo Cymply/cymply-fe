@@ -12,7 +12,11 @@ interface SearchInputProps {
   placeholder?: string;
 }
 
-export const SearchInput = ({ onSearch, initialValue = "", placeholder }: SearchInputProps) => {
+export const SearchInput = ({
+  onSearch,
+  initialValue = "",
+  placeholder,
+}: SearchInputProps) => {
   const [value, setValue] = useState(initialValue);
   const router = useRouter();
   const pathname = usePathname();
@@ -40,8 +44,12 @@ export const SearchInput = ({ onSearch, initialValue = "", placeholder }: Search
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        className={clsx("p-9 rounded-[0.625rem] border-none bg-gray-600 focus:outline-none")}
+        className={clsx(
+          "p-9 rounded-[0.625rem] border-none bg-gray-600 focus:outline-none"
+        )}
         placeholder={placeholder}
+        type="search"
+        enterKeyHint="search"
       />
       <div className="absolute w-10 h-10 right-9 top-1/2 -translate-y-1/2">
         {value ? (
